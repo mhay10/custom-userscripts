@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Download EzAudiobooksForSoul Audiobooks
-// @namespace    
-// @version      2026-01-02
+// @namespace    https://github.com/mhay10/custom-userscripts
+// @version      1.0
 // @description  Download audiobooks from EzAudiobooksForSoul
 // @author       mhay10
 // @match        https://ezaudiobookforsoul.com/audiobook/*
