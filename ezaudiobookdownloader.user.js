@@ -20,8 +20,10 @@
 })();
 
 async function decrypt(encrypted) {
+    const baseUrl =
+        "https://ezaudiobookforsoul.com/wp-content/plugins/custom-story-audio/inc/security/decrypt.php";
     const response = await fetch(
-        `https://ezaudiobookforsoul.com/wp-content/plugins/custom-story-audio/inc/security/decrypt.php?encrypted=${encodeURI}`,
+        `${baseUrl}?encrypted=${encodeURI(encrypted)}`,
         {
             credentials: "include",
             headers: {
