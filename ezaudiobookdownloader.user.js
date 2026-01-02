@@ -11,12 +11,13 @@
 
 (async function () {
     "use strict";
-});
 
-function injectUserInterface() {
+    // Wait for loading to finish
+    await waitForLoadFinish();
+
     const player = document.querySelector("#audio_content");
-    console.log(player);
-}
+    console.log(player.innerHTML);
+});
 
 async function decrypt(encrypted) {
     const response = await fetch(
@@ -56,8 +57,10 @@ async function waitForLoadFinish() {
                     mutation.attributeName === "style" &&
                     mutation.target.id == "loading-message-element"
                 ) {
+                    // Make sure loading message is hidden
                     const newStyle = mutation.target.getAttribute("style");
                     if (newStyle.includes("display: none")) {
+                        // Loading finished
                         console.log("Loading complete, executing script...");
                         observer.disconnect();
                         resolve();
@@ -66,6 +69,7 @@ async function waitForLoadFinish() {
             }
         });
 
+        // Start observing document body for changes
         observer.observe(document.body, {
             attributes: true,
             attributeOldValue: true,
