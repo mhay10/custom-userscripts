@@ -16,8 +16,8 @@
     await waitForLoadFinish();
 
     const player = document.querySelector("#audio_content");
-    console.log(player.innerHTML);
-});
+    console.log(player);
+})();
 
 async function decrypt(encrypted) {
     const response = await fetch(
