@@ -8,19 +8,17 @@
 //
 // @match        https://ezaudiobookforsoul.com/audiobook/*
 // @match        https://audiobooks4soul.com/*
-// @grant        none
+// @grant        GM_xmlhttpRequest
 //
 // @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 // @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 //
 // @require      https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js
+// @require      https://cdn.jsdelivr.net/npm/observable-slim@0.2.2/dist/observable-slim.umd.min.js
 // ==/UserScript==
 
 (async function () {
     "use strict";
-
-    // Inject fetch listener to capture request headers
-    injectFetchListener();
 
     // Wait for loading to finish
     console.log("Waiting for loading to finish...");
@@ -44,29 +42,31 @@
         trackUrls.push(trackUrl);
     }
     trackUrls.shift();
-
     console.log("Number of tracks found:", trackUrls.length);
 
-    // // Create zip file and add tracks
-    // const zip = new JSZip();
-    // for (let i = 0; i < trackUrls.length; i++) {
-    //     const track = trackUrls[i];
-    //     console.log(`Downloading track ${i + 1}/${trackUrls.length}...`);
-    //     const response = await fetch(track);
-    //     const data = await response.blob();
-    //     const trackName = `track_${i + 1}.mp3`;
-    //     zip.file(trackName, data);
-    // }
-
-    // // Download zip file
-    // // zip.generateAsync({ type: "base64" }).then(function (base64) {
-    // //     location.href = "data:application/zip;base64," + base64;
-    // // });
+    // Download each track
+    const audioResponses = [];
+    for (let i = 0; i < trackUrls.length; i++) {
+        console.log(`Downloads track ${i + 1} / ${trackUrls.length}`);
+        downloadAudioTrack(trackUrls[i]);
+    }
 })();
 
-function getRequestCookie(trackUrl) {}
-
-async function downloadAudioTrack(trackNum, trackUrl) {}
+async function downloadAudioTrack(trackUrl) {
+    const response = GM_xmlhttpRequest({
+        method: "GET",
+        url: trackUrl,
+        headers: {
+            Referer: window.location.href,
+            Range: "bytes=0-",
+        },
+        onload: function (response) {
+            console.log("Response received:", response.status);
+            console.log("Download complete:", response);
+        },
+    });
+    console.log("Response Code: ", response.status);
+}
 
 async function waitForAudioLoad(track) {
     return new Promise(function (resolve) {
@@ -123,16 +123,4 @@ async function waitForLoadFinish() {
             subtree: true,
         });
     });
-}
-
-function injectFetchListener() {
-    const observer = new PerformanceObserver(function (list) {
-        const entries = list.getEntries().filter(function (entry) {
-            return entry.initiatorType === "audio";
-        });
-        for (const entry of entries) {
-            console.log(entry);
-        }
-    });
-    observer.observe({ entryTypes: ["resource"] });
 }
