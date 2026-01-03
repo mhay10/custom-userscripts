@@ -8,29 +8,47 @@
 //
 // @match        https://ezaudiobookforsoul.com/audiobook/*
 // @match        https://audiobooks4soul.com/*
-// @grant        GM_xmlhttpRequest
-// @connect      *
 //
 // @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 // @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 //
 // @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
 // @require      https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js
+//
+// @grant        GM_xmlhttpRequest
+// @connect      *
 // ==/UserScript==
 
 (async function () {
     "use strict";
 
     // Wait for loading to finish
-    console.log("Waiting for loading to finish...");
     await waitForLoadFinish();
     console.log("Loading finished. Starting...");
 
-    // Get track elements from playlist
+    // Get useful elements from page
     const player = document.querySelector("#audio_content");
     const playlist = player.querySelector(".simp-playlist");
+    const audioElement = player.querySelector("#audio");
     const trackElements = playlist.querySelectorAll(".simp-source");
 
+    // Get decrypted track urls
+    const trackUrls = await decryptTrackUrls(trackElements);
+
+    // Pause audio playback if playing
+    if (!audioElement.paused) {
+        audioElement.pause();
+        audioElement.play();
+        audioElement.pause();
+    }
+
+    // Create and save zip archive from files
+    console.log("Creating zip archive...");
+    const zip = await createZipBlob(trackUrls);
+    saveAs(new Blob([zip]), "audiobook.zip");
+})();
+
+async function decryptTrackUrls(trackElements) {
     // Iterate through tracks and wait for audio to load
     const trackUrls = [];
     for (const track of trackElements) {
@@ -42,28 +60,39 @@
         const trackUrl = track.getAttribute("data-src");
         trackUrls.push(trackUrl);
     }
+
+    // Skip first track (promotional)
     trackUrls.shift();
+
     console.log("Number of tracks found:", trackUrls.length);
+    return trackUrls;
+}
 
-    // Download all tracks
+async function createZipBlob(trackUrls) {
+    // Create files object by downloading each track
     const files = {};
-    for (let i = 0; i < trackUrls.length; i++) {
-        // Download track
-        console.log(`Downloading track ${i + 1} / ${trackUrls.length}...`);
-        const response = await downloadAudioTrack(trackUrls[i]);
+    const chunkSize = 5;
+    for (let i = 0; i < trackUrls.length; i += chunkSize) {
+        // Download 5 tracks at a time
+        const chunk = trackUrls.slice(i, i + chunkSize);
+        const downloads = await Promise.all(
+            chunk.map(function (url) {
+                return downloadAudioTrack(url);
+            })
+        );
 
-        // Convert response to Uint8Array and store in files object
-        files[`track_${i + 1}.mp3`] = new Uint8Array(response.response);
+        // Add downloaded tracks to files object
+        for (let j = 0; j < downloads.length; j++) {
+            const trackNum = i + j + 1;
+            const response = downloads[j];
+            files[`track_${trackNum}.mp3`] = new Uint8Array(response.response);
+            console.log(`Downloaded track ${trackNum}/${trackUrls.length}`);
+        }
     }
-    console.log(files);
 
-    // Create zip archive
-    console.log("Creating zip archive...");
-    const zip = fflate.zipSync(files, { level: 0 });
-
-    // Save zip file
-    saveAs(new Blob([zip]), "audiobook.zip");
-})();
+    // Create zip archive from files
+    return fflate.zipSync(files, { level: 0 });
+}
 
 async function downloadAudioTrack(trackUrl) {
     return new Promise(function (resolve) {
