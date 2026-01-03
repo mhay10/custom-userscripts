@@ -1,26 +1,33 @@
 // ==UserScript==
 // @name         Download EzAudiobooksForSoul Audiobooks
-// @namespace    https://github.com/mhay10/custom-userscripts
-// @version      1.0
 // @description  Download audiobooks from EzAudiobooksForSoul and similar sites
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=ezaudiobookforsoul.com
 // @author       mhay10
+// @version      1.0
+// @namespace    https://github.com/mhay10/custom-userscripts
+//
 // @match        https://ezaudiobookforsoul.com/audiobook/*
 // @match        https://audiobooks4soul.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=ezaudiobookforsoul.com
 // @grant        none
+//
 // @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 // @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
+//
+// @require      https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js
 // ==/UserScript==
 
 (async function () {
     "use strict";
+
+    // Inject fetch listener to capture request headers
+    injectFetchListener();
 
     // Wait for loading to finish
     console.log("Waiting for loading to finish...");
     await waitForLoadFinish();
     console.log("Loading finished. Starting...");
 
-    // Get track elemnts from playlist
+    // Get track elements from playlist
     const player = document.querySelector("#audio_content");
     const playlist = player.querySelector(".simp-playlist");
     const trackElements = playlist.querySelectorAll(".simp-source");
@@ -36,8 +43,30 @@
         const trackUrl = track.getAttribute("data-src");
         trackUrls.push(trackUrl);
     }
-    console.log("All track URLs:", trackUrls);
+    trackUrls.shift();
+
+    console.log("Number of tracks found:", trackUrls.length);
+
+    // // Create zip file and add tracks
+    // const zip = new JSZip();
+    // for (let i = 0; i < trackUrls.length; i++) {
+    //     const track = trackUrls[i];
+    //     console.log(`Downloading track ${i + 1}/${trackUrls.length}...`);
+    //     const response = await fetch(track);
+    //     const data = await response.blob();
+    //     const trackName = `track_${i + 1}.mp3`;
+    //     zip.file(trackName, data);
+    // }
+
+    // // Download zip file
+    // // zip.generateAsync({ type: "base64" }).then(function (base64) {
+    // //     location.href = "data:application/zip;base64," + base64;
+    // // });
 })();
+
+function getRequestCookie(trackUrl) {}
+
+async function downloadAudioTrack(trackNum, trackUrl) {}
 
 async function waitForAudioLoad(track) {
     return new Promise(function (resolve) {
@@ -51,7 +80,6 @@ async function waitForAudioLoad(track) {
                 ) {
                     // Resolve promise once src is updated
                     const trackUrl = track.getAttribute("data-src");
-                    console.log("Audio loaded:", trackUrl);
                     observer.disconnect();
                     resolve(trackUrl);
                 }
@@ -95,4 +123,16 @@ async function waitForLoadFinish() {
             subtree: true,
         });
     });
+}
+
+function injectFetchListener() {
+    const observer = new PerformanceObserver(function (list) {
+        const entries = list.getEntries().filter(function (entry) {
+            return entry.initiatorType === "audio";
+        });
+        for (const entry of entries) {
+            console.log(entry);
+        }
+    });
+    observer.observe({ entryTypes: ["resource"] });
 }
