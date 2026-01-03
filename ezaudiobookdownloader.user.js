@@ -23,7 +23,7 @@
     "use strict";
 
     // Wait for loading to finish
-    await waitForLoadFinish();
+    await waitForPlayerLoadFinish();
     console.log("Loading finished. Starting...");
 
     // Get useful elements from page
@@ -54,7 +54,7 @@ async function decryptTrackUrls(trackElements) {
     for (const track of trackElements) {
         // Load track url by simulating click
         track.click();
-        await waitForAudioLoad(track);
+        await waitForAudioTrackLoad(track);
 
         // Get track url
         const trackUrl = track.getAttribute("data-src");
@@ -111,7 +111,7 @@ async function downloadAudioTrack(trackUrl) {
     });
 }
 
-async function waitForAudioLoad(track) {
+async function waitForAudioTrackLoad(track) {
     return new Promise(function (resolve) {
         // Create mutation observer for audio element
         const observer = new MutationObserver(function (mutations) {
@@ -137,7 +137,7 @@ async function waitForAudioLoad(track) {
     });
 }
 
-async function waitForLoadFinish() {
+async function waitForPlayerLoadFinish() {
     return new Promise(function (resolve) {
         // Create mutation observer for loading element
         const observer = new MutationObserver(function (mutations) {
