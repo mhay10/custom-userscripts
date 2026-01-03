@@ -7,7 +7,7 @@
 // @namespace    https://github.com/mhay10/custom-userscripts
 //
 // @match        https://ezaudiobookforsoul.com/audiobook/*
-// @match        https://audiobooks4soul.com/*
+// @match        https://audiobooks4soul.com/*-audiobook/*
 //
 // @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 // @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
@@ -22,12 +22,18 @@
 (async function () {
     "use strict";
 
+    // Get main audio player element
+    const player = document.querySelector("#audio_content");
+
+    // Inject user interface
+    console.log("Injecting user interface...");
+    injectUserInterface(player);
+
     // Wait for loading to finish
     await waitForPlayerLoadFinish();
     console.log("Loading finished. Starting...");
 
     // Get useful elements from page
-    const player = document.querySelector("#audio_content");
     const playlist = player.querySelector(".simp-playlist");
     const audioElement = player.querySelector("#audio");
     const trackElements = playlist.querySelectorAll(".simp-source");
@@ -45,7 +51,7 @@
     // Create and save zip archive from files
     console.log("Creating zip archive...");
     const zip = await createZipBlob(trackUrls);
-    saveAs(new Blob([zip]), "audiobook.zip");
+    saveAs(new Blob([zip]), getZipFilename(trackUrls[0]));
 })();
 
 async function decryptTrackUrls(trackElements) {
@@ -111,6 +117,18 @@ async function downloadAudioTrack(trackUrl) {
     });
 }
 
+function getZipFilename(trackUrl) {
+    // Parse audiobook title from track url
+    const match = trackUrl.match(/audio\/(.*?)\/\d/);
+
+    // Return formatted filename
+    if (match && match[1]) {
+        return match[1] + ".zip";
+    }
+    // Fallback filename
+    return "audiobook.zip";
+}
+
 async function waitForAudioTrackLoad(track) {
     return new Promise(function (resolve) {
         // Create mutation observer for audio element
@@ -166,4 +184,60 @@ async function waitForPlayerLoadFinish() {
             subtree: true,
         });
     });
+}
+
+function updateProgress(current, total) {
+    const progress = document.querySelector("#progress");
+    const progressTotal = document.querySelector("#progress-total");
+
+    progress.textContent = current;
+    progressTotal.textContent = total;
+}
+
+function injectUserInterface(player) {
+    const html = `
+        <div id="download-container">
+            <button type="button" id="download-btn">Download</button>
+            <p class="status">
+                <span id="instruction">Decrypting...</span>
+                <span>
+                    <span id="progress">106</span>&nbsp;/&nbsp;<span id="progress-total">106</span>
+                </span>
+            </p>
+        </div>`;
+    const css = `
+        <style>
+            #download-container {
+                font-family: "Segoe UI", sans-serif;
+                background: #ffffff;
+                padding: 12px 14px;
+                width: 180px;
+                border: 1px solid #d0d0d0;
+                border-radius: 6px;
+                margin: 7px auto 0;
+            }
+            #download-container button {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #b5c7ff;
+                border-radius: 5px;
+                background: #eaf0ff;
+                color: #1f3fd6;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            #download-container .status {
+                margin: 8px 0 0;
+                display: flex;
+                justify-content: space-between;
+                font-size: 13px;
+                /*color: #444;*/
+            }
+        </style>`;
+
+    // Inject below affilate button
+    const affiliateButton = player.querySelector(".affiliate-button");
+    affiliateButton.insertAdjacentHTML("beforeend", html);
+    affiliateButton.insertAdjacentHTML("beforeend", css);
 }
