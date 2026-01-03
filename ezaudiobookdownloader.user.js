@@ -9,12 +9,13 @@
 // @match        https://ezaudiobookforsoul.com/audiobook/*
 // @match        https://audiobooks4soul.com/*
 // @grant        GM_xmlhttpRequest
+// @connect      *
 //
 // @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 // @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 //
-// @require      https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js
-// @require      https://cdn.jsdelivr.net/npm/observable-slim@0.2.2/dist/observable-slim.umd.min.js
+// @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
+// @require      https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js
 // ==/UserScript==
 
 (async function () {
@@ -44,28 +45,41 @@
     trackUrls.shift();
     console.log("Number of tracks found:", trackUrls.length);
 
-    // Download each track
-    const audioResponses = [];
+    // Download all tracks
+    const files = {};
     for (let i = 0; i < trackUrls.length; i++) {
-        console.log(`Downloads track ${i + 1} / ${trackUrls.length}`);
-        downloadAudioTrack(trackUrls[i]);
+        // Download track
+        console.log(`Downloading track ${i + 1} / ${trackUrls.length}...`);
+        const response = await downloadAudioTrack(trackUrls[i]);
+
+        // Convert response to Uint8Array and store in files object
+        files[`track_${i + 1}.mp3`] = new Uint8Array(response.response);
     }
+    console.log(files);
+
+    // Create zip archive
+    console.log("Creating zip archive...");
+    const zip = fflate.zipSync(files, { level: 0 });
+
+    // Save zip file
+    saveAs(new Blob([zip]), "audiobook.zip");
 })();
 
 async function downloadAudioTrack(trackUrl) {
-    const response = GM_xmlhttpRequest({
-        method: "GET",
-        url: trackUrl,
-        headers: {
-            Referer: window.location.href,
-            Range: "bytes=0-",
-        },
-        onload: function (response) {
-            console.log("Response received:", response.status);
-            console.log("Download complete:", response);
-        },
+    return new Promise(function (resolve) {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: trackUrl,
+            responseType: "arraybuffer",
+            headers: {
+                Referer: window.location.href,
+                Range: "bytes=0-",
+            },
+            onload: function (response) {
+                resolve(response);
+            },
+        });
     });
-    console.log("Response Code: ", response.status);
 }
 
 async function waitForAudioLoad(track) {
