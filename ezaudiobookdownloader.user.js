@@ -98,11 +98,6 @@ async function createZipBlob(trackUrls) {
     });
 
     // Create zip archive from files
-    updateProgress(
-        "Creating zip archive...",
-        trackUrls.length,
-        trackUrls.length
-    );
     return fflate.zipSync(files, { level: 0 });
 }
 
