@@ -93,7 +93,7 @@ async function createZipBlob(trackUrls) {
         // Download audio track
         const trackNum = index + 1;
         const response = await downloadAudioTrack(trackUrl);
-        files[`track_${trackNum}.mp3`] = new Uint8Array(response.response);
+        files[`chapter_${trackNum}.mp3`] = new Uint8Array(response.response);
         updateProgress("Downloading...", trackNum, trackUrls.length);
     });
 
