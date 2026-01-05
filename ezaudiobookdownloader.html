@@ -1,6 +1,6 @@
 <div id="download-container">
     <!-- Download Button -->
-    <button type="button" id="download-btn" data-status="waiting">
+    <button type="button" id="download-btn" data-status="ready">
         Download
     </button>
 
@@ -8,22 +8,47 @@
     <p class="status">
         <span id="instruction">---</span>
         <span>
-            <span id="progress">-</span>&nbsp;/&nbsp;<span id="progress-total"
-                >-</span
-            >
+            <span id="progress">-</span>
+            &nbsp;/&nbsp;
+            <span id="progress-total">-</span>
         </span>
     </p>
-    <progress id="progress-bar" value="0"></progress>
+    <progress id="progress-bar" value="12" max="15"></progress>
 
     <!-- Concurrent Download Progress Bars -->
-    <div id="download-progress-bars">
-        <progress class="dl-progress-bar" value="0"></progress>
-        <progress class="dl-progress-bar" value="0"></progress>
-        <progress class="dl-progress-bar" value="0"></progress>
+    <div id="download-progress-container">
+        <p id="download-progress-label">File Download Progress</p>
+        <div id="download-progress-bars">
+            <div class="dl-progress-row">
+                <span class="dl-progress-percent">0%</span>
+                <progress
+                    class="dl-progress-bar"
+                    value="13"
+                    max="100"
+                ></progress>
+            </div>
+            <div class="dl-progress-row">
+                <span class="dl-progress-percent">0%</span>
+                <progress
+                    class="dl-progress-bar"
+                    value="13"
+                    max="100"
+                ></progress>
+            </div>
+            <div class="dl-progress-row">
+                <span class="dl-progress-percent">0%</span>
+                <progress
+                    class="dl-progress-bar"
+                    value="13"
+                    max="100"
+                ></progress>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
+    /* Styles for the Download Container */
     #download-container {
         font-family: "Segoe UI", sans-serif;
         background: #ffffff;
@@ -33,6 +58,8 @@
         border-radius: 6px;
         margin: 7px auto 0;
     }
+
+    /* Download Button Styles */
     #download-container button {
         width: 100%;
         padding: 8px 12px;
@@ -44,6 +71,7 @@
         font-weight: 600;
         cursor: pointer;
     }
+
     #download-container button[data-status="waiting"] {
         background: #f5f5f5;
         border-color: #e0e0e0;
@@ -52,6 +80,7 @@
         opacity: 0.6;
         position: relative;
     }
+
     #download-container button[data-status="waiting"]::after {
         content: "Waiting...";
         color: #999;
@@ -60,6 +89,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
     }
+
     #download-container button[data-status="downloading"] {
         background: #eaf0ff;
         border-color: #b5c7ff;
@@ -69,6 +99,7 @@
         position: relative;
         pointer-events: none;
     }
+
     #download-container button[data-status="downloading"]::after {
         content: "Downloading...";
         color: #1f3fd6;
@@ -77,12 +108,16 @@
         top: 50%;
         transform: translate(-50%, -50%);
     }
+
+    /* Status Text Styles */
     #download-container .status {
         margin: 8px 0 0;
         display: flex;
         justify-content: space-between;
         font-size: 13px;
     }
+
+    /* Main Progress Bar Styles */
     #progress-bar {
         width: 100%;
         height: 8px;
@@ -92,17 +127,66 @@
         background-color: #e0e0e0;
         overflow: hidden;
     }
+
     #progress-bar::-webkit-progress-bar {
         background-color: #e0e0e0;
         border-radius: 4px;
     }
+
     #progress-bar::-webkit-progress-value {
         background-color: #1f3fd6;
         border-radius: 4px;
         transition: width 0.3s ease;
     }
+
     #progress-bar::-moz-progress-bar {
         background-color: #1f3fd6;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    /* Download Progress Label Styles */
+    #download-progress-label {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+        color: #505050;
+    }
+
+    /* Download Progress bar Rows */
+    .dl-progress-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2px;
+    }
+
+    /* Download Progress Bars Styles */
+    .dl-progress-bar {
+        width: 90%;
+        height: 8px;
+        margin-top: 5px;
+        border-radius: 4px;
+        border: none;
+        background-color: #e0e0e0;
+        overflow: hidden;
+    }
+
+    .dl-progress-bar::-webkit-progress-bar {
+        background-color: #e0e0e0;
+        border-radius: 4px;
+    }
+
+    .dl-progress-bar::-webkit-progress-value {
+        background-color: #7a9aed;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .dl-progress-bar::-moz-progress-bar {
+        background-color: #7a9aed;
         border-radius: 4px;
         transition: width 0.3s ease;
     }
