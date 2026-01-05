@@ -39,6 +39,7 @@ const config = {
         downloadProgressContainerSelector: "#download-progress-container",
         downloadProgressPercentSelector: ".dl-progress-percent",
         downloadProgressBarSelector: ".dl-progress-bar",
+        downloadProgressBarRowSelector: ".dl-progress-row",
     },
 };
 
@@ -260,7 +261,9 @@ function updateProgress(instruction, current, total) {
 
 function updateDownloadProgress(slotIndex, progress) {
     // Get all progress bar elements
-    const progressRows = document.querySelectorAll(".dl-progress-row");
+    const progressRows = document.querySelectorAll(
+        config.customUi.downloadProgressBarRowSelector
+    );
 
     // Ensure slot index is within bounds
     if (slotIndex < 0 || slotIndex >= progressRows.length) {
