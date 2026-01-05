@@ -116,10 +116,12 @@ async function decryptTrackUrls(trackElements) {
 async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
     const folder = getZipFilename(trackUrls[0]).replace(".zip", "");
-    const files = { folder: {} };
-    let numDownloaded = 0;
-    let activeSlots = []; // Track active download slots
+    const files = {};
+    files[folder] = {};
 
+    // Download audio tracks with limited concurrency
+    let numDownloaded = 0;
+    let activeSlots = [];
     await async.forEachOfLimit(trackUrls, 3, async function (trackUrl, index) {
         // Find available slot by checking for undefined entries
         const slotIndex = activeSlots.findIndex(
