@@ -16,7 +16,10 @@
 // @require      https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js
 // @require      https://cdn.jsdelivr.net/npm/async@3.2.6/dist/async.min.js
 //
+// @resource     UI_HTML https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.html
+//
 // @grant        GM_xmlhttpRequest
+// @grant        GM_getResourceText
 // @connect      *
 // ==/UserScript==
 
@@ -89,12 +92,15 @@ async function decryptTrackUrls(trackElements) {
 async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
     const files = {};
-    await async.forEachOfLimit(trackUrls, 5, async function (trackUrl, index) {
+    let numDownloaded = 0;
+    await async.forEachOfLimit(trackUrls, 3, async function (trackUrl, index) {
         // Download audio track
-        const trackNum = index + 1;
         const response = await downloadAudioTrack(trackUrl);
-        files[`chapter_${trackNum}.mp3`] = new Uint8Array(response.response);
-        updateProgress("Downloading...", trackNum, trackUrls.length);
+        files[`chapter_${index + 1}.mp3`] = new Uint8Array(response.response);
+
+        // Update download progress
+        updateProgress("Downloading...", numDownloaded, trackUrls.length);
+        numDownloaded++;
     });
 
     // Create zip archive from files
@@ -205,104 +211,105 @@ function updateProgress(instruction, current, total) {
 }
 
 function injectUserInterface(player) {
-    const html = `
-        <div id="download-container">
-            <button type="button" id="download-btn" data-status="waiting">Download</button>
-            <p class="status">
-                <span id="instruction">---</span>
-                <span>
-                    <span id="progress">-</span>&nbsp;/&nbsp;<span id="progress-total">-</span>
-                </span>
-            </p>
-            <progress id="progress-bar" value="0"></progress>
-        </div>`;
-    const css = `
-        <style>
-            #download-container {
-                font-family: "Segoe UI", sans-serif;
-                background: #ffffff;
-                padding: 12px 14px;
-                width: 240px;
-                border: 1px solid #d0d0d0;
-                border-radius: 6px;
-                margin: 7px auto 0;
-            }
-            #download-container button {
-                width: 100%;
-                padding: 8px 12px;
-                border: 1px solid #b5c7ff;
-                border-radius: 5px;
-                background: #eaf0ff;
-                color: #1f3fd6;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-            }
-            #download-container button[data-status="waiting"] {
-                background: #f5f5f5;
-                border-color: #e0e0e0;
-                color: transparent;
-                cursor: not-allowed;
-                opacity: 0.6;
-                position: relative;
-            }
-            #download-container button[data-status="waiting"]::after {
-                content: "Waiting...";
-                color: #999;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-            }
-            #download-container button[data-status="downloading"] {
-                background: #eaf0ff;
-                border-color: #b5c7ff;
-                color: transparent;
-                cursor: not-allowed;
-                opacity: 0.5;
-                position: relative;
-                pointer-events: none;
-            }
-            #download-container button[data-status="downloading"]::after {
-                content: "Downloading...";
-                color: #1f3fd6;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-            }
-            #download-container .status {
-                margin: 8px 0 0;
-                display: flex;
-                justify-content: space-between;
-                font-size: 13px;
-            }
-            #progress-bar {
-                width: 100%;
-                height: 8px;
-                margin-top: 8px;
-                border-radius: 4px;
-                border: none;
-                background-color: #e0e0e0;
-                overflow: hidden;
-            }
-            #progress-bar::-webkit-progress-bar {
-                background-color: #e0e0e0;
-                border-radius: 4px;
-            }
-            #progress-bar::-webkit-progress-value {
-                background-color: #1f3fd6;
-                border-radius: 4px;
-                transition: width 0.3s ease;
-            }
-            #progress-bar::-moz-progress-bar {
-                background-color: #1f3fd6;
-                border-radius: 4px;
-                transition: width 0.3s ease;
-            }
-        </style>`;
+    // const html = `
+    //     <div id="download-container">
+    //         <button type="button" id="download-btn" data-status="waiting">Download</button>
+    //         <p class="status">
+    //             <span id="instruction">---</span>
+    //             <span>
+    //                 <span id="progress">-</span>&nbsp;/&nbsp;<span id="progress-total">-</span>
+    //             </span>
+    //         </p>
+    //         <progress id="progress-bar" value="0"></progress>
+    //     </div>`;
+    // const css = `
+    //     <style>
+    //         #download-container {
+    //             font-family: "Segoe UI", sans-serif;
+    //             background: #ffffff;
+    //             padding: 12px 14px;
+    //             width: 240px;
+    //             border: 1px solid #d0d0d0;
+    //             border-radius: 6px;
+    //             margin: 7px auto 0;
+    //         }
+    //         #download-container button {
+    //             width: 100%;
+    //             padding: 8px 12px;
+    //             border: 1px solid #b5c7ff;
+    //             border-radius: 5px;
+    //             background: #eaf0ff;
+    //             color: #1f3fd6;
+    //             font-size: 14px;
+    //             font-weight: 600;
+    //             cursor: pointer;
+    //         }
+    //         #download-container button[data-status="waiting"] {
+    //             background: #f5f5f5;
+    //             border-color: #e0e0e0;
+    //             color: transparent;
+    //             cursor: not-allowed;
+    //             opacity: 0.6;
+    //             position: relative;
+    //         }
+    //         #download-container button[data-status="waiting"]::after {
+    //             content: "Waiting...";
+    //             color: #999;
+    //             position: absolute;
+    //             left: 50%;
+    //             top: 50%;
+    //             transform: translate(-50%, -50%);
+    //         }
+    //         #download-container button[data-status="downloading"] {
+    //             background: #eaf0ff;
+    //             border-color: #b5c7ff;
+    //             color: transparent;
+    //             cursor: not-allowed;
+    //             opacity: 0.5;
+    //             position: relative;
+    //             pointer-events: none;
+    //         }
+    //         #download-container button[data-status="downloading"]::after {
+    //             content: "Downloading...";
+    //             color: #1f3fd6;
+    //             position: absolute;
+    //             left: 50%;
+    //             top: 50%;
+    //             transform: translate(-50%, -50%);
+    //         }
+    //         #download-container .status {
+    //             margin: 8px 0 0;
+    //             display: flex;
+    //             justify-content: space-between;
+    //             font-size: 13px;
+    //         }
+    //         #progress-bar {
+    //             width: 100%;
+    //             height: 8px;
+    //             margin-top: 8px;
+    //             border-radius: 4px;
+    //             border: none;
+    //             background-color: #e0e0e0;
+    //             overflow: hidden;
+    //         }
+    //         #progress-bar::-webkit-progress-bar {
+    //             background-color: #e0e0e0;
+    //             border-radius: 4px;
+    //         }
+    //         #progress-bar::-webkit-progress-value {
+    //             background-color: #1f3fd6;
+    //             border-radius: 4px;
+    //             transition: width 0.3s ease;
+    //         }
+    //         #progress-bar::-moz-progress-bar {
+    //             background-color: #1f3fd6;
+    //             border-radius: 4px;
+    //             transition: width 0.3s ease;
+    //         }
+    //     </style>`;
 
     //Inject in error container
+    const html = GM_getResourceText("UI_HTML");
     const errorContainer = player.querySelector(".error-report");
     errorContainer.insertAdjacentHTML("afterbegin", html + css);
 }
