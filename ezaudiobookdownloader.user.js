@@ -5,6 +5,7 @@
 // @author       mhay10
 // @version      1.0
 // @namespace    https://github.com/mhay10/custom-userscripts
+// @license      MIT
 //
 // @match        https://ezaudiobookforsoul.com/audiobook/*
 // @match        https://audiobooks4soul.com/*
