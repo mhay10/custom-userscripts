@@ -7,7 +7,7 @@
 // @namespace    https://github.com/mhay10/custom-userscripts
 //
 // @match        https://ezaudiobookforsoul.com/audiobook/*
-// @match        https://audiobooks4soul.com/*-audiobook/*
+// @match        https://audiobooks4soul.com/*
 //
 // @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
 // @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
