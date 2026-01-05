@@ -120,7 +120,7 @@ async function createZipBlob(trackUrls) {
     let activeSlots = []; // Track active download slots
 
     await async.forEachOfLimit(trackUrls, 3, async function (trackUrl, index) {
-        // Find available slot
+        // Find available slot by checking for undefined entries
         const slotIndex = activeSlots.findIndex(
             (slot) => slot === null || slot === undefined
         );
