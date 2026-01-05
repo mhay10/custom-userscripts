@@ -117,7 +117,6 @@ async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
     const folder = getZipFilename(trackUrls[0]).replace(".zip", "");
     const files = {};
-    files[folder] = {};
 
     // Download audio tracks with limited concurrency
     let numDownloaded = 0;
@@ -132,7 +131,7 @@ async function createZipBlob(trackUrls) {
 
         // Download audio track with progress tracking
         const response = await downloadAudioTrack(trackUrl, slot);
-        files.folder[`${config.filePrefix}${index + 1}.mp3`] = new Uint8Array(
+        files[`${folder}/${config.filePrefix}${index + 1}.mp3`] = new Uint8Array(
             response.response
         );
 
