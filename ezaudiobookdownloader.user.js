@@ -45,8 +45,6 @@ const config = {
         downloadProgressContainerSelector: "#download-progress-container",
         downloadProgressBarSelector: ".dl-progress-bar",
     },
-
-    // 
 };
 
 (async function () {
