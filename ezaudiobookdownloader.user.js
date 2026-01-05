@@ -52,14 +52,14 @@ const config = {
     "use strict";
 
     // Get player element and inject UI
-    const player = document.querySelector("#audio_content");
+    const player = document.querySelector(config.pageUi.playerSelector);
     injectUserInterface(player);
 
     // Get other useful elements
-    const audioElement = player.querySelector("#audio");
-    const playlist = player.querySelector(".simp-playlist");
-    const trackElements = playlist.querySelectorAll(".simp-source");
-    const downloadButton = player.querySelector("#download-btn");
+    const audioElement = player.querySelector(config.pageUi.audioSelector);
+    const playlist = player.querySelector(config.pageUi.playlistSelector);
+    const trackElements = playlist.querySelectorAll(config.pageUi.trackSelector);
+    const downloadButton = player.querySelector(config.customUi.downloadButtonSelector);
 
     // Enable download button once fully loaded
     await waitForPlayerLoadFinish();
@@ -128,7 +128,7 @@ async function createZipBlob(trackUrls) {
         
         // Download audio track with progress tracking
         const response = await downloadAudioTrack(trackUrl, slot);
-        files[`chapter_${index + 1}.mp3`] = new Uint8Array(response.response);
+        files[`${config.filePrefix}${index + 1}.mp3`] = new Uint8Array(response.response);
 
         // Clear slot and update download progress
         activeSlots[slot] = null;
@@ -171,7 +171,7 @@ function getZipFilename(trackUrl) {
         return match[1] + ".zip";
     }
     // Fallback filename
-    return "audiobook.zip";
+    return config.fallbackZipName;
 }
 
 async function waitForAudioTrackLoad(track) {
@@ -233,10 +233,10 @@ async function waitForPlayerLoadFinish() {
 
 function updateProgress(instruction, current, total) {
     // Get progress elements
-    const instructionElem = document.querySelector("#instruction");
-    const progressElem = document.querySelector("#progress");
-    const progressTotalElem = document.querySelector("#progress-total");
-    const progressBarElem = document.querySelector("#progress-bar");
+    const instructionElem = document.querySelector(config.customUi.instructionSelector);
+    const progressElem = document.querySelector(config.customUi.currentProgressSelector);
+    const progressTotalElem = document.querySelector(config.customUi.totalProgressSelector);
+    const progressBarElem = document.querySelector(config.customUi.mainProgressSelector);
 
     // Update progress text
     instructionElem.textContent = instruction;
@@ -264,8 +264,8 @@ function updateDownloadProgress(slotIndex, progress) {
     
     // Get specific progress elements for this slot
     const row = progressRows[slotIndex];
-    const percentElem = row.querySelector(".dl-progress-percent");
-    const progressBar = row.querySelector(".dl-progress-bar");
+    const percentElem = row.querySelector(config.customUi.downloadProgressPercentSelector);
+    const progressBar = row.querySelector(config.customUi.downloadProgressBarSelector);
     
     // Update progress display
     percentElem.textContent = `${percentage}%`;
