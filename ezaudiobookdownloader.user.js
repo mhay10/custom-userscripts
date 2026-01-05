@@ -3,7 +3,7 @@
 // @description  Download audiobooks from EzAudiobooksForSoul and similar sites
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=ezaudiobookforsoul.com
 // @author       mhay10
-// @version      1.1
+// @version      1.2
 // @namespace    https://github.com/mhay10/custom-userscripts
 // @license      MIT; https://opensource.org/licenses/MIT
 // @match        https://ezaudiobookforsoul.com/audiobook/*
@@ -115,7 +115,8 @@ async function decryptTrackUrls(trackElements) {
 
 async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
-    const files = {};
+    const folder = getZipFilename(trackUrls[0]).replace(".zip", "");
+    const files = { folder: {} };
     let numDownloaded = 0;
     let activeSlots = []; // Track active download slots
 
@@ -129,7 +130,7 @@ async function createZipBlob(trackUrls) {
 
         // Download audio track with progress tracking
         const response = await downloadAudioTrack(trackUrl, slot);
-        files[`${config.filePrefix}${index + 1}.mp3`] = new Uint8Array(
+        files.folder[`${config.filePrefix}${index + 1}.mp3`] = new Uint8Array(
             response.response
         );
 
