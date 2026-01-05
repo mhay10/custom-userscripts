@@ -9,14 +9,14 @@
 // @match        https://ezaudiobookforsoul.com/audiobook/*
 // @match        https://audiobooks4soul.com/*
 //
-// @updateURL    https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
-// @downloadURL  https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.user.js
+// @updateURL    https://github.com/mhay10/custom-userscripts/raw/refs/heads/main/ezaudiobookdownloader.user.js
+// @downloadURL  https://github.com/mhay10/custom-userscripts/raw/refs/heads/main/ezaudiobookdownloader.user.js
 //
 // @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
 // @require      https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js
 // @require      https://cdn.jsdelivr.net/npm/async@3.2.6/dist/async.min.js
 //
-// @resource     UI_HTML https://github.com/mhay10/custom-userscripts/raw/main/ezaudiobookdownloader.html
+// @resource     UI_HTML https://github.com/mhay10/custom-userscripts/raw/refs/heads/main/ezaudiobookdownloader.html
 //
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
