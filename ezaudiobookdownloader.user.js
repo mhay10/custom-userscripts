@@ -3,7 +3,7 @@
 // @description  Download audiobooks from EzAudiobooksForSoul and similar sites
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=ezaudiobookforsoul.com
 // @author       mhay10
-// @version      1.2
+// @version      1.3
 // @namespace    https://github.com/mhay10/custom-userscripts
 // @license      MIT; https://opensource.org/licenses/MIT
 // @match        https://ezaudiobookforsoul.com/audiobook/*
