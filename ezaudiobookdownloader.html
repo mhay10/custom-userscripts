@@ -1,6 +1,6 @@
 <div id="download-container">
     <!-- Download Button -->
-    <button type="button" id="download-btn" data-status="ready">
+    <button type="button" id="download-btn" data-status="waiting">
         Download
     </button>
 
@@ -36,7 +36,7 @@
                 ></progress>
             </div>
             <div class="dl-progress-row">
-                <span class="dl-progress-percent">0%</span>
+                <span class="dl-progress-percent">100%</span>
                 <progress
                     class="dl-progress-bar"
                     value="0"
@@ -163,9 +163,14 @@
         margin-bottom: 2px;
     }
 
+    /* Percentage Text Styles */
+    .dl-progress-bar {
+        font-size: 13px;
+    }
+
     /* Download Progress Bars Styles */
     .dl-progress-bar {
-        width: 90%;
+        width: calc(100% - 50px);
         height: 8px;
         margin-top: 5px;
         border-radius: 4px;
