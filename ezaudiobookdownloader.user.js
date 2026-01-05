@@ -43,6 +43,7 @@ const config = {
         currentProgressSelector: "#progress",
         totalProgressSelector: "#progress-total",
         downloadProgressContainerSelector: "#download-progress-container",
+        downloadProgressPercentSelector: ".dl-progress-percent",
         downloadProgressBarSelector: ".dl-progress-bar",
     },
 };
@@ -117,21 +118,29 @@ async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
     const files = {};
     let numDownloaded = 0;
+    let activeSlots = []; // Track active download slots
+    
     await async.forEachOfLimit(trackUrls, 3, async function (trackUrl, index) {
-        // Download audio track
-        const response = await downloadAudioTrack(trackUrl);
+        // Find available slot
+        const slotIndex = activeSlots.findIndex(slot => slot === null || slot === undefined);
+        const slot = slotIndex === -1 ? activeSlots.length : slotIndex;
+        activeSlots[slot] = index;
+        
+        // Download audio track with progress tracking
+        const response = await downloadAudioTrack(trackUrl, slot);
         files[`chapter_${index + 1}.mp3`] = new Uint8Array(response.response);
 
-        // Update download progress
-        updateProgress("Downloading...", numDownloaded, trackUrls.length);
+        // Clear slot and update download progress
+        activeSlots[slot] = null;
         numDownloaded++;
+        updateProgress("Downloading...", numDownloaded, trackUrls.length);
     });
 
     // Create zip archive from files
     return fflate.zipSync(files, { level: 0 });
 }
 
-async function downloadAudioTrack(trackUrl) {
+async function downloadAudioTrack(trackUrl, slotIndex = 0) {
     return new Promise(function (resolve) {
         GM_xmlhttpRequest({
             method: "GET",
@@ -141,7 +150,12 @@ async function downloadAudioTrack(trackUrl) {
                 Referer: window.location.href,
                 Range: "bytes=0-",
             },
+            onprogress: function (progress) {
+                updateDownloadProgress(slotIndex, progress);
+            },
             onload: function (response) {
+                // Set progress to 100% on completion
+                updateDownloadProgress(slotIndex, { loaded: 1, total: 1 });
                 resolve(response);
             },
         });
@@ -232,6 +246,30 @@ function updateProgress(instruction, current, total) {
     // Update progress bar
     progressBarElem.value = typeof current === "number" ? current : 0;
     progressBarElem.max = typeof total === "number" ? total : 1;
+}
+
+function updateDownloadProgress(slotIndex, progress) {
+    // Get all progress bar elements
+    const progressRows = document.querySelectorAll(".dl-progress-row");
+    
+    // Ensure slot index is within bounds
+    if (slotIndex < 0 || slotIndex >= progressRows.length) {
+        return;
+    }
+    
+    // Calculate percentage
+    const percentage = progress.total > 0 
+        ? Math.round((progress.loaded / progress.total) * 100)
+        : 0;
+    
+    // Get specific progress elements for this slot
+    const row = progressRows[slotIndex];
+    const percentElem = row.querySelector(".dl-progress-percent");
+    const progressBar = row.querySelector(".dl-progress-bar");
+    
+    // Update progress display
+    percentElem.textContent = `${percentage}%`;
+    progressBar.value = percentage;
 }
 
 function injectUserInterface(player) {
