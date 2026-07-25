@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Download GoldenAudiobook audiobooks
+// @name         Download GoldenAudiobook Audiobooks
 // @description  Download audiobooks from GoldenAudiobook and similar sites
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=goldenaudiobooks.com
 // @author       mhay10
@@ -16,6 +16,7 @@
 // @require      https://cdn.jsdelivr.net/npm/async@3.2.6/dist/async.min.js
 // @resource     UI_HTML https://raw.githack.com/mhay10/custom-userscripts/main/goldenaudiobookdownloader/goldenaudiobookdownloader.html
 // @grant        GM_xmlhttpRequest
+// @grant        GM_getResourceText
 // @connect      *
 // ==/UserScript==
 
@@ -27,23 +28,22 @@ const config = {
 
 	// UI Selectors
 	pageUI: {
+		coverSelector: "figure.wp-caption",
 		audioSelector: "audio.wp-audio-shortcode"
-	}
+	},
 }
 
 
 (async function () {
 	"use strict";
 
-	// Get audio elements and inject custom UI above
-	const audioElements = document.querySelectorAll(config.pageUi.audioSelector);
-	if (audioElements.length > 0) {
-		injectUserInterface(audioElements[0])
-	}
-
+	// Get book cover element and inject UI
+	const cover = document.querySelector(config.pageUI.coverSelector);
+	injectUserInterface(cover);
 })();
 
-function injectUserInterface(audioElement) {
-	// Inject above above given audio element
+function injectUserInterface(cover) {
+	// Inject into end of container
 	const html = GM_getResourceText("UI_HTML")
+	cover.insertAdjacentHTML("beforeend", html);
 }
