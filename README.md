@@ -11,14 +11,14 @@ A collection of custom userscripts that I occasionally use.
 
 ## Scripts
 
-* **EzAudiobooksForSoul Downloader**
-  * Downloads every chapter from supported audiobook pages into a single ZIP archive.
-  * Supports:
-    * https://ezaudiobookforsoul.com
-    * https://audiobooks4soul.com
-  * Features:
-    * One-click audiobook downloads
-    * Automatic ZIP creation
-    * Concurrent downloads
-    * Download progress tracking
-    * Automatic archive naming
+- **EzAudiobooksForSoul Downloader**
+  - Downloads every chapter from supported audiobook pages into a single ZIP archive.
+  - Supports:
+    - https://ezaudiobookforsoul.com
+    - https://audiobooks4soul.com
+  - Features:
+    - One-click audiobook downloads
+    - Automatic ZIP creation
+    - Concurrent downloads
+    - Download progress tracking
+    - Automatic archive naming
