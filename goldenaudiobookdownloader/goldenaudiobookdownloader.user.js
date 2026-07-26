@@ -3,7 +3,7 @@
 // @description  Download audiobooks from GoldenAudiobook and similar sites
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=goldenaudiobooks.com
 // @author       mhay10
-// @version      0.1.0
+// @version      0.1.1
 // @namespace    https://github.com/mhay10/custom-userscripts
 // @license      MIT; https://opensource.org/licenses/MIT
 // @match        https://goldenaudiobooks.com/*
@@ -31,7 +31,7 @@ const config = {
 
 	// UI Selectors
 	pageUI: {
-		coverSelector: "figure.wp-caption",
+		coverSelector: ".wp-caption.aligncenter",
 		audioSelector: "audio.wp-audio-shortcode",
 	},
 	customUI: {
