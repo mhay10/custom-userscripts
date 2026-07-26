@@ -1,6 +1,12 @@
 <div class="container-sm p-2 border rounded mt-3 mb-3" style="width: 300px">
 	<!-- Download Button -->
-	<button class="btn btn-primary fw-bold w-100">Download</button>
+	<button
+		id="download-btn"
+		class="btn btn-primary fw-bold w-100"
+		data-status="waiting"
+	>
+		Download
+	</button>
 
 	<!-- Program Status -->
 	<div class="d-flex justify-content-between align-items-center small mt-3">
@@ -22,3 +28,35 @@
 		></div>
 	</div>
 </div>
+
+<style>
+	#download-btn[data-status="waiting"] {
+		color: transparent;
+		position: relative;
+		pointer-events: none;
+	}
+
+	#download-btn[data-status="waiting"]::after {
+		content: "Waiting...";
+		color: var(--bs-secondary-color);
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+	}
+
+	#download-btn[data-status="downloading"] {
+		color: transparent;
+		position: relative;
+		pointer-events: none;
+	}
+
+	#download-btn[data-status="downloading"]::after {
+		content: "Downloading...";
+		color: white;
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+	}
+</style>

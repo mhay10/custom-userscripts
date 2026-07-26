@@ -34,6 +34,13 @@ const config = {
 		coverSelector: "figure.wp-caption",
 		audioSelector: "audio.wp-audio-shortcode",
 	},
+	customUI: {
+		downloadButtonSelector: "#download-btn",
+		instructionSelector: "#instruction",
+		progressSelector: "#progress",
+		progressTotalSelector: "#progress-total",
+		progressBarSelector: "#progress-bar",
+	},
 };
 
 (async function () {
@@ -51,23 +58,32 @@ const config = {
 			});
 		});
 	}
+	downloadButton.setAttribute("data-status", "ready");
 	console.log("Page fully loaded");
 
-	// Get book cover element and inject UI
-	const cover = document.querySelector(config.pageUI.coverSelector);
-	injectUserInterface(cover);
+	// Inject the UI into DOM
+	injectUserInterface();
 	console.log("Custom UI injected");
 
-	//
+	// Start download when button is clicked
+	const downloadButton = document.querySelector(
+		config.customUI.downloadButtonSelector,
+	);
+	downloadButton.addEventListener("click", async function () {
+		// Prevent multiple clicks
+		if (downloadButton.getAttribute("data-status"))
+	});
 })();
 
-function injectUserInterface(cover) {
-	// Inject into end of container
-	const html = GM_getResourceText("UI_HTML");
-	cover.insertAdjacentHTML("afterend", html);
-}
-
 function injectBootstrap() {
+	// Inject using Userscript functions
 	const css = GM_getResourceText("BOOTSTRAP_CSS");
 	GM_addStyle(css);
+}
+
+function injectUserInterface() {
+	// Inject after book cover container
+	const html = GM_getResourceText("UI_HTML");
+	const cover = document.querySelector(config.pageUI.coverSelector);
+	cover.insertAdjacentHTML("afterend", html);
 }
