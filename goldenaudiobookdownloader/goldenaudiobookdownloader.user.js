@@ -218,7 +218,7 @@ function getZipFilename(trackUrl) {
 
 	// Return formatted filename
 	if (match && match[1]) {
-		const filename = decodeURIComponent(match[1]).replace(" ", "_");
+		const filename = decodeURIComponent(match[1]).replace(/\s+/g, "_");
 		return `${filename}.zip`;
 	}
 	// Fallback filename
