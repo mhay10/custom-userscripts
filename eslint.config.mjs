@@ -27,6 +27,11 @@ export default [
         GM_unregisterMenuCommand: "readonly",
         GM_xmlhttpRequest: "readonly",
         unsafeWindow: "readonly",
+
+        // Libraries
+        async: "readonly",
+        fflate: "readonly",
+        saveAs: "readonly",
       },
     },
     rules: {

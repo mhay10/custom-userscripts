@@ -37,8 +37,8 @@ const config = {
         currentProgressSelector: "#progress",
         totalProgressSelector: "#progress-total",
         downloadProgressContainerSelector: "#download-progress-container",
-        downloadProgressPercentSelector: ".dl-progress-percent",
-        downloadProgressBarSelector: ".dl-progress-bar",
+        downloadProgressPercentSelector: ".conc-progress-percent",
+        downloadProgressBarSelector: ".conc-progress-bar",
         downloadProgressBarRowSelector: ".dl-progress-row",
     },
 };

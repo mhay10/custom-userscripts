@@ -8,7 +8,7 @@
 		Download
 	</button>
 
-	<!-- Program Status -->
+	<!-- Main Status -->
 	<div class="d-flex justify-content-between align-items-center small mt-3">
 		<span id="instruction">---</span>
 		<span>
@@ -16,7 +16,7 @@
 		</span>
 	</div>
 
-	<!-- Progress Bar -->
+	<!-- Main Progress Bar -->
 	<div class="progress mt-2">
 		<div
 			id="progress-bar"
@@ -27,21 +27,91 @@
 			aria-valuemax="100"
 		></div>
 	</div>
+
+	<!-- Concurrent Download Progress Bars -->
+	<div id="download-progress-container" class="mt-3">
+		<p class="text-center small fw-bold mb-0 pb-1">
+			File Download Progress
+		</p>
+		<div id="download-progress-bars">
+			<div class="d-flex align-items-center mb-1">
+				<span class="conc-progress-percent small me-2">0%</span>
+				<div
+					class="progress conc-progress-bar-track"
+					style="height: 8px"
+				>
+					<div
+						class="progress-bar conc-progress-bar"
+						role="progressbar"
+						style="width: 0"
+						aria-valuemin="0"
+						aria-valuemax="100"
+					></div>
+				</div>
+			</div>
+			<div class="d-flex align-items-center mb-1">
+				<span class="conc-progress-percent small me-2">0%</span>
+				<div
+					class="progress conc-progress-bar-track"
+					style="height: 8px"
+				>
+					<div
+						class="progress-bar conc-progress-bar"
+						role="progressbar"
+						style="width: 0"
+						aria-valuemin="0"
+						aria-valuemax="100"
+					></div>
+				</div>
+			</div>
+			<div class="d-flex align-items-center mb-1">
+				<span class="conc-progress-percent small me-2">0%</span>
+				<div
+					class="progress conc-progress-bar-track"
+					style="height: 8px"
+				>
+					<div
+						class="progress-bar conc-progress-bar"
+						role="progressbar"
+						style="width: 0"
+						aria-valuemin="0"
+						aria-valuemax="100"
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <style>
 	#download-btn[data-status="downloading"] {
+		background-color: var(--bs-secondary);
+		border-color: var(--bs-secondary);
 		color: transparent;
+		opacity: 0.65;
 		position: relative;
+		cursor: not-allowed;
 		pointer-events: none;
 	}
 
 	#download-btn[data-status="downloading"]::after {
 		content: "Downloading...";
-		color: white;
+		color: var(--bs-white);
 		position: absolute;
 		inset: 0;
 		display: grid;
 		place-items: center;
+	}
+
+	.conc-progress-percent {
+		display: inline-block;
+		width: 2.5rem;
+		flex-shrink: 0;
+		text-align: left;
+	}
+
+	.conc-progress-bar-track {
+		flex: 1 1 auto;
+		min-width: 0;
 	}
 </style>
