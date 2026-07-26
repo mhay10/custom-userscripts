@@ -58,7 +58,6 @@ const config = {
 			});
 		});
 	}
-	downloadButton.setAttribute("data-status", "ready");
 	console.log("Page fully loaded");
 
 	// Inject the UI into DOM
@@ -71,7 +70,22 @@ const config = {
 	);
 	downloadButton.addEventListener("click", async function () {
 		// Prevent multiple clicks
-		if (downloadButton.getAttribute("data-status"))
+		if (downloadButton.getAttribute("data-status") === "ready") {
+			downloadButton.setAttribute("data-status", "downloading");
+		} else {
+			return;
+		}
+		console.log("Audiobook download started");
+
+		// Get audio source URLs
+		const audioElems = document.querySelectorAll(
+			config.pageUI.audioSelector,
+		);
+		const audioUrls = audioElems.map(function (audioElem) {
+			return audioElem.src;
+		});
+
+		console.log("Audiobook URLS:", audioUrls);
 	});
 })();
 

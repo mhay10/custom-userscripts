@@ -3,7 +3,7 @@
 	<button
 		id="download-btn"
 		class="btn btn-primary fw-bold w-100"
-		data-status="waiting"
+		data-status="ready"
 	>
 		Download
 	</button>
@@ -30,21 +30,6 @@
 </div>
 
 <style>
-	#download-btn[data-status="waiting"] {
-		color: transparent;
-		position: relative;
-		pointer-events: none;
-	}
-
-	#download-btn[data-status="waiting"]::after {
-		content: "Waiting...";
-		color: var(--bs-secondary-color);
-		position: absolute;
-		inset: 0;
-		display: grid;
-		place-items: center;
-	}
-
 	#download-btn[data-status="downloading"] {
 		color: transparent;
 		position: relative;
