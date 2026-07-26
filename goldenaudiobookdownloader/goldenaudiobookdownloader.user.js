@@ -3,7 +3,7 @@
 // @description  Download audiobooks from GoldenAudiobook and similar sites
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=goldenaudiobooks.com
 // @author       mhay10
-// @version      0.1
+// @version      0.1.0
 // @namespace    https://github.com/mhay10/custom-userscripts
 // @license      MIT; https://opensource.org/licenses/MIT
 // @match        https://goldenaudiobooks.com/*
@@ -233,9 +233,9 @@ function injectBootstrap() {
 
 function injectUserInterface() {
 	// Inject after book cover container
-	// const html = GM_getResourceText("UI_HTML");
+	const html = GM_getResourceText("UI_HTML");
 	const cover = document.querySelector(config.pageUI.coverSelector);
-	cover.insertAdjacentHTML("afterend", dev_html);
+	cover.insertAdjacentHTML("afterend", html);
 
 	// Cache download slot elements
 	const progressBarElems = document.querySelectorAll(
