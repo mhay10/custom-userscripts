@@ -14,7 +14,7 @@
 // @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
 // @require      https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js
 // @require      https://cdn.jsdelivr.net/npm/async@3.2.6/dist/async.min.js
-// @resource     UI_HTML https://cdn.jsdelivr.net/gh/mhay10/custom-userscripts@main/goldenaudiobookdownloader/goldenaudiobookdownloader.html
+// @resource     UI_HTML https://cdn.jsdelivr.net/gh/mhay10/custom-userscripts@latest/goldenaudiobookdownloader/goldenaudiobookdownloader.html
 // @resource     BOOTSTRAP_CSS https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
@@ -22,125 +22,6 @@
 // @connect      *
 // @run-at       document-end
 // ==/UserScript==
-
-const dev_html = `
-<div class="container-sm p-2 border rounded mt-3 mb-3" style="width: 300px">
-	<!-- Download Button -->
-	<button
-		id="download-btn"
-		class="btn btn-primary fw-bold w-100"
-		data-status="ready"
-	>
-		Download
-	</button>
-
-	<!-- Main Status -->
-	<div class="d-flex justify-content-between align-items-center small mt-3">
-		<span id="instruction">---</span>
-		<span>
-			<span id="progress">-</span> / <span id="progress-total">-</span>
-		</span>
-	</div>
-
-	<!-- Main Progress Bar -->
-	<div class="progress mt-2">
-		<div
-			id="progress-bar"
-			class="progress-bar"
-			role="progressbar"
-			style="width: 0"
-			aria-valuemin="0"
-			aria-valuemax="100"
-		></div>
-	</div>
-
-	<!-- Concurrent Download Progress Bars -->
-	<div id="download-progress-container" class="mt-3">
-		<p class="text-center small fw-bold mb-0 pb-1">File Download Progress</p>
-		<div id="download-progress-bars">
-			<div class="d-flex align-items-center mb-1">
-				<span class="conc-progress-percent small me-2">0%</span>
-				<div
-					class="progress conc-progress-bar-track"
-					style="height: 8px"
-				>
-					<div
-						class="progress-bar conc-progress-bar"
-						role="progressbar"
-						style="width: 0"
-						aria-valuemin="0"
-						aria-valuemax="100"
-					></div>
-				</div>
-			</div>
-			<div class="d-flex align-items-center mb-1">
-				<span class="conc-progress-percent small me-2">0%</span>
-				<div
-					class="progress conc-progress-bar-track"
-					style="height: 8px"
-				>
-					<div
-						class="progress-bar conc-progress-bar"
-						role="progressbar"
-						style="width: 0"
-						aria-valuemin="0"
-						aria-valuemax="100"
-					></div>
-				</div>
-			</div>
-			<div class="d-flex align-items-center mb-1">
-				<span class="conc-progress-percent small me-2">0%</span>
-				<div
-					class="progress conc-progress-bar-track"
-					style="height: 8px"
-				>
-					<div
-						class="progress-bar conc-progress-bar"
-						role="progressbar"
-						style="width: 0"
-						aria-valuemin="0"
-						aria-valuemax="100"
-					></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<style>
-	#download-btn[data-status="downloading"] {
-		background-color: var(--bs-secondary);
-		border-color: var(--bs-secondary);
-		color: transparent;
-		opacity: 0.65;
-		position: relative;
-		cursor: not-allowed;
-		pointer-events: none;
-	}
-
-	#download-btn[data-status="downloading"]::after {
-		content: "Downloading...";
-		color: var(--bs-white);
-		position: absolute;
-		inset: 0;
-		display: grid;
-		place-items: center;
-	}
-
-	.conc-progress-percent {
-		display: inline-block;
-		width: 2.5rem;
-		flex-shrink: 0;
-		text-align: left;
-	}
-
-	.conc-progress-bar-track {
-		flex: 1 1 auto;
-		min-width: 0;
-	}
-</style>
-
-`;
 
 // Configuration Settings
 const config = {
@@ -213,7 +94,7 @@ let downloadSlots = [];
 		// Create and save zip archive from files
 		updateProgress("Downloading...", 0, trackUrls.length);
 		const zip = await createZipBlob(trackUrls);
-		console.log("Zip file created:", zip);
+		saveAs(new Blob([zip]), getZipFilename(trackUrls[0]));
 
 		// Reset download button
 		updateProgress("---", "-", "-");
@@ -223,7 +104,7 @@ let downloadSlots = [];
 
 async function createZipBlob(trackUrls) {
 	// Create files object by downloading each track
-	const folder = getZipFileName(trackUrls[0]).replace(".zip", "");
+	const folder = getZipFilename(trackUrls[0]).replace(".zip", "");
 	const files = {};
 
 	// Keep track of free download slots
@@ -331,7 +212,7 @@ function updateProgress(instruction, current, total) {
 	progressBarElem.setAttribute("aria-valuemax", total);
 }
 
-function getZipFileName(trackUrl) {
+function getZipFilename(trackUrl) {
 	// Parse audiobook title from track url
 	const match = trackUrl.match(/uploads\/.+?\/(.+?)\//);
 
