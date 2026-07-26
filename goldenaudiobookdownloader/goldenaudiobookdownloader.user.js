@@ -41,6 +41,7 @@ const config = {
 
 	// Inject Bootstrap into DOM
 	injectBootstrap();
+	console.log("Injected Boostrap CSS");
 
 	// Wait for page to finish loading
 	if (document.readyState === "loading") {
@@ -50,10 +51,12 @@ const config = {
 			});
 		});
 	}
+	console.log("Page fully loaded");
 
 	// Get book cover element and inject UI
 	const cover = document.querySelector(config.pageUI.coverSelector);
 	injectUserInterface(cover);
+	console.log("Custom UI injected");
 
 	//
 })();
