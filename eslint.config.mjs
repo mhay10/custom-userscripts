@@ -30,21 +30,32 @@ export default [
       },
     },
     rules: {
+      // Errors
       "no-undef": "error",
       "no-unused-vars": "error",
+      "no-unreachable": "error",
       "no-shadow": "error",
-      "no-var": "error",
-      "prefer-const": "error",
+      "no-dupe-keys": "error",
+      "no-dupe-args": "error",
+
+      // Safer code
       eqeqeq: ["error", "always"],
       curly: ["error", "all"],
       "no-eval": "error",
       "no-implied-eval": "error",
-      "no-unreachable": "error",
-      "no-duplicate-imports": "error",
-      "no-return-await": "error",
+      "no-with": "error",
+
+      // Modern, but compatible
+      "no-var": "error",
+      "prefer-const": "error",
+
+      // Readability
+      "dot-notation": "error",
       "object-shorthand": "error",
-      "prefer-template": "error",
-      "prefer-arrow-callback": "error",
+      "prefer-template": "warn",
+
+      // Intentionally disabled
+      "prefer-arrow-callback": "off",
     },
   },
 ];
