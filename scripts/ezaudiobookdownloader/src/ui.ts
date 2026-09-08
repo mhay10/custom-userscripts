@@ -1,4 +1,4 @@
-import { config } from './config.js';
+import { config } from "./config.js";
 
 /**
  * Update the main progress display
@@ -24,12 +24,18 @@ export function updateProgress(
     config.customUi.mainProgressSelector
   ) as HTMLProgressElement;
 
-  if (instructionElem) {instructionElem.textContent = instruction;}
-  if (progressElem) {progressElem.textContent = String(current);}
-  if (progressTotalElem) {progressTotalElem.textContent = String(total);}
+  if (instructionElem) {
+    instructionElem.textContent = instruction;
+  }
+  if (progressElem) {
+    progressElem.textContent = String(current);
+  }
+  if (progressTotalElem) {
+    progressTotalElem.textContent = String(total);
+  }
   if (progressBarElem) {
-    progressBarElem.value = typeof current === 'number' ? current : 0;
-    progressBarElem.max = typeof total === 'number' ? total : 1;
+    progressBarElem.value = typeof current === "number" ? current : 0;
+    progressBarElem.max = typeof total === "number" ? total : 1;
   }
 }
 
@@ -42,18 +48,13 @@ export function updateDownloadProgress(
   slotIndex: number,
   progress: { loaded: number; total: number }
 ): void {
-  const progressRows = document.querySelectorAll(
-    config.customUi.downloadProgressBarRowSelector
-  );
+  const progressRows = document.querySelectorAll(config.customUi.downloadProgressBarRowSelector);
 
   if (slotIndex < 0 || slotIndex >= progressRows.length) {
     return;
   }
 
-  const percentage =
-    progress.total > 0
-      ? Math.round((progress.loaded / progress.total) * 100)
-      : 0;
+  const percentage = progress.total > 0 ? Math.round((progress.loaded / progress.total) * 100) : 0;
 
   const row = progressRows[slotIndex];
   const percentElem = row.querySelector(
@@ -63,8 +64,12 @@ export function updateDownloadProgress(
     config.customUi.downloadProgressBarSelector
   ) as HTMLProgressElement;
 
-  if (percentElem) {percentElem.textContent = `${percentage}%`;}
-  if (progressBar) {progressBar.value = percentage;}
+  if (percentElem) {
+    percentElem.textContent = `${percentage}%`;
+  }
+  if (progressBar) {
+    progressBar.value = percentage;
+  }
 }
 
 /**
@@ -72,9 +77,9 @@ export function updateDownloadProgress(
  * @param player - The player element to inject UI into
  */
 export function injectUserInterface(player: Element): void {
-  const html = GM_getResourceText('UI_HTML');
-  const errorContainer = player.querySelector('.error-report');
+  const html = GM_getResourceText("UI_HTML");
+  const errorContainer = player.querySelector(".error-report");
   if (errorContainer) {
-    errorContainer.insertAdjacentHTML('afterbegin', html);
+    errorContainer.insertAdjacentHTML("afterbegin", html);
   }
 }

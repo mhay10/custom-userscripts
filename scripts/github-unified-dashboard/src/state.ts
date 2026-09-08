@@ -4,7 +4,7 @@
 
 export interface FeedItem {
   id: string;
-  type: 'issue' | 'pull_request' | 'commit' | 'release';
+  type: "issue" | "pull_request" | "commit" | "release";
   title: string;
   author: string;
   repo: string;
@@ -59,9 +59,7 @@ export function addItem(item: FeedItem): void {
 }
 
 export function getItems(): FeedItem[] {
-  return [...state.items].sort(
-    (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-  );
+  return [...state.items].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 }
 
 export function clearItems(): void {

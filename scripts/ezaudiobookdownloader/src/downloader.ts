@@ -1,5 +1,5 @@
-import { config } from './config.js';
-import { updateDownloadProgress } from './ui.js';
+import { config } from "./config.js";
+import { updateDownloadProgress } from "./ui.js";
 
 /**
  * Download an audio track using GM_xmlhttpRequest
@@ -7,18 +7,15 @@ import { updateDownloadProgress } from './ui.js';
  * @param slotIndex - The slot index for progress tracking
  * @returns Promise resolving with the response
  */
-export function downloadAudioTrack(
-  trackUrl: string,
-  slotIndex = 0
-): Promise<GM.Response<unknown>> {
+export function downloadAudioTrack(trackUrl: string, slotIndex = 0): Promise<GM.Response<unknown>> {
   return new Promise((resolve) => {
     GM_xmlhttpRequest({
-      method: 'GET',
+      method: "GET",
       url: trackUrl,
-      responseType: 'arraybuffer',
+      responseType: "arraybuffer",
       headers: {
         Referer: window.location.href,
-        Range: 'bytes=0-',
+        Range: "bytes=0-",
       },
       onprogress: (progress) => {
         updateDownloadProgress(slotIndex, {

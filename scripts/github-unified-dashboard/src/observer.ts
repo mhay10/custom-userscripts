@@ -2,7 +2,7 @@
  * MutationObserver utilities for watching DOM changes.
  */
 
-import { log } from './config';
+import { log } from "./config";
 
 export interface ObserverOptions {
   childList: boolean;
@@ -21,7 +21,7 @@ export function createObserver(
   _options?: Partial<ObserverOptions>
 ): MutationObserver {
   const observer = new MutationObserver((mutations) => {
-    log('Observer triggered with', mutations.length, 'mutations');
+    log("Observer triggered with", mutations.length, "mutations");
     callback(mutations);
   });
 
@@ -42,23 +42,20 @@ export function observeElement(
 
   const opts = { ...defaultOptions, ..._options };
   observer.observe(element, opts);
-  log('Observing element', element);
+  log("Observing element", element);
 }
 
 export function disconnectObserver(observer: MutationObserver | null): void {
   if (observer) {
     observer.disconnect();
-    log('Observer disconnected');
+    log("Observer disconnected");
   }
 }
 
 /**
  * Wait for an element to appear in the DOM.
  */
-export function waitForElement(
-  selector: string,
-  timeout = 10000
-): Promise<Element> {
+export function waitForElement(selector: string, timeout = 10000): Promise<Element> {
   return new Promise((resolve, reject) => {
     const element = document.querySelector(selector);
     if (element) {

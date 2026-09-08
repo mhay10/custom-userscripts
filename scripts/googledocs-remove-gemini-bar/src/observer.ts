@@ -1,4 +1,4 @@
-import { config } from './config.js';
+import { config } from "./config.js";
 
 /**
  * Wait for the Gemini Bar element to exist in the DOM

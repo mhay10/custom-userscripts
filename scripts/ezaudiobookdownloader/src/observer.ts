@@ -2,8 +2,6 @@
  * Observer utilities for monitoring DOM changes.
  */
 
-
-
 /**
  * Wait for an audio track to load by monitoring data-src attribute changes
  * @param track - The track element to observe
@@ -13,11 +11,8 @@ export async function waitForAudioTrackLoad(track: Element): Promise<string> {
   return new Promise((resolve) => {
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'data-src'
-        ) {
-          const trackUrl = track.getAttribute('data-src');
+        if (mutation.type === "attributes" && mutation.attributeName === "data-src") {
+          const trackUrl = track.getAttribute("data-src");
           if (trackUrl) {
             observer.disconnect();
             resolve(trackUrl);
@@ -42,12 +37,12 @@ export async function waitForPlayerLoadFinish(): Promise<void> {
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'style' &&
-          (mutation.target as HTMLElement).id === 'loading-message-element'
+          mutation.type === "attributes" &&
+          mutation.attributeName === "style" &&
+          (mutation.target as HTMLElement).id === "loading-message-element"
         ) {
-          const newStyle = (mutation.target as HTMLElement).getAttribute('style');
-          if (newStyle && newStyle.includes('display: none')) {
+          const newStyle = (mutation.target as HTMLElement).getAttribute("style");
+          if (newStyle && newStyle.includes("display: none")) {
             observer.disconnect();
             resolve();
           }

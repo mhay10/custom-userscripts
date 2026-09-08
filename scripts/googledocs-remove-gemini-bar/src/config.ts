@@ -4,6 +4,6 @@
 export const config = {
   // UI Selectors
   pageUI: {
-    geminiBarSelector: '.kixWizBarkickWrapper.WithHideTransition',
+    geminiBarSelector: ".kixWizBarkickWrapper.WithHideTransition",
   },
 };

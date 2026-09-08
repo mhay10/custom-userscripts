@@ -1,4 +1,4 @@
-import { config } from './config.js';
+import { config } from "./config.js";
 
 interface DownloadSlot {
   progressBarElem: HTMLElement;
@@ -11,12 +11,8 @@ let downloadSlots: DownloadSlot[] = [];
  * Initialize download slot elements cache
  */
 export function initializeDownloadSlots(): void {
-  const progressBarElems = document.querySelectorAll(
-    config.customUI.concProgressBarSelector
-  );
-  const percentElems = document.querySelectorAll(
-    config.customUI.concProgressPercentSelector
-  );
+  const progressBarElems = document.querySelectorAll(config.customUI.concProgressBarSelector);
+  const percentElems = document.querySelectorAll(config.customUI.concProgressPercentSelector);
   downloadSlots = Array.from(progressBarElems).map((progressBarElem, index) => ({
     progressBarElem: progressBarElem as HTMLElement,
     percentElem: percentElems[index] as HTMLElement,
@@ -37,9 +33,7 @@ export function updateProgress(
   const instructionElem = document.querySelector(
     config.customUI.instructionSelector
   ) as HTMLElement;
-  const progressElem = document.querySelector(
-    config.customUI.progressSelector
-  ) as HTMLElement;
+  const progressElem = document.querySelector(config.customUI.progressSelector) as HTMLElement;
   const progressTotalElem = document.querySelector(
     config.customUI.progressTotalSelector
   ) as HTMLElement;
@@ -47,21 +41,24 @@ export function updateProgress(
     config.customUI.progressBarSelector
   ) as HTMLElement;
 
-  if (instructionElem) {instructionElem.textContent = instruction;}
-  if (progressElem) {progressElem.textContent = String(current);}
-  if (progressTotalElem) {progressTotalElem.textContent = String(total);}
+  if (instructionElem) {
+    instructionElem.textContent = instruction;
+  }
+  if (progressElem) {
+    progressElem.textContent = String(current);
+  }
+  if (progressTotalElem) {
+    progressTotalElem.textContent = String(total);
+  }
 
   // Calculate completion percentage
-  const percent =
-    typeof total === 'number' && total > 0
-      ? ((current as number) / total) * 100
-      : 0;
+  const percent = typeof total === "number" && total > 0 ? ((current as number) / total) * 100 : 0;
 
   if (progressBarElem) {
     progressBarElem.style.width = `${percent}%`;
-    progressBarElem.setAttribute('aria-valuenow', String(current));
-    progressBarElem.setAttribute('aria-valuemin', '0');
-    progressBarElem.setAttribute('aria-valuemax', String(total));
+    progressBarElem.setAttribute("aria-valuenow", String(current));
+    progressBarElem.setAttribute("aria-valuemin", "0");
+    progressBarElem.setAttribute("aria-valuemax", String(total));
   }
 }
 
@@ -81,21 +78,18 @@ export function updateDownloadSlot(
   const { progressBarElem, percentElem } = downloadSlots[slot];
 
   // Calculate completion percentage
-  const percent =
-    progress.total > 0
-      ? Math.round((progress.loaded / progress.total) * 100)
-      : 0;
+  const percent = progress.total > 0 ? Math.round((progress.loaded / progress.total) * 100) : 0;
 
   percentElem.textContent = `${percent}%`;
   progressBarElem.style.width = `${percent}%`;
-  progressBarElem.setAttribute('aria-valuenow', String(percent));
+  progressBarElem.setAttribute("aria-valuenow", String(percent));
 }
 
 /**
  * Inject Bootstrap CSS into the page
  */
 export function injectBootstrap(): void {
-  const css = GM_getResourceText('BOOTSTRAP_CSS');
+  const css = GM_getResourceText("BOOTSTRAP_CSS");
   GM_addStyle(css);
 }
 
@@ -103,10 +97,10 @@ export function injectBootstrap(): void {
  * Inject the custom UI into the page
  */
 export function injectUserInterface(): void {
-  const html = GM_getResourceText('UI_HTML');
+  const html = GM_getResourceText("UI_HTML");
   const cover = document.querySelector(config.pageUI.coverSelector);
   if (cover) {
-    cover.insertAdjacentHTML('afterend', html);
+    cover.insertAdjacentHTML("afterend", html);
   }
 
   // Cache download slot elements

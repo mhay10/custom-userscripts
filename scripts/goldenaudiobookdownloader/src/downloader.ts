@@ -1,5 +1,5 @@
-import { config } from './config.js';
-import { updateDownloadSlot } from './ui.js';
+import { config } from "./config.js";
+import { updateDownloadSlot } from "./ui.js";
 
 /**
  * Download an audio track using GM_xmlhttpRequest
@@ -7,18 +7,15 @@ import { updateDownloadSlot } from './ui.js';
  * @param slot - The slot index for progress tracking
  * @returns Promise resolving with the response
  */
-export function downloadAudioTrack(
-  trackUrl: string,
-  slot: number
-): Promise<GM.Response<unknown>> {
+export function downloadAudioTrack(trackUrl: string, slot: number): Promise<GM.Response<unknown>> {
   return new Promise((resolve) => {
     GM_xmlhttpRequest({
-      method: 'GET',
+      method: "GET",
       url: trackUrl,
-      responseType: 'arraybuffer',
+      responseType: "arraybuffer",
       headers: {
         Referer: window.location.href,
-        Range: 'bytes=0-',
+        Range: "bytes=0-",
       },
       onprogress(progress) {
         updateDownloadSlot(slot, {
@@ -41,7 +38,7 @@ export function downloadAudioTrack(
 export function getZipFilename(trackUrl: string): string {
   const match = trackUrl.match(/uploads\/.+?\/(.+?)\//);
   if (match && match[1]) {
-    const filename = decodeURIComponent(match[1]).replace(/\s+/g, '_');
+    const filename = decodeURIComponent(match[1]).replace(/\s+/g, "_");
     return `${filename}.zip`;
   }
   return config.fallbackZipName;

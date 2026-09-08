@@ -2,16 +2,16 @@
  * Main entry point for the GitHub Unified Dashboard script.
  */
 
-import { config, log, error } from './config';
-import { setIsInitialized, isInitialized } from './state';
-import { createObserver, observeElement, waitForElement } from './observer';
-import { initUnifiedFeed } from './features/unified-feed';
+import { config, log, error } from "./config";
+import { setIsInitialized, isInitialized } from "./state";
+import { createObserver, observeElement, waitForElement } from "./observer";
+import { initUnifiedFeed } from "./features/unified-feed";
 
 /**
  * Inject custom styles for the unified dashboard.
  */
 function injectStyles(): void {
-  if (typeof GM_addStyle !== 'undefined') {
+  if (typeof GM_addStyle !== "undefined") {
     GM_addStyle(`
       .unified-feed-badge {
         margin-left: 8px;
@@ -33,16 +33,16 @@ function injectStyles(): void {
  */
 async function initializeDashboard(): Promise<void> {
   if (isInitialized()) {
-    log('Already initialized');
+    log("Already initialized");
     return;
   }
 
   try {
-    log('Initializing GitHub Unified Dashboard...');
+    log("Initializing GitHub Unified Dashboard...");
 
     // Wait for the dashboard container
     const dashboard = await waitForElement(config.dashboardSelector);
-    log('Dashboard container found:', dashboard);
+    log("Dashboard container found:", dashboard);
 
     // Inject styles
     injectStyles();
@@ -54,7 +54,7 @@ async function initializeDashboard(): Promise<void> {
     const observer = createObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length > 0) {
-          log('New nodes added, re-initializing feed');
+          log("New nodes added, re-initializing feed");
           initUnifiedFeed(dashboard);
         }
       });
@@ -69,9 +69,9 @@ async function initializeDashboard(): Promise<void> {
     // state.observer = observer;
 
     setIsInitialized(true);
-    log('GitHub Unified Dashboard initialized successfully!');
+    log("GitHub Unified Dashboard initialized successfully!");
   } catch (e) {
-    error('Failed to initialize dashboard:', e);
+    error("Failed to initialize dashboard:", e);
   }
 }
 
@@ -81,19 +81,19 @@ async function initializeDashboard(): Promise<void> {
 export function initDashboard(): void {
   // Check if we're on the dashboard page
   if (!document.querySelector(config.dashboardSelector)) {
-    log('Not on dashboard page, skipping initialization');
+    log("Not on dashboard page, skipping initialization");
     return;
   }
 
   // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeDashboard);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeDashboard);
   } else {
     initializeDashboard();
   }
 }
 
 // Auto-execute if this is the main bundle
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   initDashboard();
 }

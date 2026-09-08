@@ -16,8 +16,8 @@ export interface Config {
 export const config: Config = {
   debug: true,
   itemsPerPage: 50,
-  dashboardSelector: '.dashboard',
-  feedSelector: '.news',
+  dashboardSelector: ".dashboard",
+  feedSelector: ".news",
 };
 
 export function isDebug(): boolean {
@@ -26,10 +26,10 @@ export function isDebug(): boolean {
 
 export function log(...args: unknown[]): void {
   if (isDebug()) {
-    console.log('[GitHub Unified Dashboard]', ...args);
+    console.log("[GitHub Unified Dashboard]", ...args);
   }
 }
 
 export function error(...args: unknown[]): void {
-  console.error('[GitHub Unified Dashboard]', ...args);
+  console.error("[GitHub Unified Dashboard]", ...args);
 }
