@@ -25,6 +25,9 @@ export function createObserver(
     callback(mutations);
   });
 
+  // Options can be used in the future if needed
+  void _options;
+
   return observer;
 }
 

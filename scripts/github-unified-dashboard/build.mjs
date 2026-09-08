@@ -61,7 +61,7 @@ async function build() {
     try {
       unlinkSync(join(OUTPUT_DIR, 'bundle.tmp.js'));
       console.log('✓ Cleaned up temporary files');
-    } catch (e) {
+    } catch {
       // Ignore cleanup errors
     }
     

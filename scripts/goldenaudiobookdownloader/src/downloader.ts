@@ -10,7 +10,7 @@ import { updateDownloadSlot } from './ui.js';
 export function downloadAudioTrack(
   trackUrl: string,
   slot: number
-): Promise<GM.Response<any>> {
+): Promise<GM.Response<unknown>> {
   return new Promise((resolve) => {
     GM_xmlhttpRequest({
       method: 'GET',

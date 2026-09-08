@@ -10,7 +10,7 @@ import { updateDownloadProgress } from './ui.js';
 export function downloadAudioTrack(
   trackUrl: string,
   slotIndex = 0
-): Promise<GM.Response<any>> {
+): Promise<GM.Response<unknown>> {
   return new Promise((resolve) => {
     GM_xmlhttpRequest({
       method: 'GET',
