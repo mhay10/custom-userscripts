@@ -1,0 +1,13 @@
+{
+  "name": "@scripts/ezaudiobookdownloader",
+  "version": "1.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.2"
+  }
+}

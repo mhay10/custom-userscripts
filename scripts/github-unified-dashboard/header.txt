@@ -1,0 +1,13 @@
+// ==UserScript==
+// @name         GitHub Unified Dashboard
+// @namespace    https://github.com/your-username
+// @version      1.0.0
+// @description  Unifies Issues and Pull Requests into a single chronological feed on the GitHub Dashboard.
+// @author       Your Name
+// @match        https://github.com/*
+// @match        https://github.com/
+// @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @connect      github.com
+// @run-at       document-end
+// ==/UserScript==

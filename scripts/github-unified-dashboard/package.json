@@ -1,0 +1,14 @@
+{
+  "name": "github-unified-dashboard",
+  "version": "1.0.0",
+  "description": "GitHub Unified Dashboard - Unifies Issues and PRs into a single feed",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.2"
+  }
+}
