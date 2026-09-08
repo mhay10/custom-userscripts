@@ -1,0 +1,49 @@
+name: Build and Lint
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Build all scripts
+        run: npm run build
+
+      - name: Verify output files
+        run: |
+          echo "Verifying generated userscript files..."
+          for script in scripts/*/dist/*.user.js; do
+            if [ ! -f "$script" ]; then
+              echo "Error: Missing output file $script"
+              exit 1
+            fi
+            # Verify metadata block exists at the start
+            if ! head -n 1 "$script" | grep -q "// ==UserScript=="; then
+              echo "Error: $script does not start with // ==UserScript=="
+              exit 1
+            fi
+            echo "✓ $script is valid"
+          done
+          echo "All userscript files verified successfully!"

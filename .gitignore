@@ -1,43 +1,11 @@
 ```
 # Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# Build outputs
-dist/
-build/
-*.min.js
-*.bundle.js
-
-# TypeScript
-*.tsbuildinfo
-*.d.ts
-
-# Logs
+# Logs and temp files
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# Environment variables
+# Environment
 .env
-.env.local
-.env.*
-!.env.example
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Temporary files
-*.tmp
-*.temp
+.env.
 ```
