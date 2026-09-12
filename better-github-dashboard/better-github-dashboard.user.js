@@ -75,7 +75,7 @@
         },
         delays: {
             mutObserverDebounce: 150,
-            paginationFetch: 300,
+            paginationFetch: 50,
         },
         queries: {
             reviewPRs:
@@ -113,7 +113,6 @@
 
     /**
      * Creates a promise that resolves after a specified delay.
-     * @function
      * @param {number} ms - Delay in milliseconds.
      * @returns {Promise<void>} Promise that resolves after the delay.
      */
@@ -123,7 +122,6 @@
 
     /**
      * Creates a debounced version of a function.
-     * @function
      * @param {Function} fn - Function to debounce.
      * @param {number} ms - Debounce delay in milliseconds.
      * @returns {Function} Debounced function.
@@ -138,7 +136,6 @@
 
     /**
      * Gets the Content Security Policy nonce from the page.
-     * @function
      * @returns {string|null} CSP nonce value or null if not found.
      */
     function getCspNonce() {
@@ -157,7 +154,6 @@
 
     /**
      * Sets the current logged-in GitHub user from the page metadata.
-     * @function
      * @returns {boolean} True if user was successfully set, false otherwise.
      */
     function setCurrentUser() {
@@ -185,7 +181,6 @@
 
     /**
      * Hides the Copilot widget by injecting a style tag with CSS rules.
-     * @function
      */
     function hideCopilot() {
         // Don't re-hide if already hidden
@@ -226,7 +221,6 @@
 
     /**
      * Parses a repository node from the DOM to extract repo information.
-     * @function
      * @param {HTMLElement} node - DOM node containing repository information.
      * @returns {RepoData|null} Parsed repository data or null if parsing fails.
      */
@@ -270,16 +264,65 @@
 
     /**
      * Builds HTML for a group of repositories.
-     * @function
-     * @param {string} group - Group category name.
+     * @param {string} category - Group category name.
      * @param {RepoData[]} repos - Array of repository data objects.
-     * @returns {string} HTML string for the repository group.
+     * @returns {HTMLDivElement} HTML container for the repository group.
      */
-    function buildRepoGroupHtml(group, repos) {}
+    function buildRepoCategoryHtml(category, repos) {
+        // Create main category container
+        const categoryElem = document.createElement("div");
+        categoryElem.classList.add("better-gh-dash-repo-category");
+
+        // Create details dropdown
+        const detailsElem = document.createElement("details");
+        if (category === "Personal") {
+            detailsElem.open = true; // Auto expand personal repos
+        }
+
+        // Create category summary
+        const summaryElem = document.createElement("summary");
+        summaryElem.textContent = `${category} (${repos.length})`;
+
+        // Build list of repos
+        const listElem = document.createElement("ul");
+        for (const repo of repos) {
+            // Create list item element and add key for search filtering
+            const itemElem = document.createElement("li");
+            itemElem.dataset.repoName = repo.repoName.toLowerCase();
+
+            // Setup repo avatar image and add to list item DOM
+            if (repo.avatarSrc) {
+                const imgElem = document.createElement("img");
+                imgElem.src = repo.avatarSrc;
+                imgElem.width = 16;
+                imgElem.height = 16;
+                imgElem.alt = "";
+                imgElem.style.verticalAlign = "middle";
+                imgElem.style.marginRight = "6px";
+                itemElem.appendChild(imgElem);
+            }
+
+            // Setup repo link element
+            const linkElem = document.createElement("a");
+            linkElem.href = `${repo.repo}`;
+            linkElem.textContent = repo.repoName;
+            linkElem.style.textDecoration = "none";
+            itemElem.appendChild(linkElem);
+
+            // Add repo item to list
+            listElem.appendChild(itemElem);
+        }
+
+        // Add child elements to parent elements
+        detailsElem.appendChild(summaryElem);
+        detailsElem.appendChild(listElem);
+        categoryElem.appendChild(detailsElem);
+
+        return categoryElem;
+    }
 
     /**
      * Renders the repository dropdowns grouped by owner.
-     * @function
      */
     function renderRepoDropdowns() {
         // Get the existing repo list element and hide it
@@ -326,15 +369,14 @@
                 }),
             );
 
-            // Build the HTML
-            const groupHtml = buildRepoGroupHtml(group, repos);
+            // Build the HTML and add it to the main list
+            const categoryHtml = buildRepoCategoryHtml(group, repos);
+            groupsElem.appendChild(categoryHtml);
         });
     }
 
     /**
      * Fetches all remaining pages of repositories from GitHub.
-     * @async
-     * @function
      * @returns {Promise<void>}
      */
     async function fetchRemainingPages() {
@@ -374,9 +416,8 @@
                 if (data) state.repos.set(data.repo, data);
             });
 
-            // Check if another page of repos exists and update the UI
+            // Check if another page of repos exists
             lastPage = !html.querySelector(config.selectors.repoPaginationNext);
-            renderRepoDropdowns();
 
             // Wait to avoid rate limiting
             await delay(config.delays.paginationFetch);
@@ -394,17 +435,12 @@
 
     /**
      * Fetches items for the triage dashboard.
-     * @async
-     * @function
      * @returns {Promise<void>}
      */
-    async function fetchItems() {
-        /* ... */
-    }
+    async function fetchItems() {}
 
     /**
      * Injects the triage dashboard into the page.
-     * @function
      */
     function injectDashboard() {
         /* ... */
