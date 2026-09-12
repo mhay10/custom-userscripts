@@ -10,7 +10,19 @@
 // @run-at       document-end
 // ==/UserScript==
 
-// Configuration Settings
+/**
+ * Configuration settings for the userscript
+ * @typedef {Object} Config
+ * @property {PageUI} pageUI - UI selectors for page elements
+ */
+
+/**
+ * Page UI selectors
+ * @typedef {Object} PageUI
+ * @property {string} geminiBarSelector - CSS selector for the Gemini bar element
+ */
+
+/** @type {Config} */
 const config = {
     // UI Selectors
     pageUI: {
@@ -18,24 +30,10 @@ const config = {
     },
 };
 
-(async function () {
-    "use strict";
-
-    // Wait for bar element to exist
-    console.log("Waiting for Gemini Bar to load...");
-    await waitForGeminiBarExist();
-
-    // Set bar element style with "display: none;"
-    console.log("Gemini Bar loaded. Hiding...");
-    const elem = document.querySelector(config.pageUI.geminiBarSelector);
-    if (elem) {
-        elem.style.display = "none";
-        console.log("Gemini Bar has been successfully hidden");
-    } else {
-        console.log("Something went wrong. L bozo");
-    }
-})();
-
+/**
+ * Waits for the Gemini bar element to exist in the DOM using a MutationObserver.
+ * @returns {Promise<void>} Promise that resolves when the Gemini bar is found.
+ */
 async function waitForGeminiBarExist() {
     // Check if element already exists
     if (document.querySelector(config.pageUI.geminiBarSelector)) {
@@ -56,3 +54,21 @@ async function waitForGeminiBarExist() {
         observer.observe(document.body, { childList: true, subtree: true });
     });
 }
+
+(async function () {
+    "use strict";
+
+    // Wait for bar element to exist
+    console.log("Waiting for Gemini Bar to load...");
+    await waitForGeminiBarExist();
+
+    // Set bar element style with "display: none;"
+    console.log("Gemini Bar loaded. Hiding...");
+    const elem = document.querySelector(config.pageUI.geminiBarSelector);
+    if (elem) {
+        elem.style.display = "none";
+        console.log("Gemini Bar has been successfully hidden");
+    } else {
+        console.log("Something went wrong. L bozo");
+    }
+})();

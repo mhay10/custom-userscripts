@@ -17,6 +17,39 @@
 // @connect      *
 // ==/UserScript==
 
+/**
+ * Configuration settings for the userscript
+ * @typedef {Object} Config
+ * @property {string} filePrefix - Prefix for chapter filenames in the ZIP
+ * @property {string} fallbackZipName - Default ZIP filename if title cannot be parsed
+ * @property {PageUI} pageUi - UI selectors for page elements
+ * @property {CustomUI} customUi - UI selectors for custom injected elements
+ */
+
+/**
+ * Page UI selectors
+ * @typedef {Object} PageUI
+ * @property {string} playerSelector - CSS selector for the audio player container
+ * @property {string} audioSelector - CSS selector for the audio element
+ * @property {string} playlistSelector - CSS selector for the playlist container
+ * @property {string} trackSelector - CSS selector for individual track elements
+ */
+
+/**
+ * Custom UI selectors
+ * @typedef {Object} CustomUI
+ * @property {string} downloadButtonSelector - CSS selector for the download button
+ * @property {string} instructionSelector - CSS selector for instruction text element
+ * @property {string} mainProgressSelector - CSS selector for main progress bar
+ * @property {string} currentProgressSelector - CSS selector for current track progress
+ * @property {string} totalProgressSelector - CSS selector for total progress display
+ * @property {string} downloadProgressContainerSelector - CSS selector for download progress container
+ * @property {string} downloadProgressPercentSelector - CSS selector for download percentage text
+ * @property {string} downloadProgressBarSelector - CSS selector for individual download progress bars
+ * @property {string} downloadProgressBarRowSelector - CSS selector for download progress row elements
+ */
+
+/** @type {Config} */
 // Configuration settings
 const config = {
     // File Naming Options
@@ -43,6 +76,12 @@ const config = {
     },
 };
 
+/**
+ * Main entry point - initializes the userscript functionality.
+ * @async
+ * @function
+ * @returns {Promise<void>}
+ */
 (async function () {
     "use strict";
 
@@ -92,6 +131,13 @@ const config = {
     });
 })();
 
+/**
+ * Decrypts track URLs by simulating clicks on track elements.
+ * @async
+ * @function
+ * @param {NodeList} trackElements - List of track DOM elements to decrypt.
+ * @returns {Promise<string[]>} Array of decrypted track URLs (excluding promotional track).
+ */
 async function decryptTrackUrls(trackElements) {
     // Iterate through tracks and wait for audio to load
     const trackUrls = [];
@@ -113,6 +159,13 @@ async function decryptTrackUrls(trackElements) {
     return trackUrls;
 }
 
+/**
+ * Creates a ZIP blob containing all downloaded audio tracks.
+ * @async
+ * @function
+ * @param {string[]} trackUrls - Array of audio track URLs to download.
+ * @returns {Promise<Uint8Array>} ZIP file as a Uint8Array.
+ */
 async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
     const folder = getZipFilename(trackUrls[0]).replace(".zip", "");
@@ -144,6 +197,14 @@ async function createZipBlob(trackUrls) {
     return fflate.zipSync(files, { level: 0 });
 }
 
+/**
+ * Downloads a single audio track using GM_xmlhttpRequest.
+ * @async
+ * @function
+ * @param {string} trackUrl - URL of the audio track to download.
+ * @param {number} slotIndex - Index of the download slot for progress tracking.
+ * @returns {Promise<Object>} Response object containing the audio data.
+ */
 async function downloadAudioTrack(trackUrl, slotIndex = 0) {
     return new Promise(function (resolve) {
         GM_xmlhttpRequest({
@@ -166,6 +227,12 @@ async function downloadAudioTrack(trackUrl, slotIndex = 0) {
     });
 }
 
+/**
+ * Parses and returns the ZIP filename from a track URL.
+ * @function
+ * @param {string} trackUrl - URL of an audio track.
+ * @returns {string} Filename for the ZIP archive.
+ */
 function getZipFilename(trackUrl) {
     // Parse audiobook title from track url
     const match = trackUrl.match(/audio\/(.*?)\/\d/);
@@ -178,6 +245,13 @@ function getZipFilename(trackUrl) {
     return config.fallbackZipName;
 }
 
+/**
+ * Waits for an audio track to finish loading by observing data-src attribute changes.
+ * @async
+ * @function
+ * @param {HTMLElement} track - Track element to observe.
+ * @returns {Promise<string>} Resolves with the track URL when loaded.
+ */
 async function waitForAudioTrackLoad(track) {
     return new Promise(function (resolve) {
         // Create mutation observer for audio element
@@ -204,6 +278,12 @@ async function waitForAudioTrackLoad(track) {
     });
 }
 
+/**
+ * Waits for the player to finish loading by observing the loading message element.
+ * @async
+ * @function
+ * @returns {Promise<void>} Resolves when the player has finished loading.
+ */
 async function waitForPlayerLoadFinish() {
     return new Promise(function (resolve) {
         // Create mutation observer for loading element
@@ -235,6 +315,13 @@ async function waitForPlayerLoadFinish() {
     });
 }
 
+/**
+ * Updates the main progress bar and text display.
+ * @function
+ * @param {string} instruction - Instruction text to display.
+ * @param {number|string} current - Current progress value.
+ * @param {number|string} total - Total progress value.
+ */
 function updateProgress(instruction, current, total) {
     // Get progress elements
     const instructionElem = document.querySelector(
@@ -260,6 +347,12 @@ function updateProgress(instruction, current, total) {
     progressBarElem.max = typeof total === "number" ? total : 1;
 }
 
+/**
+ * Updates the progress display for a specific download slot.
+ * @function
+ * @param {number} slotIndex - Index of the download slot to update.
+ * @param {Object} progress - Progress event object with loaded and total bytes.
+ */
 function updateDownloadProgress(slotIndex, progress) {
     // Get all progress bar elements
     const progressRows = document.querySelectorAll(
@@ -291,6 +384,11 @@ function updateDownloadProgress(slotIndex, progress) {
     progressBar.value = percentage;
 }
 
+/**
+ * Injects the custom user interface into the player element.
+ * @function
+ * @param {HTMLElement} player - Player container element.
+ */
 function injectUserInterface(player) {
     //Inject in error container
     const html = GM_getResourceText("UI_HTML");
