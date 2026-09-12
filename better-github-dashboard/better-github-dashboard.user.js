@@ -20,11 +20,16 @@
     // ==========================================
     const config = {
         selectors: {
+            // Page UI selectors
             repoList: "ul.js-dashboard-repos-list",
             repoPaginationForm:
                 "form.js-ajax-pagination, form.js-more-repos-form",
+            repoPaginationNext: 'input[name="repos_cursor"]',
             copilotElems:
                 '.copilotPreview__container, react-partial[partial-name*="copilot"]',
+
+            // Custom UI selectors
+            groupedRepoList: "#better-gh-dash-repo-list",
         },
         delays: {
             mutObserverDebounce: 150,
@@ -169,8 +174,56 @@
         };
     }
 
+    function buildRepoGroupHtml() {}
+
     function renderRepoDropdowns() {
-        /* ... */
+        // Get the existing repo list element and hide it
+        const existingList = document.querySelector(config.selectors.repoList);
+        if (!existingList) return;
+        existingList.style.display = "none";
+
+        // Get or create the new grouped repos container
+        let groupsElem = document.querySelector(
+            config.selectors.groupedRepoList,
+        );
+        if (!groupsElem) {
+            groupsElem = document.createElement("div");
+            groupsElem.setAttribute("id", config.selectors.groupedRepoList);
+
+            // Add newly created element to DOM
+            existingList.parentElement.insertBefore(groupsElem, existingList);
+        } else {
+            // Clear HTML contents if it already exists
+            groupsElem.innerHTML = "";
+        }
+
+        // Convert state's flat repo list into grouped sections
+        const groups = new Map();
+        state.repos.forEach((repo) => {
+            if (!groups.has(repo.category)) groups.set(repo.category, []);
+            groups.set(repo.category, [...groups.get(repo.category), repo]);
+        });
+
+        // Sort the grouped sections alphabetically with Personal repos first
+        const sortedGroups = Array.from(groups.keys()).sort((a, b) => {
+            if (a === "Personal") return -1;
+            if (b === "Personal") return 1;
+            return a.localeCompare(b, undefined, { sensitivity: "base" });
+        });
+
+        // Convert each group to HTML and add to DOM
+        sortedGroups.forEach((group) => {
+            // Get repos and sort them alphabetically
+            const repos = groups.get(group);
+            repos.sort((a, b) =>
+                a.repoName.localeCompare(b.repoName, undefined, {
+                    sensitivity: "base",
+                }),
+            );
+
+            // Build the HTML
+            const groupHtml = buildRepoGroupHtml(group, repos);
+        });
     }
 
     async function fetchRemainingPages() {
@@ -181,18 +234,15 @@
         state.isFetching = true;
 
         // Loop while the form cursor exists
-        let cursor = document
-            .querySelector('input[name="repos_cursor"]')
-            ?.getAttribute("value");
-        for (let pageCount = 1; pageCount < 50 && cursor; pageCount++) {
-            // Wait to avoid rate limiting
-            await delay(config.delays.paginationFetch);
+        let lastPage = false;
+        for (let pageNum = 1; pageNum < 50 && !lastPage; pageNum++) {
+            logger.info(`Fetching page ${pageNum} of repos...`);
 
             // Send request to get next page of repos
             const url = "/dashboard/ajax_my_repositories";
             const params = new URLSearchParams({
                 location: "left",
-                repos_cursor: cursor,
+                repos_cursor: pageNum,
             });
             const response = await fetch(`${url}?${params}`, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -207,17 +257,18 @@
                 "text/html",
             );
 
-            // Get all repo elements in HTML and parse them
+            // Get all repo elements in the HTML and extract the data
             html.querySelectorAll("li").forEach((li) => {
                 const data = parseRepoNode(li);
                 if (data) state.repos.set(data.repo, data);
             });
 
-            // Check if another form cursor exists and update the UI
-            cursor = html
-                .querySelector('input[name="repos_cursor"]')
-                ?.getAttribute("value");
+            // Check if another page of repos exists and update the UI
+            lastPage = !html.querySelector(config.selectors.repoPaginationNext);
             renderRepoDropdowns();
+
+            // Wait to avoid rate limiting
+            await delay(config.delays.paginationFetch);
         }
 
         // Update fetch state flags and do one final render call
@@ -242,7 +293,7 @@
     //         INITIALIZATION & OBSERVER
     // ==========================================
 
-    await delay(1000);
+    // await delay(1000);
 
     if (!setCurrentUser()) {
         logger.error("Current is not logged in. Stopping");
@@ -260,8 +311,6 @@
 
     logger.info("Fetching all repositories...");
     await fetchRemainingPages();
-
-    console.log(state.repos);
 
     logger.info("Dashboard modifications complete");
 })();
