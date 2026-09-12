@@ -23,6 +23,42 @@
 // @run-at       document-end
 // ==/UserScript==
 
+/**
+ * Configuration settings for the userscript
+ * @typedef {Object} Config
+ * @property {string} filePrefix - Prefix for track filenames in the ZIP
+ * @property {string} fallbackZipName - Default ZIP filename if title cannot be parsed
+ * @property {PageUI} pageUI - UI selectors for page elements
+ * @property {CustomUI} customUI - UI selectors for custom injected elements
+ */
+
+/**
+ * Page UI selectors
+ * @typedef {Object} PageUI
+ * @property {string} coverSelector - CSS selector for the book cover element
+ * @property {string} audioSelector - CSS selector for audio elements on the page
+ */
+
+/**
+ * Custom UI selectors
+ * @typedef {Object} CustomUI
+ * @property {string} downloadButtonSelector - CSS selector for the download button
+ * @property {string} instructionSelector - CSS selector for instruction text element
+ * @property {string} progressSelector - CSS selector for current progress display
+ * @property {string} progressTotalSelector - CSS selector for total progress display
+ * @property {string} progressBarSelector - CSS selector for main progress bar
+ * @property {string} concProgressBarSelector - CSS selector for concurrent download progress bars
+ * @property {string} concProgressPercentSelector - CSS selector for concurrent download percentage text
+ */
+
+/**
+ * Download slot object for tracking concurrent downloads
+ * @typedef {Object} DownloadSlot
+ * @property {HTMLElement} progressBarElem - Progress bar element
+ * @property {HTMLElement} percentElem - Percentage text element
+ */
+
+/** @type {Config} */
 // Configuration Settings
 const config = {
     // File Name Options
@@ -45,9 +81,16 @@ const config = {
     },
 };
 
+/** @type {DownloadSlot[]} */
 // Cached download slot elements
 let downloadSlots = [];
 
+/**
+ * Main entry point - initializes the userscript functionality.
+ * @async
+ * @function
+ * @returns {Promise<void>}
+ */
 (async function () {
     "use strict";
 
@@ -102,6 +145,13 @@ let downloadSlots = [];
     });
 })();
 
+/**
+ * Creates a ZIP blob containing all downloaded audio tracks.
+ * @async
+ * @function
+ * @param {string[]} trackUrls - Array of audio track URLs to download.
+ * @returns {Promise<Uint8Array>} ZIP file as a Uint8Array.
+ */
 async function createZipBlob(trackUrls) {
     // Create files object by downloading each track
     const folder = getZipFilename(trackUrls[0]).replace(".zip", "");
@@ -135,6 +185,14 @@ async function createZipBlob(trackUrls) {
     return fflate.zipSync(files, { level: 0 });
 }
 
+/**
+ * Downloads a single audio track using GM_xmlhttpRequest.
+ * @async
+ * @function
+ * @param {string} trackUrl - URL of the audio track to download.
+ * @param {number} slot - Index of the download slot for progress tracking.
+ * @returns {Promise<Object>} Response object containing the audio data.
+ */
 async function downloadAudioTrack(trackUrl, slot) {
     return new Promise(function (resolve) {
         GM_xmlhttpRequest({
@@ -161,6 +219,12 @@ async function downloadAudioTrack(trackUrl, slot) {
     });
 }
 
+/**
+ * Updates the progress display for a specific download slot.
+ * @function
+ * @param {number} slot - Index of the download slot to update.
+ * @param {Object} progress - Progress event object with loaded and total bytes.
+ */
 function updateDownloadSlot(slot, progress) {
     // Check that slot is within bounds
     if (slot < 0 || slot >= downloadSlots.length) {
@@ -182,6 +246,13 @@ function updateDownloadSlot(slot, progress) {
     progressBarElem.setAttribute("aria-valuenow", percent);
 }
 
+/**
+ * Updates the main progress bar and text display.
+ * @function
+ * @param {string} instruction - Instruction text to display.
+ * @param {number|string} current - Current progress value.
+ * @param {number|string} total - Total progress value.
+ */
 function updateProgress(instruction, current, total) {
     // Get progress elements
     const instructionElem = document.querySelector(
@@ -212,6 +283,12 @@ function updateProgress(instruction, current, total) {
     progressBarElem.setAttribute("aria-valuemax", total);
 }
 
+/**
+ * Parses and returns the ZIP filename from a track URL.
+ * @function
+ * @param {string} trackUrl - URL of an audio track.
+ * @returns {string} Filename for the ZIP archive.
+ */
 function getZipFilename(trackUrl) {
     // Parse audiobook title from track url
     const match = trackUrl.match(/uploads\/.+?\/(.+?)\//);
@@ -225,12 +302,21 @@ function getZipFilename(trackUrl) {
     return config.fallbackZipName;
 }
 
+/**
+ * Injects Bootstrap CSS into the page using GM_addStyle.
+ * @function
+ */
 function injectBootstrap() {
     // Inject using Userscript functions
     const css = GM_getResourceText("BOOTSTRAP_CSS");
     GM_addStyle(css);
 }
 
+/**
+ * Injects the custom user interface into the page after the book cover.
+ * Also caches download slot elements for progress tracking.
+ * @function
+ */
 function injectUserInterface() {
     // Inject after book cover container
     const html = GM_getResourceText("UI_HTML");

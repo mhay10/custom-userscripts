@@ -12,12 +12,54 @@
 // @run-at       document-end
 // ==/UserScript==
 
+/**
+ * Configuration settings for the userscript
+ * @typedef {Object} Config
+ * @property {Selectors} selectors - CSS selectors for page and custom UI elements
+ * @property {Delays} delays - Timing delays for various operations
+ * @property {Queries} queries - Search queries for GitHub API
+ */
+
+/**
+ * CSS selectors configuration
+ * @typedef {Object} Selectors
+ * @property {string} repoList - Selector for the repository list element
+ * @property {string} repoPaginationForm - Selector for pagination form elements
+ * @property {string} repoPaginationNext - Selector for next page cursor input
+ * @property {string} copilotElems - Selector for Copilot UI elements to hide
+ * @property {string} groupedRepoList - Selector for the custom grouped repo list
+ */
+
+/**
+ * Delay timings in milliseconds
+ * @typedef {Object} Delays
+ * @property {number} mutObserverDebounce - Debounce delay for mutation observer
+ * @property {number} paginationFetch - Delay between pagination fetch requests
+ */
+
+/**
+ * GitHub search queries
+ * @typedef {Object} Queries
+ * @property {string} reviewPRs - Query for finding PRs requiring review
+ */
+
+/**
+ * Application state object
+ * @typedef {Object} State
+ * @property {Map<string, Object>} repos - Map of repositories by repo path
+ * @property {boolean} isFetching - Flag indicating if fetch is in progress
+ * @property {boolean} paginationComplete - Flag indicating if all pages fetched
+ * @property {boolean} copilotHidden - Flag indicating if Copilot is hidden
+ * @property {string} currentUser - Current logged-in GitHub username
+ */
+
 (async function () {
     "use strict";
 
     // ==========================================
     //           CONFIGURATION & STATE
     // ==========================================
+    /** @type {Config} */
     const config = {
         selectors: {
             // Page UI selectors
@@ -41,6 +83,7 @@
         },
     };
 
+    /** @type {State} */
     const state = {
         repos: new Map(),
         isFetching: false,
@@ -53,6 +96,14 @@
     //                 UTILITIES
     // ==========================================
 
+    /**
+     * Logger utility for consistent console output formatting.
+     * @typedef {Object} Logger
+     * @property {function(string): void} info - Log info messages with blue color.
+     * @property {function(string): void} error - Log error messages with red color.
+     */
+
+    /** @type {Logger} */
     const logger = {
         info: (msg) =>
             console.log(`%c[Better GH Dashboard]%c ${msg}`, "color: #74E4EE;"),
@@ -60,10 +111,23 @@
             console.log(`%c[Better GH Dashboard]%c ${msg}`, "color: #EE3B60;"),
     };
 
+    /**
+     * Creates a promise that resolves after a specified delay.
+     * @function
+     * @param {number} ms - Delay in milliseconds.
+     * @returns {Promise<void>} Promise that resolves after the delay.
+     */
     function delay(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
+    /**
+     * Creates a debounced version of a function.
+     * @function
+     * @param {Function} fn - Function to debounce.
+     * @param {number} ms - Debounce delay in milliseconds.
+     * @returns {Function} Debounced function.
+     */
     function debounce(fn, ms) {
         let timer;
         return function (...args) {
@@ -72,6 +136,11 @@
         };
     }
 
+    /**
+     * Gets the Content Security Policy nonce from the page.
+     * @function
+     * @returns {string|null} CSP nonce value or null if not found.
+     */
     function getCspNonce() {
         // Try to get nonce from a meta tag
         const metaNonce = document
@@ -86,6 +155,11 @@
         return null;
     }
 
+    /**
+     * Sets the current logged-in GitHub user from the page metadata.
+     * @function
+     * @returns {boolean} True if user was successfully set, false otherwise.
+     */
     function setCurrentUser() {
         // Don't re-set if current user has already been set
         if (state.currentUser) return;
@@ -109,6 +183,10 @@
     //              COPILOT REMOVAL
     // ==========================================
 
+    /**
+     * Hides the Copilot widget by injecting a style tag with CSS rules.
+     * @function
+     */
     function hideCopilot() {
         // Don't re-hide if already hidden
         if (state.copilotHidden) return;
@@ -136,6 +214,22 @@
     //             REPOSITORY SIDEBAR
     // ==========================================
 
+    /**
+     * Repository data object parsed from a DOM node.
+     * @typedef {Object} RepoData
+     * @property {string} repoName - Name of the repository.
+     * @property {string} repoOwner - Owner/organization of the repository.
+     * @property {string} repo - Full repo path (owner/repo).
+     * @property {string} category - Category for grouping (Personal or owner name).
+     * @property {string} avatarSrc - URL of the owner's avatar image.
+     */
+
+    /**
+     * Parses a repository node from the DOM to extract repo information.
+     * @function
+     * @param {HTMLElement} node - DOM node containing repository information.
+     * @returns {RepoData|null} Parsed repository data or null if parsing fails.
+     */
     function parseRepoNode(node) {
         // Get link conatiner
         const linkElem = node.querySelector(
@@ -174,8 +268,19 @@
         };
     }
 
-    function buildRepoGroupHtml() {}
+    /**
+     * Builds HTML for a group of repositories.
+     * @function
+     * @param {string} group - Group category name.
+     * @param {RepoData[]} repos - Array of repository data objects.
+     * @returns {string} HTML string for the repository group.
+     */
+    function buildRepoGroupHtml(group, repos) {}
 
+    /**
+     * Renders the repository dropdowns grouped by owner.
+     * @function
+     */
     function renderRepoDropdowns() {
         // Get the existing repo list element and hide it
         const existingList = document.querySelector(config.selectors.repoList);
@@ -226,6 +331,12 @@
         });
     }
 
+    /**
+     * Fetches all remaining pages of repositories from GitHub.
+     * @async
+     * @function
+     * @returns {Promise<void>}
+     */
     async function fetchRemainingPages() {
         // Don't request more repos if already being requested
         if (state.isFetching || state.paginationComplete) return;
@@ -281,10 +392,20 @@
     //             TRIAGE DASHBOARD
     // ==========================================
 
+    /**
+     * Fetches items for the triage dashboard.
+     * @async
+     * @function
+     * @returns {Promise<void>}
+     */
     async function fetchItems() {
         /* ... */
     }
 
+    /**
+     * Injects the triage dashboard into the page.
+     * @function
+     */
     function injectDashboard() {
         /* ... */
     }
