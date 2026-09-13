@@ -26,6 +26,7 @@
  * @property {string} repoList - Selector for the repository list element
  * @property {string} repoPaginationForm - Selector for pagination form elements
  * @property {string} repoPaginationNext - Selector for next page cursor input
+ * @property {string} sideShowMoreButton - Selector for "Show More" side bar button
  * @property {string} copilotElems - Selector for Copilot UI elements to hide
  * @property {string} groupedRepoList - Selector for the custom grouped repo list
  */
@@ -67,6 +68,7 @@
             repoPaginationForm:
                 "form.js-ajax-pagination, form.js-more-repos-form",
             repoPaginationNext: 'input[name="repos_cursor"]',
+            sideShowMoreButton: 'button[data-disable-with="Loading more..."]',
             copilotElems:
                 '.copilotPreview__container, react-partial[partial-name*="copilot"]',
 
@@ -75,7 +77,7 @@
         },
         delays: {
             mutObserverDebounce: 150,
-            paginationFetch: 50,
+            paginationFetch: 300,
         },
         queries: {
             reviewPRs:
@@ -176,13 +178,13 @@
     }
 
     // ==========================================
-    //              COPILOT REMOVAL
+    //             STYLE MODIFICATION
     // ==========================================
 
     /**
-     * Hides the Copilot widget by injecting a style tag with CSS rules.
+     * Hides the select elements in the DOM by injecting a style tag with CSS rules.
      */
-    function hideCopilot() {
+    function hideElements() {
         // Don't re-hide if already hidden
         if (state.copilotHidden) return;
 
@@ -198,11 +200,84 @@
                 visibility: hidden !important;
                 height: 0 !important;
             }
+
+            ${config.selectors.sideShowMoreButton}, ${config.selectors.sideShowMoreButton} * {
+                display: none !important;
+                visibilty: hidden !important;
+                height: 0 !important;
+            }
         `;
 
         // Add the style tag to the DOM
         (document.head || document.documentElement).appendChild(style);
         state.copilotHidden = true;
+    }
+
+    function injectStyles() {
+        if (document.getElementById("better-gh-dash-styles")) return;
+
+        const style = document.createElement("style");
+        style.id = "better-gh-dash-styles";
+        style.textContent = `
+            #better-gh-dash-repos-list {
+                margin-top: 8px;
+                margin-bottom: 16px;
+            }
+            .better-gh-dash-repo-category details {
+                border: 1px solid var(--borderColor-default, #d0d7de);
+                border-radius: 6px;
+                background: var(--bgColor-muted, #f6f8fa);
+                margin-bottom: 8px;
+            }
+            .better-gh-dash-repo-category summary {
+                font-weight: 600;
+                font-size: 12px;
+                cursor: pointer;
+                padding: 8px 12px;
+                color: var(--fgColor-default, #1f2328);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                user-select: none;
+                list-style: none;
+            }
+            .better-gh-dash-repo-category summary::after {
+                content: "▾";
+                font-size: 10px;
+                color: var(--fgColor-muted, #656d76);
+            }
+            .better-gh-dash-repo-category details[open] summary::after {
+                content: "▴";
+            }
+            .better-gh-dash-repo-category ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                border-top: 1px solid var(--borderColor-muted, #e1e4e8);
+            }
+            .better-gh-dash-repo-category li {
+                padding: 6px 12px;
+                display: flex;
+                align-items: center;
+                font-size: 13px;
+                transition: background-color 0.1s;
+            }
+            .better-gh-dash-repo-category li:hover {
+                background-color: var(--bgColor-neutral-muted, rgba(175,184,193,0.2));
+            }
+            .better-gh-dash-repo-category a {
+                color: var(--fgColor-accent, #0969da);
+                text-decoration: none;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                flex: 1;
+            }
+            .better-gh-dash-repo-category a:hover {
+                text-decoration: underline;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     // ==========================================
@@ -214,7 +289,7 @@
      * @typedef {Object} RepoData
      * @property {string} repoName - Name of the repository.
      * @property {string} repoOwner - Owner/organization of the repository.
-     * @property {string} repo - Full repo path (owner/repo).
+     * @property {string} repoPath - Full repo path (owner/repo).
      * @property {string} category - Category for grouping (Personal or owner name).
      * @property {string} avatarSrc - URL of the owner's avatar image.
      */
@@ -256,7 +331,7 @@
         return {
             repoName: repoName,
             repoOwner: repoOwner,
-            repo: `${repoOwner}/${repoName}`.toLowerCase(), // Force lowercase for deduplication
+            repoPath: `${repoOwner}/${repoName}`.toLowerCase(), // Force lowercase for deduplication
             category: isPersonal ? "Personal" : repoOwner,
             avatarSrc: avatarSrc,
         };
@@ -289,6 +364,7 @@
             // Create list item element and add key for search filtering
             const itemElem = document.createElement("li");
             itemElem.dataset.repoName = repo.repoName.toLowerCase();
+            itemElem.style.listStyle = "none";
 
             // Setup repo avatar image and add to list item DOM
             if (repo.avatarSrc) {
@@ -297,16 +373,13 @@
                 imgElem.width = 16;
                 imgElem.height = 16;
                 imgElem.alt = "";
-                imgElem.style.verticalAlign = "middle";
-                imgElem.style.marginRight = "6px";
                 itemElem.appendChild(imgElem);
             }
 
             // Setup repo link element
             const linkElem = document.createElement("a");
-            linkElem.href = `${repo.repo}`;
+            linkElem.href = `${repo.repoPath}`;
             linkElem.textContent = repo.repoName;
-            linkElem.style.textDecoration = "none";
             itemElem.appendChild(linkElem);
 
             // Add repo item to list
@@ -329,6 +402,9 @@
         const existingList = document.querySelector(config.selectors.repoList);
         if (!existingList) return;
         existingList.style.display = "none";
+
+        // Inject CSS styles for the new HTML
+        injectStyles();
 
         // Get or create the new grouped repos container
         let groupsElem = document.querySelector(
@@ -413,7 +489,7 @@
             // Get all repo elements in the HTML and extract the data
             html.querySelectorAll("li").forEach((li) => {
                 const data = parseRepoNode(li);
-                if (data) state.repos.set(data.repo, data);
+                if (data) state.repos.set(data.repoPath, data);
             });
 
             // Check if another page of repos exists
@@ -463,8 +539,8 @@
     logger.info("Setting current user...");
 
     // TODO: Insert Main logic here
-    logger.info("Hiding Copilot widget...");
-    hideCopilot();
+    logger.info("Hiding HTML elements...");
+    hideElements();
 
     logger.info("Fetching all repositories...");
     await fetchRemainingPages();
