@@ -1,6 +1,9 @@
+import { delay } from "@repo/shared-utils";
+import { CONFIG } from "../config";
+import { LOGGER } from "../logger";
+import { STATE } from "../state";
 import { RepoData } from "../types";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function parseRepoNode(node: HTMLElement): RepoData | null {
     // Get link conatiner
     const linkElem = node.querySelector('a[data-hovercard-type="repository"]');
@@ -30,4 +33,153 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
         href: rawHref,
         avatarSrc: avatarSrc,
     };
+}
+
+function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
+    // Create main category container
+    const categoryElem = document.createElement("div");
+    categoryElem.classList.add("better-gh-dash-repo-category");
+
+    // Create details dropdown
+    const detailsElem = document.createElement("details");
+    if (category === "Personal") {
+        detailsElem.open = true; // Auto expand personal repos
+    }
+
+    // Create category summary
+    const summaryElem = document.createElement("summary");
+    summaryElem.textContent = `${category} (${repos.length})`;
+
+    // Build list of repos
+    const listElem = document.createElement("ul");
+    for (const repo of repos) {
+        // Create list item element and add key for search filtering
+        const itemElem = document.createElement("li");
+        itemElem.dataset.repoName = repo.name.toLowerCase();
+        itemElem.style.listStyle = "none";
+
+        // Setup repo avatar image and add to list item DOM
+        if (repo.avatarSrc) {
+            const imgElem = document.createElement("img");
+            imgElem.src = repo.avatarSrc;
+            imgElem.width = 16;
+            imgElem.height = 16;
+            imgElem.alt = "";
+            itemElem.appendChild(imgElem);
+        }
+
+        // Setup repo link element
+        const linkElem = document.createElement("a");
+        linkElem.href = `${repo.href}`;
+        linkElem.textContent = repo.path;
+        itemElem.appendChild(linkElem);
+
+        // Add repo item to list
+        listElem.appendChild(itemElem);
+    }
+
+    // Add child elements to parent elements
+    detailsElem.appendChild(summaryElem);
+    detailsElem.appendChild(listElem);
+    categoryElem.appendChild(detailsElem);
+
+    return categoryElem;
+}
+
+export function renderRepoDropdowns(): void {
+    // Get the existing repo list element and hide it
+    const existingList = document.querySelector(CONFIG.selectors.repoList) as HTMLElement;
+    if (!existingList?.parentElement) return;
+    existingList.style.display = "none";
+
+    // Get or create the new grouped repos container
+    let groupsElem = document.querySelector(CONFIG.selectors.groupedRepoList);
+    if (!groupsElem) {
+        groupsElem = document.createElement("div");
+        groupsElem.setAttribute("id", CONFIG.selectors.groupedRepoList);
+
+        // Add newly created element to DOM
+        existingList.parentElement.insertBefore(groupsElem, existingList);
+    } else {
+        // Clear HTML contents if it already exists
+        groupsElem.innerHTML = "";
+    }
+
+    // Convert state's flat repo list into grouped sections
+    const groups = new Map<string, RepoData[]>();
+    STATE.repos.forEach((repo) => {
+        if (!groups.has(repo.owner)) groups.set(repo.owner, []);
+        const existing = groups.get(repo.owner) ?? [];
+        groups.set(repo.owner, [...existing, repo]);
+    });
+
+    // Sort the grouped sections alphabetically with Personal repos first
+    const sortedGroups = Array.from(groups.keys()).sort((a, b) => {
+        if (a === "Personal") return -1;
+        if (b === "Personal") return 1;
+        return a.localeCompare(b, undefined, { sensitivity: "base" });
+    });
+
+    // Convert each group to HTML and add to DOM
+    sortedGroups.forEach((group) => {
+        // Get repos and sort them alphabetically
+        const repos = groups.get(group);
+        if (!repos) return;
+        repos.sort((a, b) =>
+            a.name.localeCompare(b.name, undefined, {
+                sensitivity: "base",
+            })
+        );
+
+        // Build the HTML and add it to the main list
+        const categoryHtml = buildCategoryHtml(group, repos);
+        groupsElem.appendChild(categoryHtml);
+    });
+}
+
+export async function fetchRemainingPages(): Promise<void> {
+    // Don't request more repos if already being requested
+    if (STATE.isFetching || STATE.paginationComplete) return;
+
+    // Start fetch rest of the pages
+    STATE.isFetching = true;
+
+    // Loop while the form cursor exists
+    let lastPage = false;
+    for (let pageNum = 1; pageNum < 50 && !lastPage; pageNum++) {
+        LOGGER.info(`Fetching page ${pageNum} of repos...`);
+
+        // Send request to get next page of repos
+        const url = "/dashboard/ajax_my_repositories";
+        const params = new URLSearchParams({
+            location: "left",
+            repos_cursor: "" + pageNum,
+        });
+        const response = await fetch(`${url}?${params}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+
+        // Stop fetching if the response returns an error
+        if (!response.ok) break;
+
+        // Parse HTML from response
+        const html = new DOMParser().parseFromString(await response.text(), "text/html");
+
+        // Get all repo elements in the HTML and extract the data
+        html.querySelectorAll("li").forEach((li) => {
+            const data = parseRepoNode(li);
+            if (data) STATE.repos.set(data.path, data);
+        });
+
+        // Check if another page of repos exists
+        lastPage = !html.querySelector(CONFIG.selectors.repoPaginationNext);
+
+        // Wait to avoid rate limiting
+        await delay(CONFIG.delays.paginationFetch);
+    }
+
+    // Update fetch state flags and do one final render call
+    STATE.isFetching = false;
+    STATE.paginationComplete = true;
+    renderRepoDropdowns();
 }
