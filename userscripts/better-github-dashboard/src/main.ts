@@ -1,4 +1,4 @@
-async function init() {
+async function init(): Promise<void> {
     let x: number = 5;
     console.log("Starting something big time");
     console.log("Number x =", x);
