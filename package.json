@@ -29,7 +29,8 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
-        "prepare": "husky"
+        "prepare": "husky",
+        "setup-hooks": "husky init && husky add .husky/pre-commit \"npx lint-staged\""
     },
     "lint-staged": {
         "*.{ts,tsx,js,jsx}": [
