@@ -1,22 +1,9 @@
-import { debounce } from "@repo/common-utils";
+import { delay } from "@repo/common-utils";
 import { CONFIG } from "./config";
 import { LOGGER } from "./logger";
 import { fetchRemainingPages } from "./modules/group-repos";
 import { hideUiElements, injectSidebarStyes } from "./modules/styles";
 import { setCurrentUser, STATE } from "./state";
-
-async function update(): Promise<void> {
-    hideUiElements();
-    injectSidebarStyes();
-    await fetchRemainingPages();
-
-    const personalRepos = document.querySelector(
-        CONFIG.selectors.personalRepoList
-    ) as HTMLDetailsElement;
-    if (personalRepos) {
-        personalRepos.open = true;
-    }
-}
 
 async function init(): Promise<void> {
     LOGGER.info("Setting current user...");
@@ -26,13 +13,21 @@ async function init(): Promise<void> {
     }
     LOGGER.info(`Current User: ${STATE.currentUser}`);
 
-    await update();
+    hideUiElements();
+    injectSidebarStyes();
+    await fetchRemainingPages();
 
-    const debouncedUpdate = debounce(update, CONFIG.delays.mutObserverDebounce);
-    const observer = new MutationObserver(debouncedUpdate);
-    observer.observe(document.body, { childList: true, subtree: true });
+    await delay(500);
+
+    LOGGER.info("Opening personal repos...");
+    const personalReposElem = document.querySelector(
+        CONFIG.selectors.personalRepoList
+    ) as HTMLDetailsElement;
+    if (personalReposElem) {
+        personalReposElem.open = true;
+    }
 }
 
-init().catch(LOGGER.error);
-document.addEventListener("turbo:load", init);
-document.addEventListener("turbo:render", init);
+(async (): Promise<void> => {
+    await init();
+})();

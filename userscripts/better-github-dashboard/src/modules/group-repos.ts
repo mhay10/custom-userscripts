@@ -42,6 +42,9 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
 
     // Create details dropdown
     const detailsElem = document.createElement("details");
+    if (category == "Personal") {
+        detailsElem.open = true;
+    }
 
     // Create category summary
     const summaryElem = document.createElement("summary");
@@ -81,14 +84,10 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
     detailsElem.appendChild(listElem);
     categoryElem.appendChild(detailsElem);
 
-    if (category === "Personal") {
-        detailsElem.open = true;
-    }
-
     return categoryElem;
 }
 
-export function renderRepoDropdowns(): void {
+export function renderRepoCategories(): void {
     // Get the existing repo list element
     const existingList = document.querySelector(CONFIG.selectors.repoList) as HTMLElement;
     if (!existingList?.parentElement) return;
@@ -97,7 +96,7 @@ export function renderRepoDropdowns(): void {
     let categoriesElem = document.querySelector(CONFIG.selectors.categorizedRepoList);
     if (!categoriesElem) {
         categoriesElem = document.createElement("div");
-        categoriesElem.setAttribute("id", CONFIG.selectors.categorizedRepoList);
+        categoriesElem.setAttribute("id", CONFIG.selectors.categorizedRepoList.slice(1));
 
         // Add newly created element to DOM
         existingList.parentElement.insertBefore(categoriesElem, existingList);
@@ -179,8 +178,10 @@ export async function fetchRemainingPages(): Promise<void> {
         await delay(CONFIG.delays.paginationFetch);
     }
 
+    // Render the categories and open the Personal one by default
+    renderRepoCategories();
+
     // Update fetch state flags and do one final render call
     STATE.isFetching = false;
     STATE.paginationComplete = true;
-    renderRepoDropdowns();
 }
