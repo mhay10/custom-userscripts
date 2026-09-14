@@ -28,7 +28,7 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
     // Return parsed object
     return {
         name: repoName,
-        owner: repoOwner,
+        owner: repoOwner === STATE.currentUser ? "Personal" : repoOwner, // Use "Personal" label for current users's repos
         path: cleanPath,
         href: rawHref,
         avatarSrc: avatarSrc,
@@ -36,15 +36,14 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
 }
 
 function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
+    LOGGER.debug(`Building ${category} --> Is Personal? ${category === "Personal"}`);
+
     // Create main category container
     const categoryElem = document.createElement("div");
     categoryElem.classList.add("better-gh-dash-repo-category");
 
     // Create details dropdown
     const detailsElem = document.createElement("details");
-    if (category === "Personal") {
-        detailsElem.open = true; // Auto expand personal repos
-    }
 
     // Create category summary
     const summaryElem = document.createElement("summary");
@@ -87,10 +86,9 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
 }
 
 export function renderRepoDropdowns(): void {
-    // Get the existing repo list element and hide it
+    // Get the existing repo list element
     const existingList = document.querySelector(CONFIG.selectors.repoList) as HTMLElement;
     if (!existingList?.parentElement) return;
-    existingList.style.display = "none";
 
     // Get or create the new grouped repos container
     let groupsElem = document.querySelector(CONFIG.selectors.groupedRepoList);
@@ -113,7 +111,7 @@ export function renderRepoDropdowns(): void {
         groups.set(repo.owner, [...existing, repo]);
     });
 
-    // Sort the grouped sections alphabetically with Personal repos first
+    // Sort the grouped sections alphabetically with current user's repos first
     const sortedGroups = Array.from(groups.keys()).sort((a, b) => {
         if (a === "Personal") return -1;
         if (b === "Personal") return 1;

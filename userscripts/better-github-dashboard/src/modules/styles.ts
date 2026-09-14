@@ -3,7 +3,7 @@ import { CONFIG } from "../config";
 import { STATE } from "../state";
 import sidebarCss from "../../lib/styles.css?inline";
 
-export function hideCopilot(): void {
+export function hideUiElements(): void {
     // Don't re-hide if already hidden
     if (STATE.copilotHidden) return;
 
@@ -14,7 +14,9 @@ export function hideCopilot(): void {
 
     // Set style contents to hide the copilot widget
     style.textContent = `
-        ${CONFIG.selectors.copilotElems}, ${CONFIG.selectors.copilotElems} * {
+        ${CONFIG.selectors.copilotElems}, ${CONFIG.selectors.copilotElems} *,
+        ${CONFIG.selectors.sideShowMoreButton}, ${CONFIG.selectors.sideShowMoreButton} *,
+        ${CONFIG.selectors.repoList}, ${CONFIG.selectors.repoList} * {
             display: none !important;
             visibility: hidden !important;
             height: 0 !important;

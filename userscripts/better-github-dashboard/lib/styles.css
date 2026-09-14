@@ -24,13 +24,13 @@
 }
 
 .better-gh-dash-repo-category summary::after {
-    content: "▾";
+    content: "\25BC";
     font-size: 10px;
     color: var(--fgColor-muted, #656d76);
 }
 
 .better-gh-dash-repo-category details[open] summary::after {
-    content: "▴";
+    content: "\25B2";
 }
 
 .better-gh-dash-repo-category ul {
