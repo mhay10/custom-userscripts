@@ -28,6 +28,7 @@ interface Selectors {
 interface Delays {
     mutObserverDebounce: number;
     paginationFetch: number;
+    personalOpenSettle: number;
 }
 
 interface Queries {

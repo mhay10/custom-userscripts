@@ -28,7 +28,7 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
     // Return parsed object
     return {
         name: repoName,
-        owner: repoOwner === STATE.currentUser ? "Personal" : repoOwner, // Use "Personal" label for current users's repos
+        owner: repoOwner.toLowerCase() === STATE.currentUser ? "Personal" : repoOwner, // Use "Personal" label for current users's repos
         path: cleanPath,
         href: rawHref,
         avatarSrc: avatarSrc,
@@ -42,7 +42,7 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
 
     // Create details dropdown
     const detailsElem = document.createElement("details");
-    if (category == "Personal") {
+    if (category === "Personal") {
         detailsElem.open = true;
     }
 
@@ -135,6 +135,42 @@ export function renderRepoCategories(): void {
         const categoryHtml = buildCategoryHtml(category, repos);
         categoriesElem.appendChild(categoryHtml);
     });
+
+    // Keep personal category from closing due to GitHub's post-render logic
+    keepPersonalCategoryOpen(categoriesElem as HTMLElement);
+}
+
+/**
+ * Keeps the Personal <details> open through GitHub's initial post-render reflow.
+ *
+ * GitHub closes the element exactly once shortly after it is inserted. We watch
+ * the `open` attribute and re-open it if it is closed within a short settle
+ * window, then disconnect so subsequent user-initiated closes are respected.
+ */
+function keepPersonalCategoryOpen(container: HTMLElement): void {
+    // Check for the personal details tag
+    const personalElem = container.querySelector<HTMLDetailsElement>(
+        CONFIG.selectors.personalRepoList
+    );
+    if (!personalElem) return;
+
+    // Track the start of the observation window
+    const startedAt = performance.now();
+
+    // Create mutation observer to watch for when the details tag is closed
+    const observer = new MutationObserver(() => {
+        // Only correct an unwanted close during the settle window.
+        if (personalElem.open) return;
+        if (performance.now() - startedAt > CONFIG.delays.personalOpenSettle) {
+            observer.disconnect();
+            return;
+        }
+        personalElem.open = true;
+    });
+    observer.observe(personalElem, { attributes: true, attributeFilter: ["open"] });
+
+    // Stop watching after the settle window so manual closes stick.
+    setTimeout(() => observer.disconnect(), CONFIG.delays.personalOpenSettle);
 }
 
 export async function fetchRemainingPages(): Promise<void> {

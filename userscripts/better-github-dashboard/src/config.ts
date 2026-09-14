@@ -10,12 +10,13 @@ export const CONFIG: Config = {
         copilotElems: '.copilotPreview__container, react-partial[partial-name*="copilot"]',
 
         // Custom UI selectors
-        categorizedRepoList: "#better-gh-dash-repo-list",
+        categorizedRepoList: "#better-gh-dash-repos-list",
         personalRepoList: 'details:has(> summary[data-category="Personal"])',
     },
     delays: {
         mutObserverDebounce: 150,
         paginationFetch: 300,
+        personalOpenSettle: 100,
     },
     queries: {
         reviewPRs: "is:open is:pr review-requested:@me archived:false sort:updated-desc",

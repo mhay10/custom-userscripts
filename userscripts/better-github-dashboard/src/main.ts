@@ -1,5 +1,3 @@
-import { delay } from "@repo/common-utils";
-import { CONFIG } from "./config";
 import { LOGGER } from "./logger";
 import { fetchRemainingPages } from "./modules/group-repos";
 import { hideUiElements, injectSidebarStyes } from "./modules/styles";
@@ -16,16 +14,6 @@ async function init(): Promise<void> {
     hideUiElements();
     injectSidebarStyes();
     await fetchRemainingPages();
-
-    await delay(500);
-
-    LOGGER.info("Opening personal repos...");
-    const personalReposElem = document.querySelector(
-        CONFIG.selectors.personalRepoList
-    ) as HTMLDetailsElement;
-    if (personalReposElem) {
-        personalReposElem.open = true;
-    }
 }
 
 (async (): Promise<void> => {
