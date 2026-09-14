@@ -39,17 +39,5 @@ export default defineConfig({
                 "run-at": "document-end",
             },
         }),
-        // generateUserscriptMetadata({
-        //     {
-        //         name: "Better Github Dashboard",
-        //         namespace:
-        //             "https://github.com/your-username/custom-userscripts",
-        //         match: ["https://github.com/", "https://github.com/dashboard"],
-        //         grant: ["none"],
-        //         "run-at": "document-end",
-        //         description:
-        //             "Cleaner GitHub dashboard that hides Copilot, displays active PRs/issues, and groups repos by owner",
-        //     },
-        // }),
     ],
 });

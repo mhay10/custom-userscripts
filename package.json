@@ -8,7 +8,7 @@
     "type": "module",
     "workspaces": [
         "userscripts/*",
-        "shared-utils"
+        "common-utils"
     ],
     "devDependencies": {
         "@eslint/js": "^10.0.1",
@@ -24,7 +24,7 @@
         "vite-userscript-plugin": "^2.5.0"
     },
     "scripts": {
-        "build": "npm run build --workspaces",
+        "build": "npm run build --workspaces --if-present",
         "dev": "npm run dev --workspaces",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",

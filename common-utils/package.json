@@ -1,5 +1,5 @@
 {
-    "name": "@repo/shared-utils",
+    "name": "@repo/common-utils",
     "version": "1.0.0",
     "type": "module",
     "exports": {

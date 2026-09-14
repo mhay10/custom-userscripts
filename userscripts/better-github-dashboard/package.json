@@ -11,7 +11,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@repo/shared-utils": "*"
+        "@repo/common-utils": "*"
     },
     "devDependencies": {}
 }

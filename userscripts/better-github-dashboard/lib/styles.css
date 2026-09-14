@@ -1,0 +1,66 @@
+#better-gh-dash-repos-list {
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.better-gh-dash-repo-category details {
+    border: 1px solid var(--borderColor-default, #d0d7de);
+    border-radius: 6px;
+    background: var(--bgColor-muted, #f6f8fa);
+    margin-bottom: 8px;
+}
+
+.better-gh-dash-repo-category summary {
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 8px 12px;
+    color: var(--fgColor-default, #1f2328);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    list-style: none;
+}
+
+.better-gh-dash-repo-category summary::after {
+    content: "▾";
+    font-size: 10px;
+    color: var(--fgColor-muted, #656d76);
+}
+
+.better-gh-dash-repo-category details[open] summary::after {
+    content: "▴";
+}
+
+.better-gh-dash-repo-category ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--borderColor-muted, #e1e4e8);
+}
+
+.better-gh-dash-repo-category li {
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    transition: background-color 0.1s;
+}
+
+.better-gh-dash-repo-category li:hover {
+    background-color: var(--bgColor-neutral-muted, rgba(175, 184, 193, 0.2));
+}
+
+.better-gh-dash-repo-category a {
+    color: var(--fgColor-accent, #0969da);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.better-gh-dash-repo-category a:hover {
+    text-decoration: underline;
+}

@@ -1,3 +1,3 @@
-import { createLogger } from "@repo/shared-utils";
+import { createLogger } from "@repo/common-utils";
 
 export const LOGGER = createLogger("Better GH Dashboard");
