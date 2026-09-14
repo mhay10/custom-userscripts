@@ -10,7 +10,8 @@ export const CONFIG: Config = {
         copilotElems: '.copilotPreview__container, react-partial[partial-name*="copilot"]',
 
         // Custom UI selectors
-        groupedRepoList: "#better-gh-dash-repo-list",
+        categorizedRepoList: "#better-gh-dash-repo-list",
+        personalRepoList: 'details:has(> summary[data-category="Personal"])',
     },
     delays: {
         mutObserverDebounce: 150,

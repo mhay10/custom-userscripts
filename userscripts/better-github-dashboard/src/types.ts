@@ -13,12 +13,16 @@ export interface Config {
 }
 
 interface Selectors {
+    // Page UI selectors
     repoList: string;
     repoPaginationForm: string;
     repoPaginationNext: string;
     sideShowMoreButton: string;
     copilotElems: string;
-    groupedRepoList: string;
+
+    // Custom UI selectors
+    categorizedRepoList: string;
+    personalRepoList: string;
 }
 
 interface Delays {

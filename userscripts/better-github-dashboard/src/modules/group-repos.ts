@@ -36,8 +36,6 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
 }
 
 function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
-    LOGGER.debug(`Building ${category} --> Is Personal? ${category === "Personal"}`);
-
     // Create main category container
     const categoryElem = document.createElement("div");
     categoryElem.classList.add("better-gh-dash-repo-category");
@@ -48,6 +46,7 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
     // Create category summary
     const summaryElem = document.createElement("summary");
     summaryElem.textContent = `${category} (${repos.length})`;
+    summaryElem.dataset.category = category;
 
     // Build list of repos
     const listElem = document.createElement("ul");
@@ -82,6 +81,10 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
     detailsElem.appendChild(listElem);
     categoryElem.appendChild(detailsElem);
 
+    if (category === "Personal") {
+        detailsElem.open = true;
+    }
+
     return categoryElem;
 }
 
@@ -91,37 +94,37 @@ export function renderRepoDropdowns(): void {
     if (!existingList?.parentElement) return;
 
     // Get or create the new grouped repos container
-    let groupsElem = document.querySelector(CONFIG.selectors.groupedRepoList);
-    if (!groupsElem) {
-        groupsElem = document.createElement("div");
-        groupsElem.setAttribute("id", CONFIG.selectors.groupedRepoList);
+    let categoriesElem = document.querySelector(CONFIG.selectors.categorizedRepoList);
+    if (!categoriesElem) {
+        categoriesElem = document.createElement("div");
+        categoriesElem.setAttribute("id", CONFIG.selectors.categorizedRepoList);
 
         // Add newly created element to DOM
-        existingList.parentElement.insertBefore(groupsElem, existingList);
+        existingList.parentElement.insertBefore(categoriesElem, existingList);
     } else {
         // Clear HTML contents if it already exists
-        groupsElem.innerHTML = "";
+        categoriesElem.innerHTML = "";
     }
 
     // Convert state's flat repo list into grouped sections
-    const groups = new Map<string, RepoData[]>();
+    const categories = new Map<string, RepoData[]>();
     STATE.repos.forEach((repo) => {
-        if (!groups.has(repo.owner)) groups.set(repo.owner, []);
-        const existing = groups.get(repo.owner) ?? [];
-        groups.set(repo.owner, [...existing, repo]);
+        if (!categories.has(repo.owner)) categories.set(repo.owner, []);
+        const existing = categories.get(repo.owner) ?? [];
+        categories.set(repo.owner, [...existing, repo]);
     });
 
     // Sort the grouped sections alphabetically with current user's repos first
-    const sortedGroups = Array.from(groups.keys()).sort((a, b) => {
+    const sortedCategories = Array.from(categories.keys()).sort((a, b) => {
         if (a === "Personal") return -1;
         if (b === "Personal") return 1;
         return a.localeCompare(b, undefined, { sensitivity: "base" });
     });
 
     // Convert each group to HTML and add to DOM
-    sortedGroups.forEach((group) => {
+    sortedCategories.forEach((category) => {
         // Get repos and sort them alphabetically
-        const repos = groups.get(group);
+        const repos = categories.get(category);
         if (!repos) return;
         repos.sort((a, b) =>
             a.name.localeCompare(b.name, undefined, {
@@ -129,9 +132,9 @@ export function renderRepoDropdowns(): void {
             })
         );
 
-        // Build the HTML and add it to the main list
-        const categoryHtml = buildCategoryHtml(group, repos);
-        groupsElem.appendChild(categoryHtml);
+        // Build the HTML for the repo category
+        const categoryHtml = buildCategoryHtml(category, repos);
+        categoriesElem.appendChild(categoryHtml);
     });
 }
 

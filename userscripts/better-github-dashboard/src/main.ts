@@ -9,6 +9,13 @@ async function update(): Promise<void> {
     hideUiElements();
     injectSidebarStyes();
     await fetchRemainingPages();
+
+    const personalRepos = document.querySelector(
+        CONFIG.selectors.personalRepoList
+    ) as HTMLDetailsElement;
+    if (personalRepos) {
+        personalRepos.open = true;
+    }
 }
 
 async function init(): Promise<void> {
