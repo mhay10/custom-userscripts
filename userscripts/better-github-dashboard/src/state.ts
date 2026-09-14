@@ -2,12 +2,12 @@ import { State } from "./types";
 
 export const STATE: State = {
     repos: new Map(),
-    isFetching: false,
     paginationComplete: false,
     copilotHidden: false,
     currentUser: "",
 };
 
+/** Reads the logged-in username from the page meta tag into state; returns whether a user was found */
 export function setCurrentUser(): boolean {
     // Don't re-set if current user has already been set
     if (STATE.currentUser) return true;

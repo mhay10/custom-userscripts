@@ -9,6 +9,7 @@ export interface RepoData {
 export interface Config {
     selectors: Selectors;
     delays: Delays;
+    pagination: Pagination;
     queries: Queries;
 }
 
@@ -31,13 +32,18 @@ interface Delays {
     personalOpenSettle: number;
 }
 
+interface Pagination {
+    endpoint: string;
+    location: string;
+    maxPages: number;
+}
+
 interface Queries {
     reviewPRs: string;
 }
 
 export interface State {
     repos: Map<string, RepoData>;
-    isFetching: boolean;
     paginationComplete: boolean;
     copilotHidden: boolean;
     currentUser: string;

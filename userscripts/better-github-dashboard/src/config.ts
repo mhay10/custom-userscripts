@@ -18,6 +18,11 @@ export const CONFIG: Config = {
         paginationFetch: 300,
         personalOpenSettle: 100,
     },
+    pagination: {
+        endpoint: "/dashboard/ajax_my_repositories",
+        location: "left",
+        maxPages: 50,
+    },
     queries: {
         reviewPRs: "is:open is:pr review-requested:@me archived:false sort:updated-desc",
     },

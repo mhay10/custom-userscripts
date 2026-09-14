@@ -4,6 +4,13 @@ import { LOGGER } from "../logger";
 import { STATE } from "../state";
 import { RepoData } from "../types";
 
+/**
+ * Extracts repo owner, name, path, and avatar from a sidebar repo list node
+ *
+ * @param node - A candidate list item from the repo sidebar HTML
+ * @returns The parsed repo data, or `null` if the node has no repository link
+ * or the link path lacks both an owner and repo name
+ */
 function parseRepoNode(node: HTMLElement): RepoData | null {
     // Get link conatiner
     const linkElem = node.querySelector('a[data-hovercard-type="repository"]');
@@ -35,6 +42,7 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
     };
 }
 
+/** Builds a collapsible category section containing a sorted list of repo links */
 function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
     // Create main category container
     const categoryElem = document.createElement("div");
@@ -87,6 +95,7 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
     return categoryElem;
 }
 
+/** Groups the current repos by owner and renders them into the sidebar container */
 export function renderRepoCategories(): void {
     // Get the existing repo list element
     const existingList = document.querySelector(CONFIG.selectors.repoList) as HTMLElement;
@@ -102,15 +111,15 @@ export function renderRepoCategories(): void {
         existingList.parentElement.insertBefore(categoriesElem, existingList);
     } else {
         // Clear HTML contents if it already exists
-        categoriesElem.innerHTML = "";
+        categoriesElem.replaceChildren();
     }
 
     // Convert state's flat repo list into grouped sections
     const categories = new Map<string, RepoData[]>();
     STATE.repos.forEach((repo) => {
-        if (!categories.has(repo.owner)) categories.set(repo.owner, []);
-        const existing = categories.get(repo.owner) ?? [];
-        categories.set(repo.owner, [...existing, repo]);
+        const group = categories.get(repo.owner);
+        if (group) group.push(repo);
+        else categories.set(repo.owner, [repo]);
     });
 
     // Sort the grouped sections alphabetically with current user's repos first
@@ -121,6 +130,7 @@ export function renderRepoCategories(): void {
     });
 
     // Convert each group to HTML and add to DOM
+    const docFrag = document.createDocumentFragment();
     sortedCategories.forEach((category) => {
         // Get repos and sort them alphabetically
         const repos = categories.get(category);
@@ -133,20 +143,15 @@ export function renderRepoCategories(): void {
 
         // Build the HTML for the repo category
         const categoryHtml = buildCategoryHtml(category, repos);
-        categoriesElem.appendChild(categoryHtml);
+        docFrag.appendChild(categoryHtml);
     });
+    categoriesElem.appendChild(docFrag);
 
     // Keep personal category from closing due to GitHub's post-render logic
     keepPersonalCategoryOpen(categoriesElem as HTMLElement);
 }
 
-/**
- * Keeps the Personal <details> open through GitHub's initial post-render reflow.
- *
- * GitHub closes the element exactly once shortly after it is inserted. We watch
- * the `open` attribute and re-open it if it is closed within a short settle
- * window, then disconnect so subsequent user-initiated closes are respected.
- */
+/** Re-opens the Personal group if GitHub's post-render reflow closes it within the settle window */
 function keepPersonalCategoryOpen(container: HTMLElement): void {
     // Check for the personal details tag
     const personalElem = container.querySelector<HTMLDetailsElement>(
@@ -159,7 +164,7 @@ function keepPersonalCategoryOpen(container: HTMLElement): void {
 
     // Create mutation observer to watch for when the details tag is closed
     const observer = new MutationObserver(() => {
-        // Only correct an unwanted close during the settle window.
+        // Only correct an unwanted close during the settle window
         if (personalElem.open) return;
         if (performance.now() - startedAt > CONFIG.delays.personalOpenSettle) {
             observer.disconnect();
@@ -169,29 +174,26 @@ function keepPersonalCategoryOpen(container: HTMLElement): void {
     });
     observer.observe(personalElem, { attributes: true, attributeFilter: ["open"] });
 
-    // Stop watching after the settle window so manual closes stick.
+    // Stop watching after the settle window so manual closes stick
     setTimeout(() => observer.disconnect(), CONFIG.delays.personalOpenSettle);
 }
 
+/** Fetches all paginated repo pages, rendering the sidebar incrementally as each arrives */
 export async function fetchRemainingPages(): Promise<void> {
     // Don't request more repos if already being requested
-    if (STATE.isFetching || STATE.paginationComplete) return;
-
-    // Start fetch rest of the pages
-    STATE.isFetching = true;
+    if (STATE.paginationComplete) return;
 
     // Loop while the form cursor exists
     let lastPage = false;
-    for (let pageNum = 1; pageNum < 50 && !lastPage; pageNum++) {
+    for (let pageNum = 1; pageNum < CONFIG.pagination.maxPages && !lastPage; pageNum++) {
         LOGGER.info(`Fetching page ${pageNum} of repos...`);
 
         // Send request to get next page of repos
-        const url = "/dashboard/ajax_my_repositories";
         const params = new URLSearchParams({
-            location: "left",
+            location: CONFIG.pagination.location,
             repos_cursor: "" + pageNum,
         });
-        const response = await fetch(`${url}?${params}`, {
+        const response = await fetch(`${CONFIG.pagination.endpoint}?${params}`, {
             headers: { "X-Requested-With": "XMLHttpRequest" },
         });
 
@@ -207,17 +209,18 @@ export async function fetchRemainingPages(): Promise<void> {
             if (data) STATE.repos.set(data.path, data);
         });
 
+        // Render updated repo data
+        renderRepoCategories();
+
         // Check if another page of repos exists
         lastPage = !html.querySelector(CONFIG.selectors.repoPaginationNext);
 
         // Wait to avoid rate limiting
-        await delay(CONFIG.delays.paginationFetch);
+        if (!lastPage) {
+            await delay(CONFIG.delays.paginationFetch);
+        }
     }
 
-    // Render the categories and open the Personal one by default
-    renderRepoCategories();
-
-    // Update fetch state flags and do one final render call
-    STATE.isFetching = false;
+    // Update fetch state flags
     STATE.paginationComplete = true;
 }

@@ -3,6 +3,7 @@ import { CONFIG } from "../config";
 import { STATE } from "../state";
 import sidebarCss from "../../lib/styles.css?inline";
 
+/** Injects a stylesheet that hides GitHub's Copilot widget, "show more" button, and original repo list */
 export function hideUiElements(): void {
     // Don't re-hide if already hidden
     if (STATE.copilotHidden) return;
@@ -28,6 +29,7 @@ export function hideUiElements(): void {
     STATE.copilotHidden = true;
 }
 
+/** Injects the custom sidebar stylesheet, once per page */
 export function injectSidebarStyes(): void {
     if (document.getElementById("better-gh-dash-styles")) return;
 

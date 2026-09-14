@@ -3,7 +3,9 @@ import { fetchRemainingPages } from "./modules/group-repos";
 import { hideUiElements, injectSidebarStyes } from "./modules/styles";
 import { setCurrentUser, STATE } from "./state";
 
+/** Entry point: verifies login, hides default UI, injects styles, and loads the grouped repo sidebar */
 async function init(): Promise<void> {
+    // Only run script if user is logged in
     LOGGER.info("Setting current user...");
     if (!setCurrentUser()) {
         LOGGER.error("Current user is not logged in. Stopping");
@@ -16,6 +18,4 @@ async function init(): Promise<void> {
     await fetchRemainingPages();
 }
 
-(async (): Promise<void> => {
-    await init();
-})();
+init().catch(LOGGER.error);

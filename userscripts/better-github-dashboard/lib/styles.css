@@ -53,12 +53,13 @@
 }
 
 .better-gh-dash-repo-category a {
-    color: var(--fgColor-accent, #0969da);
+    color: var(--fgColor-default, #8f8f8f);
     text-decoration: none;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     flex: 1;
+    margin-left: 8px;
 }
 
 .better-gh-dash-repo-category a:hover {
