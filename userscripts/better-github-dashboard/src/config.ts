@@ -15,17 +15,31 @@ export const CONFIG: Config = {
     },
     delays: {
         mutObserverDebounce: 150,
-        paginationFetch: 300,
+        repoPaginationFetch: 300,
         personalOpenSettle: 100,
+        queuePaginationFetch: 100,
     },
     pagination: {
         endpoint: "/dashboard/ajax_my_repositories",
         location: "left",
         maxPages: 50,
     },
+    search: {
+        endpoint: "/search",
+        maxPages: 3,
+    },
     queries: {
-        reviewRequestedPRs: "is:open is:pr review-requested:@me archived:false sort:updated-desc",
-        authoredPRs: "is:open is:pr author:@me archived:false sort:updated-desc",
-        assignedIssues: "is:open is:issue assignee:@me archived:false sort:updated-desc",
+        reviewRequestedPRs: {
+            query: "is:open is:pr review-requested:@me archived:false sort:updated-desc",
+            type: "pullrequests",
+        },
+        authoredPRs: {
+            query: "is:open is:pr author:@me archived:false sort:updated-desc",
+            type: "pullrequests",
+        },
+        assignedIssues: {
+            query: "is:open is:issue assignee:@me archived:false sort:updated-desc",
+            type: "issues",
+        },
     },
 };

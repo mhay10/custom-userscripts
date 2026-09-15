@@ -43,7 +43,7 @@ export async function injectCategorizedRepos(): Promise<void> {
 
         // Wait to avoid rate limiting
         if (!lastPage) {
-            await delay(CONFIG.delays.paginationFetch);
+            await delay(CONFIG.delays.repoPaginationFetch);
         }
     }
 

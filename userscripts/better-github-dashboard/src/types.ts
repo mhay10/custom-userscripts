@@ -10,6 +10,7 @@ export interface Config {
     selectors: Selectors;
     delays: Delays;
     pagination: Pagination;
+    search: Search;
     queries: Queries;
 }
 
@@ -28,8 +29,9 @@ interface Selectors {
 
 interface Delays {
     mutObserverDebounce: number;
-    paginationFetch: number;
+    repoPaginationFetch: number;
     personalOpenSettle: number;
+    queuePaginationFetch: number;
 }
 
 interface Pagination {
@@ -38,10 +40,33 @@ interface Pagination {
     maxPages: number;
 }
 
+interface Search {
+    endpoint: string;
+    maxPages: number;
+}
+
 interface Queries {
-    reviewRequestedPRs: string;
-    authoredPRs: string;
-    assignedIssues: string;
+    reviewRequestedPRs: Query;
+    authoredPRs: Query;
+    assignedIssues: Query;
+}
+
+export interface Query {
+    query: string;
+    type: "pullrequests" | "issues";
+}
+
+/** A single normalized PR or issue result rendered in a queue */
+export interface QueueItem {
+    number: number;
+    title: string;
+    href: string;
+    state: string;
+    repo: string;
+    authorName: string;
+    authorAvatarUrl: string;
+    numComments: number;
+    createdAt: string;
 }
 
 export interface State {

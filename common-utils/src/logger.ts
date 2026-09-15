@@ -5,13 +5,13 @@ export interface Logger {
 }
 
 // Fixed color for the logger name across all levels
-const NAME_COLOR = "#888888";
+const NAME_COLOR = "#a78bfa";
 
 // Per-level colors applied to the message text
 const LEVEL_COLORS = {
-    info: "#258beb", // blue
-    error: "#dc2626", // red
-    debug: "#444444", // dark gray
+    info: "#38cff8",
+    error: "#ef4444",
+    debug: "#666666",
 } as const;
 
 /**

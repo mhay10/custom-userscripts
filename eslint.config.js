@@ -1,6 +1,9 @@
-import js from "@eslint/js";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 export default [
     {
@@ -11,7 +14,8 @@ export default [
         languageOptions: {
             parser: tsParser,
             parserOptions: {
-                project: "tsconfig.base.json",
+                projectService: true,
+                tsconfigRootDir: rootDir,
             },
         },
         plugins: {
