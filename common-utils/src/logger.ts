@@ -5,13 +5,13 @@ export interface Logger {
 }
 
 // Fixed color for the logger name across all levels
-const NAME_COLOR = "#74e4ee";
+const NAME_COLOR = "#888888";
 
 // Per-level colors applied to the message text
 const LEVEL_COLORS = {
-    info: "#3b82f6", // blue
-    error: "#ee3b60", // red
-    debug: "#8f8f8f", // dark gray
+    info: "#258beb", // blue
+    error: "#dc2626", // red
+    debug: "#444444", // dark gray
 } as const;
 
 /**
@@ -22,11 +22,14 @@ const LEVEL_COLORS = {
  */
 export function createLogger(name: string): Logger {
     function log(level: keyof typeof LEVEL_COLORS, args: any[]): void {
+        const message = args
+            .map((arg) => (typeof arg === "string" ? arg : JSON.stringify(arg)))
+            .join(" ");
+
         console.log(
-            `%c[${name}]%c`,
+            `%c[${name}]%c ${message}`,
             `color: ${NAME_COLOR}`,
-            `color: ${LEVEL_COLORS[level]}`,
-            ...args
+            `color: ${LEVEL_COLORS[level]}`
         );
     }
 
