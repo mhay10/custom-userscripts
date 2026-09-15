@@ -4,6 +4,53 @@ import { LOGGER } from "../logger";
 import { STATE } from "../state";
 import { RepoData } from "../types";
 
+/** Fetches all paginated repo pages, rendering the sidebar incrementally as each arrives */
+export async function injectCategorizedRepos(): Promise<void> {
+    // Don't request more repos if already being requested
+    if (STATE.paginationComplete) return;
+
+    // Loop while the form cursor exists
+    let lastPage = false;
+    for (let pageNum = 1; pageNum < CONFIG.pagination.maxPages && !lastPage; pageNum++) {
+        LOGGER.info(`Fetching page ${pageNum} of repos...`);
+
+        // Send request to get next page of repos
+        const params = new URLSearchParams({
+            location: CONFIG.pagination.location,
+            repos_cursor: "" + pageNum,
+        });
+        const response = await fetch(`${CONFIG.pagination.endpoint}?${params}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+
+        // Stop fetching if the response returns an error
+        if (!response.ok) break;
+
+        // Parse HTML from response
+        const html = new DOMParser().parseFromString(await response.text(), "text/html");
+
+        // Get all repo elements in the HTML and extract the data
+        html.querySelectorAll("li").forEach((li) => {
+            const data = parseRepoNode(li);
+            if (data) STATE.repos.set(data.path, data);
+        });
+
+        // Render updated repo data
+        renderRepos();
+
+        // Check if another page of repos exists
+        lastPage = !html.querySelector(CONFIG.selectors.repoPaginationNext);
+
+        // Wait to avoid rate limiting
+        if (!lastPage) {
+            await delay(CONFIG.delays.paginationFetch);
+        }
+    }
+
+    // Update fetch state flags
+    STATE.paginationComplete = true;
+}
+
 /**
  * Extracts repo owner, name, path, and avatar from a sidebar repo list node
  *
@@ -96,7 +143,7 @@ function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
 }
 
 /** Groups the current repos by owner and renders them into the sidebar container */
-export function renderRepoCategories(): void {
+function renderRepos(): void {
     // Get the existing repo list element
     const existingList = document.querySelector(CONFIG.selectors.repoList) as HTMLElement;
     if (!existingList?.parentElement) return;
@@ -176,51 +223,4 @@ function keepPersonalCategoryOpen(container: HTMLElement): void {
 
     // Stop watching after the settle window so manual closes stick
     setTimeout(() => observer.disconnect(), CONFIG.delays.personalOpenSettle);
-}
-
-/** Fetches all paginated repo pages, rendering the sidebar incrementally as each arrives */
-export async function fetchRemainingPages(): Promise<void> {
-    // Don't request more repos if already being requested
-    if (STATE.paginationComplete) return;
-
-    // Loop while the form cursor exists
-    let lastPage = false;
-    for (let pageNum = 1; pageNum < CONFIG.pagination.maxPages && !lastPage; pageNum++) {
-        LOGGER.info(`Fetching page ${pageNum} of repos...`);
-
-        // Send request to get next page of repos
-        const params = new URLSearchParams({
-            location: CONFIG.pagination.location,
-            repos_cursor: "" + pageNum,
-        });
-        const response = await fetch(`${CONFIG.pagination.endpoint}?${params}`, {
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        });
-
-        // Stop fetching if the response returns an error
-        if (!response.ok) break;
-
-        // Parse HTML from response
-        const html = new DOMParser().parseFromString(await response.text(), "text/html");
-
-        // Get all repo elements in the HTML and extract the data
-        html.querySelectorAll("li").forEach((li) => {
-            const data = parseRepoNode(li);
-            if (data) STATE.repos.set(data.path, data);
-        });
-
-        // Render updated repo data
-        renderRepoCategories();
-
-        // Check if another page of repos exists
-        lastPage = !html.querySelector(CONFIG.selectors.repoPaginationNext);
-
-        // Wait to avoid rate limiting
-        if (!lastPage) {
-            await delay(CONFIG.delays.paginationFetch);
-        }
-    }
-
-    // Update fetch state flags
-    STATE.paginationComplete = true;
 }
