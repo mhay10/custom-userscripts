@@ -37,7 +37,7 @@
 }
 
 .better-gh-dash-repo-category details[open] summary::after {
-    transform: rotate(180) translateY(-2px);
+    transform: rotate(180deg) translateY(-1px);
 }
 
 .better-gh-dash-repo-category ul {
@@ -52,7 +52,7 @@
     display: flex;
     align-items: center;
     font-size: 13px;
-    transition: background-color 0.1s;
+    transition: background-color 0.1s ease;
 }
 
 .better-gh-dash-repo-category li:hover {
