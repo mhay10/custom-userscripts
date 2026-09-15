@@ -1,4 +1,4 @@
-import { delay } from "../../../../common-utils/src";
+import { delay } from "@repo/common-utils";
 import { CONFIG } from "../config";
 import { LOGGER } from "../logger";
 import { STATE } from "../state";

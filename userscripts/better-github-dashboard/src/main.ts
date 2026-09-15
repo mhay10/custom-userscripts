@@ -1,6 +1,6 @@
 import { LOGGER } from "./logger";
-import { fetchRemainingPages } from "./modules/group-repos";
-import { hideUiElements, injectSidebarStyes } from "./modules/styles";
+import { fetchRemainingPages } from "./modules/grouped-repos";
+import { hideUiElements, injectSidebarStyes } from "./modules/styling";
 import { setCurrentUser, STATE } from "./state";
 
 /** Entry point: verifies login, hides default UI, injects styles, and loads the grouped repo sidebar */

@@ -39,7 +39,9 @@ interface Pagination {
 }
 
 interface Queries {
-    reviewPRs: string;
+    reviewRequestedPRs: string;
+    authoredPRs: string;
+    assignedIssues: string;
 }
 
 export interface State {

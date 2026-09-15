@@ -24,6 +24,8 @@ export const CONFIG: Config = {
         maxPages: 50,
     },
     queries: {
-        reviewPRs: "is:open is:pr review-requested:@me archived:false sort:updated-desc",
+        reviewRequestedPRs: "is:open is:pr review-requested:@me archived:false sort:updated-desc",
+        authoredPRs: "is:open is:pr author:@me archived:false sort:updated-desc",
+        assignedIssues: "is:open is:issue assignee:@me archived:false sort:updated-desc",
     },
 };

@@ -1,7 +1,8 @@
 import { getCspNonce } from "@repo/common-utils";
 import { CONFIG } from "../config";
 import { STATE } from "../state";
-import sidebarCss from "../../lib/styles.css?inline";
+import sidebarCss from "../../lib/sidebarStyles.css?inline";
+import queueCss from "../../lib/queueStyles.css?inline";
 
 /** Injects a stylesheet that hides GitHub's Copilot widget, "show more" button, and original repo list */
 export function hideUiElements(): void {
@@ -29,15 +30,34 @@ export function hideUiElements(): void {
     STATE.copilotHidden = true;
 }
 
-/** Injects the custom sidebar stylesheet, once per page */
+/** Injects the custom sidebar stylesheet */
 export function injectSidebarStyes(): void {
-    if (document.getElementById("better-gh-dash-styles")) return;
+    // Skip if styles have already been injected
+    if (document.getElementById("better-gh-dash-sidebar-styles")) return;
 
-    const style = document.createElement("style");
+    // Create style tag and copy CSS file contents to it
+    const styleElem = document.createElement("style");
     const nonce = getCspNonce();
-    if (nonce) style.nonce = nonce;
-    style.id = "better-gh-dash-styles";
-    style.textContent = sidebarCss;
+    if (nonce) styleElem.nonce = nonce;
+    styleElem.id = "better-gh-dash-sidebar-styles";
+    styleElem.textContent = sidebarCss;
 
-    document.head.appendChild(style);
+    // Add style tag to DOM
+    document.head.appendChild(styleElem);
+}
+
+/** Injects the custom queues stylesheet */
+export function injectQueueStyles(): void {
+    // Skip if styles have already been injected
+    if (document.getElementById("better-gh-dash-queue-styles")) return;
+
+    // Create style tag and copy CSS file contents to it
+    const styleElem = document.createElement("style");
+    const nonce = getCspNonce();
+    if (nonce) styleElem.nonce = nonce;
+    styleElem.id = "better-gh-dash-queue-styles";
+    styleElem.textContent = queueCss;
+
+    // Add style tag to DOM
+    document.head.appendChild(styleElem);
 }
