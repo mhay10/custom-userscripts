@@ -13,15 +13,31 @@ export function debounce<T extends (...args: any[]) => any>(
     };
 }
 
-export function formatRelativeTime(isoDateString: string): string {
-    const date = new Date(isoDateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+export function formatRelativeTime(dateString: string): string {
+    try {
+        const date = new Date(dateString);
 
-    if (seconds < 60) return "now";
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+        if (isNaN(date.getTime())) {
+            return dateString;
+        }
 
-    return date.toLocaleDateString();
+        const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+
+        if (seconds < 0) return "future";
+
+        const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+        if (seconds < 60) return rtf.format(-Math.round(seconds), "second");
+        if (seconds < 3600) return rtf.format(-Math.floor(seconds / 60), "minute");
+        if (seconds < 86400) return rtf.format(-Math.floor(seconds / 3600), "hour");
+        if (seconds < 604800) return rtf.format(-Math.floor(seconds / 86400), "day");
+
+        return date.toLocaleDateString("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+        });
+    } catch {
+        return dateString;
+    }
 }

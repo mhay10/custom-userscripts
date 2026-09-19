@@ -162,3 +162,14 @@
     color: var(--fgColor-muted);
     font-size: 12px;
 }
+
+.better-gh-dash-queue-comment-icon {
+  vertical-align: text-bottom;
+  margin-right: 2px;
+}
+
+.better-gh-dash-queue-item-comments {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
