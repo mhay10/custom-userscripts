@@ -1,0 +1,44 @@
+name: Release Userscript
+
+on:
+  workflow_dispatch:
+    inputs:
+      script_name:
+        description: Folder name of the userscript to release (in userscripts/)
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node_version: 24
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Extract userscript info
+        id: userscript-info
+        working-directory: userscripts/${{ inputs.script_name }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          NAME=$(node -p "require('./package.json').name" | sed 's/@userscripts\///')
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=${NAME}-v${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Build Userscript
+        run: npm run build --workspace=@userscripts/${{ inputs.script_name }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3.0.3
+        with:
+          tag_name: ${{ steps.userscript-info.outputs.tag }}
+          name: ${{ steps.userscript-info.outputs.name }} v${{ steps.userscript-info.outputs.version }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: userscripts/${{ inputs.script_name }}/dist/*.user.js

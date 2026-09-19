@@ -1,0 +1,44 @@
+{
+    "name": "custom-userscripts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mhay10/custom-userscripts.git"
+    },
+    "private": true,
+    "type": "module",
+    "workspaces": [
+        "userscripts/*",
+        "common-utils"
+    ],
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@types/node": "^22.20.2",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
+        "@typescript-eslint/parser": "^8.0.0",
+        "eslint": "^10.10.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.5.1",
+        "prettier": "^3.9.6",
+        "typescript": "^5.9.3",
+        "vite": "^8.3.0",
+        "vite-userscript-plugin": "^2.5.0"
+    },
+    "scripts": {
+        "build": "npm run build --workspaces --if-present",
+        "dev": "npm run dev --workspaces",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "prepare": "husky",
+        "setup-hooks": "husky init && husky add .husky/pre-commit \"npx lint-staged\""
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,jsx}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{json,md}": [
+            "prettier --write"
+        ]
+    }
+}
