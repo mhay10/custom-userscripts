@@ -1,4 +1,4 @@
-import { delay } from "@repo/common-utils";
+import { delay, escapeHtml } from "@repo/common-utils";
 import { CONFIG } from "../config";
 import { LOGGER } from "../logger";
 import { STATE } from "../state";
@@ -91,53 +91,28 @@ function parseRepoNode(node: HTMLElement): RepoData | null {
 
 /** Builds a collapsible category section containing a sorted list of repo links */
 function buildCategoryHtml(category: string, repos: RepoData[]): HTMLElement {
-    // Create main category container
     const categoryElem = document.createElement("div");
-    categoryElem.classList.add("better-gh-dash-repo-category");
+    categoryElem.className = "better-gh-dash-repo-category";
 
-    // Create details dropdown
-    const detailsElem = document.createElement("details");
-    if (category === "Personal") {
-        detailsElem.open = true;
-    }
+    const repoList = repos
+        .map(
+            (repo) => `
+                <li data-repo-name="${repo.name.toLowerCase()}">
+                    ${repo.avatarSrc ? `<img src="${repo.avatarSrc}" width="16" height="16" alt="">` : ""}
+                    <a href="${repo.href}">${escapeHtml(repo.path)}</a>
+                </li>
+            `
+        )
+        .join("");
 
-    // Create category summary
-    const summaryElem = document.createElement("summary");
-    summaryElem.textContent = `${category} (${repos.length})`;
-    summaryElem.dataset.category = category;
-
-    // Build list of repos
-    const listElem = document.createElement("ul");
-    for (const repo of repos) {
-        // Create list item element and add key for search filtering
-        const itemElem = document.createElement("li");
-        itemElem.dataset.repoName = repo.name.toLowerCase();
-        itemElem.style.listStyle = "none";
-
-        // Setup repo avatar image and add to list item DOM
-        if (repo.avatarSrc) {
-            const imgElem = document.createElement("img");
-            imgElem.src = repo.avatarSrc;
-            imgElem.width = 16;
-            imgElem.height = 16;
-            imgElem.alt = "";
-            itemElem.appendChild(imgElem);
-        }
-
-        // Setup repo link element
-        const linkElem = document.createElement("a");
-        linkElem.href = `${repo.href}`;
-        linkElem.textContent = repo.path;
-        itemElem.appendChild(linkElem);
-
-        // Add repo item to list
-        listElem.appendChild(itemElem);
-    }
-
-    // Add child elements to parent elements
-    detailsElem.appendChild(summaryElem);
-    detailsElem.appendChild(listElem);
-    categoryElem.appendChild(detailsElem);
+    categoryElem.innerHTML = `
+        <details ${category === "Personal" ? "open" : ""}>
+            <summary data-category="${category}">${category} (${repos.length})</summary>
+            <ul>
+                ${repoList}
+            </ul>
+        </details>
+    `;
 
     return categoryElem;
 }
