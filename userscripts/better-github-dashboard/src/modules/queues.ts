@@ -4,50 +4,49 @@ import { LOGGER } from "../logger";
 import { Query, QueueItem } from "../types";
 
 export async function injectQueues(): Promise<void> {
-    // const [reviewedPRs, authoredPRs, assignedIssues] = await Promise.all([
-    //     loadQueueData(CONFIG.queries.reviewRequestedPRs),
-    //     loadQueueData(CONFIG.queries.authoredPRs),
-    //     loadQueueData(CONFIG.queries.assignedIssues),
-    // ]);
+    // Build list of query name and search query
+    const queueConfigs: { title: string; query: Query }[] = [
+        {
+            title: "Assigned Issues",
+            query: CONFIG.queries.assignedIssues,
+        },
+        {
+            title: "Review Requests",
+            query: CONFIG.queries.reviewRequestedPRs,
+        },
+        {
+            title: "Created Pull Requests",
+            query: CONFIG.queries.authoredPRs,
+        },
+    ];
 
-    const viteIssuesQuery: Query = {
-        query: "is:issue is:open repo:vitejs/vite archived:false sort:updated-desc",
-        type: "issues",
-    };
-    const vitePRsQuery: Query = {
-        query: "is:pr is:open repo:vitejs/vite archived:false sort:updated-desc",
-        type: "pullrequests",
-    };
-    const authoredPRsQuery: Query = {
-        query: "is:pr author:@me sort:updated-desc",
-        type: "pullrequests",
-    };
-
-    const [viteIssues, vitePRs, authoredPRs] = await Promise.all([
-        fetchQueueData(viteIssuesQuery),
-        fetchQueueData(vitePRsQuery),
-        fetchQueueData(authoredPRsQuery),
-    ]);
-
-    if (!viteIssues || !vitePRs || !authoredPRs) {
-        LOGGER.error("Failed to load queue data");
-        return;
-    }
-
-    LOGGER.info("Number of vite issues:", viteIssues.length);
-    LOGGER.info("Number of vite prs:", vitePRs.length);
-    LOGGER.info("Number of authored prs:", authoredPRs.length);
-
-    const authoredPRsHtml = buildQueueHtml("Review Requested Pull Requests", authoredPRs);
-    const viteIssuesHtml = buildQueueHtml("Assigned Issues", viteIssues);
-    const vitePRsHtml = buildQueueHtml("Assigned Pull Requests", vitePRs);
-
+    // Get element to inject queues before
     const mainFeedElem = document.querySelector(CONFIG.selectors.mainFeed);
-    if (mainFeedElem) {
-        mainFeedElem.insertAdjacentElement("beforebegin", authoredPRsHtml);
-        mainFeedElem.insertAdjacentElement("beforebegin", viteIssuesHtml);
-        mainFeedElem.insertAdjacentElement("beforebegin", vitePRsHtml);
-    }
+    if (!mainFeedElem) return;
+
+    // Create placeholder elements queues for progressive item adding
+    const slots = queueConfigs.map(({ title }) => {
+        const emptyQueue = buildQueueHtml(title, []);
+        mainFeedElem.insertAdjacentElement("beforebegin", emptyQueue);
+        return { title, placeholderElem: emptyQueue };
+    });
+
+    // Fetch queues concurrently and stream data into UI as it's recieved
+    await Promise.all(
+        queueConfigs.map(async ({ query }, index) => {
+            const { title, placeholderElem } = slots[index];
+            const items = await fetchQueueData(query);
+
+            if (items) {
+                const html = buildQueueHtml(title, items);
+                placeholderElem.replaceWith(html);
+                LOGGER.debug(`Loaded queue [${title}]: ${items.length}`);
+            } else {
+                placeholderElem.remove();
+                LOGGER.error(`Failed to load queue items [${title}]`);
+            }
+        })
+    );
 }
 
 function buildQueueHtml(title: string, items: QueueItem[], lastUpdated?: string): HTMLElement {
@@ -117,7 +116,6 @@ async function fetchQueueData(query: Query): Promise<QueueItem[] | null> {
             q: query.query,
             type: query.type,
             p: "" + page,
-            per_page: "5",
         });
         const response = await fetch(`${CONFIG.search.endpoint}?${params}`, {
             headers: {

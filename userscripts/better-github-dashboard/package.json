@@ -1,6 +1,6 @@
 {
     "name": "@userscripts/better-github-dashboard",
-    "version": "0.3.2",
+    "version": "0.4.0",
     "description": "Cleaner GitHub dashboard that hides Copilot, displays active PRs/issues, and groups repos by owner",
     "private": true,
     "type": "module",
