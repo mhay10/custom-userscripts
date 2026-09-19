@@ -133,7 +133,7 @@ function renderRepos(): void {
         existingList.parentElement.insertBefore(categoriesElem, existingList);
     } else {
         // Clear HTML contents if it already exists
-        categoriesElem.replaceChildren();
+        categoriesElem.innerHTML = "";
     }
 
     // Convert state's flat repo list into grouped sections
