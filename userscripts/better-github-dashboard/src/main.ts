@@ -1,7 +1,7 @@
 import { LOGGER } from "./logger";
 import { injectCategorizedRepos } from "./modules/grouped-repos";
 import { injectQueues } from "./modules/queues";
-import { hideUiElements, injectQueueStyles, injectSidebarStyes } from "./modules/styling";
+import { hideUiElements, injectQueueStyles, injectSidebarStyles } from "./modules/styling";
 import { setCurrentUser, STATE } from "./state";
 
 /** Entry point: verifies login, hides default UI, injects styles, and loads the grouped repo sidebar */
@@ -15,7 +15,7 @@ async function init(): Promise<void> {
 
     // Setup CSS styling
     hideUiElements();
-    injectSidebarStyes();
+    injectSidebarStyles();
     injectQueueStyles();
 
     // Inject repo sidebar stuff

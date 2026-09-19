@@ -11,7 +11,7 @@ export async function injectCategorizedRepos(): Promise<void> {
 
     // Loop while the form cursor exists
     let lastPage = false;
-    for (let pageNum = 1; pageNum < CONFIG.pagination.maxPages && !lastPage; pageNum++) {
+    for (let pageNum = 1; pageNum <= CONFIG.pagination.maxPages && !lastPage; pageNum++) {
         LOGGER.debug(`Fetching page ${pageNum} of repos...`);
 
         // Send request to get next page of repos

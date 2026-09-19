@@ -23,7 +23,11 @@ const LEVEL_COLORS = {
 export function createLogger(name: string): Logger {
     function log(level: keyof typeof LEVEL_COLORS, args: any[]): void {
         const message = args
-            .map((arg) => (typeof arg === "string" ? arg : JSON.stringify(arg)))
+            .map((arg) => {
+                if (typeof arg === "string") return arg;
+                if (arg instanceof Error) return arg.stack ?? arg.message;
+                return JSON.stringify(arg) ?? String(arg);
+            })
             .join(" ");
 
         console.log(

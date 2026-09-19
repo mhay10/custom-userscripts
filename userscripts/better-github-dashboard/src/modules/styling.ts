@@ -31,7 +31,7 @@ export function hideUiElements(): void {
 }
 
 /** Injects the custom sidebar stylesheet */
-export function injectSidebarStyes(): void {
+export function injectSidebarStyles(): void {
     // Skip if styles have already been injected
     if (document.getElementById("better-gh-dash-sidebar-styles")) return;
 

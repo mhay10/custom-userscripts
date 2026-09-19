@@ -31,7 +31,7 @@ export async function injectQueues(): Promise<void> {
         return { title, placeholderElem: emptyQueue };
     });
 
-    // Fetch queues concurrently and stream data into UI as it's recieved
+    // Fetch queues concurrently and stream data into UI as it's received
     await Promise.all(
         queueConfigs.map(async ({ query }, index) => {
             const { title, placeholderElem } = slots[index];

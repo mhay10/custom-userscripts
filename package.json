@@ -25,7 +25,7 @@
     },
     "scripts": {
         "build": "npm run build --workspaces --if-present",
-        "dev": "npm run dev --workspaces",
+        "dev": "npm run dev --workspaces --if-present",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
