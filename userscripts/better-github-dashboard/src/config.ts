@@ -2,12 +2,17 @@ import { Config } from "./types";
 
 export const CONFIG: Config = {
     selectors: {
-        // Page UI selectors
+        // Dashboard selectors
+        mainFeed: '#dashboard > div[class="news"]',
+
+        // Copilot selectors
+        copilotElems: '.copilotPreview__container, react-partial[partial-name*="copilot"]',
+
+        // Sidebar Repo selectors
         repoList: "ul.js-dashboard-repos-list",
         repoPaginationForm: "form.js-ajax-pagination, form.js-more-repos-form",
         repoPaginationNext: 'input[name="repos_cursor"]',
         sideShowMoreButton: 'button[data-disable-with="Loading more..."]',
-        copilotElems: '.copilotPreview__container, react-partial[partial-name*="copilot"]',
 
         // Custom UI selectors
         categorizedRepoList: "#better-gh-dash-repos-list",

@@ -1,4 +1,4 @@
-import { clamp, delay } from "@repo/common-utils";
+import { clamp, delay, escapeHtml, formatRelativeTime } from "@repo/common-utils";
 import { CONFIG } from "../config";
 import { LOGGER } from "../logger";
 import { Query, QueueItem } from "../types";
@@ -11,11 +11,11 @@ export async function injectQueues(): Promise<void> {
     // ]);
 
     const viteIssuesQuery: Query = {
-        query: "is:issue is:open repo:vitejs/vite sort:updated-desc",
+        query: "is:issue is:open repo:vitejs/vite archived:false sort:updated-desc",
         type: "issues",
     };
     const vitePRsQuery: Query = {
-        query: "is:pr is:open repo:vitejs/vite sort:updated-desc",
+        query: "is:pr is:open repo:vitejs/vite archived:false sort:updated-desc",
         type: "pullrequests",
     };
     const authoredPRsQuery: Query = {
@@ -37,6 +37,70 @@ export async function injectQueues(): Promise<void> {
     LOGGER.info("Number of vite issues:", viteIssues.length);
     LOGGER.info("Number of vite prs:", vitePRs.length);
     LOGGER.info("Number of authored prs:", authoredPRs.length);
+
+    const authoredPRsHtml = buildQueueHtml("Review Requested Pull Requests", authoredPRs);
+    const viteIssuesHtml = buildQueueHtml("Assigned Issues", viteIssues);
+    const vitePRsHtml = buildQueueHtml("Assigned Pull Requests", vitePRs);
+
+    const mainFeedElem = document.querySelector(CONFIG.selectors.mainFeed);
+    if (mainFeedElem) {
+        mainFeedElem.insertAdjacentElement("beforebegin", authoredPRsHtml);
+        mainFeedElem.insertAdjacentElement("beforebegin", viteIssuesHtml);
+        mainFeedElem.insertAdjacentElement("beforebegin", vitePRsHtml);
+    }
+}
+
+function buildQueueHtml(title: string, items: QueueItem[], lastUpdated?: string): HTMLElement {
+    const details = document.createElement("details");
+    details.className = "better-gh-dash-queue";
+    details.open = true;
+
+    details.innerHTML = `
+        <summary class="better-gh-dash-queue-header">
+            <div class="better-gh-dash-queue-header-title">${title}</div>
+            <div class="better-gh-dash-queue-header-info">
+                <span>${items.length} item${items.length !== 1 ? "s" : ""}</span>
+                ${lastUpdated ? `<span class="better-gh-dash-queue-header-updated">${lastUpdated}</span>` : ""}
+            </div>
+        </summary>
+        <ul class="better-gh-dash-queue-list">
+            ${
+                items.length === 0
+                    ? '<div class="better-gh-dash-queue-empty">No items</div>'
+                    : items.map((item) => buildQueueItemHtml(item).outerHTML).join("")
+            }
+        </ul>
+    `;
+    return details;
+}
+
+/**
+ * Builds a single queue item as a clickable link.
+ * Left side: avatar, title, repo, state badge.
+ * Right side (aligned right): author, timestamp, comment count.
+ */
+function buildQueueItemHtml(item: QueueItem): HTMLElement {
+    const link = document.createElement("a");
+    link.className = "better-gh-dash-queue-item";
+    link.href = item.href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.innerHTML = `
+        <img class="better-gh-dash-queue-item-avatar" src="${escapeHtml(item.authorAvatarUrl)}" alt="${escapeHtml(item.authorName)}">
+        <div class="better-gh-dash-queue-item-left">
+            <div class="better-gh-dash-queue-item-title">#${item.number} ${escapeHtml(item.title)}</div>
+            <div class="better-gh-dash-queue-item-meta-left">
+                <span class="better-gh-dash-queue-item-repo">${escapeHtml(item.repo)}</span>
+                <span class="better-gh-dash-queue-item-state ${item.state.toLowerCase()}">${escapeHtml(item.state)}</span>
+            </div>
+        </div>
+        <div class="better-gh-dash-queue-item-right">
+            <span>${escapeHtml(item.authorName)}</span>
+            <span>${formatRelativeTime(item.createdAt)}</span>
+            ${item.numComments > 0 ? `<span>💬 ${item.numComments}</span>` : ""}
+        </div>
+    `;
+    return link;
 }
 
 async function fetchQueueData(query: Query): Promise<QueueItem[] | null> {

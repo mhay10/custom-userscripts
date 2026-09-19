@@ -8,9 +8,9 @@
 }
 
 .better-gh-dash-repo-category details {
-    border: 1px solid var(--borderColor-default, #d0d7de);
+    border: 1px solid var(--borderColor-default);
     border-radius: 6px;
-    background: var(--bgColor-muted, #f6f8fa);
+    background: var(--bgColor-muted);
     margin-bottom: 8px;
 }
 
@@ -19,7 +19,7 @@
     font-size: 12px;
     cursor: pointer;
     padding: 8px 12px;
-    color: var(--fgColor-default, #1f2328);
+    color: var(--fgColor-default);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,7 +32,7 @@
     width: 16px;
     height: 16px;
     flex-shrink: 0;
-    background-color: var(--fgColor-muted, #656d76);
+    background-color: var(--fgColor-muted);
     mask: var(--dropdown-arrow) center / contain no-repeat;
 }
 
@@ -44,7 +44,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--borderColor-muted, #e1e4e8);
+    border-top: 1px solid var(--borderColor-muted);
 }
 
 .better-gh-dash-repo-category li {
@@ -60,7 +60,7 @@
 }
 
 .better-gh-dash-repo-category a {
-    color: var(--fgColor-default, #8f8f8f);
+    color: var(--fgColor-default);
     text-decoration: underline;
     text-decoration-color: transparent;
     overflow: hidden;

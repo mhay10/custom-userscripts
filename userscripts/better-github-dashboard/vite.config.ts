@@ -15,8 +15,8 @@ export default defineConfig({
             fileName: "better-github-dashboard.user",
             formats: ["iife"],
         },
-        minify: false,
-        sourcemap: true,
+        // minify: true,
+        // cssMinify: true,
         rollupOptions: {
             output: {
                 entryFileNames: "better-github-dashboard.user.js",

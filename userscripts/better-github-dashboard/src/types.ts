@@ -15,14 +15,12 @@ export interface Config {
 }
 
 interface Selectors {
-    // Page UI selectors
+    mainFeed: string;
+    copilotElems: string;
     repoList: string;
     repoPaginationForm: string;
     repoPaginationNext: string;
     sideShowMoreButton: string;
-    copilotElems: string;
-
-    // Custom UI selectors
     categorizedRepoList: string;
     personalRepoList: string;
 }
