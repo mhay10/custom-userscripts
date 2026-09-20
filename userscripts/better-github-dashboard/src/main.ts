@@ -4,6 +4,8 @@ import { injectQueues } from "./modules/queues";
 import { hideUiElements, injectQueueStyles, injectSidebarStyles } from "./modules/styling";
 import { setCurrentUser, STATE } from "./state";
 
+init().catch(LOGGER.error);
+
 /** Entry point: verifies login, hides default UI, injects styles, and loads the grouped repo sidebar */
 async function init(): Promise<void> {
     // Only run script if user is logged in
@@ -13,18 +15,30 @@ async function init(): Promise<void> {
     }
     LOGGER.info(`Current User: ${STATE.currentUser}`);
 
-    // Setup CSS styling
+    // Setup UI elements
+    injectUI();
+
+    // Re-run on Turbo navigation stuff
+    document.addEventListener("turbo:load", () => {
+        LOGGER.debug("Turbo page load detected. Re-running UI injection");
+        injectUI();
+    });
+}
+
+/** Inject custom UI elements */
+async function injectUI(): Promise<void> {
+    // Reset state flags so re-injection works
+    STATE.paginationComplete = false;
+    STATE.copilotHidden = false;
+    STATE.repos.clear();
+
     hideUiElements();
     injectSidebarStyles();
     injectQueueStyles();
 
-    // Inject repo sidebar stuff
     LOGGER.info("Injecting categorized repo lists...");
     await injectCategorizedRepos();
 
-    // Inject PR/issues stuff
     LOGGER.info("Injecting PR/issue queues...");
     await injectQueues();
 }
-
-init().catch(LOGGER.error);

@@ -4,6 +4,9 @@ import { LOGGER } from "../logger";
 import { Query, QueueItem } from "../types";
 
 export async function injectQueues(): Promise<void> {
+    // Remove any existing queues from previous page loads
+    document.querySelectorAll(".better-gh-dash-queue").forEach((elem) => elem.remove());
+
     // Build list of query name and search query
     const queueConfigs: { title: string; query: Query }[] = [
         {
