@@ -1,0 +1,17 @@
+{
+    "name": "@userscripts/googledocs-no-gemini-bar",
+    "version": "0.1.0",
+    "description": "Removes floating Gemini bar from bottom of the page",
+    "private": true,
+    "type": "module",
+    "main": "./dist/googledocs-no-gemini-bar.user.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@repo/common-utils": "*"
+    },
+    "devDependencies": {}
+}
