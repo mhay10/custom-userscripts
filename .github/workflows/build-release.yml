@@ -6,25 +6,48 @@ on:
       script_name:
         description: Folder name of the userscript to release (in userscripts/)
         required: true
+      is_prerelease:
+        description: Mark this release as a prerelease
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+
+concurrency:
+  group: release-${{ inputs.script_name }}
+  cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Validate Userscript Location
+        env:
+          SCRIPT_NAME: ${{ inputs.script_name }}
+        run: |
+          if [[ ! "$SCRIPT_NAME" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+            echo "::error::In valid script name '${SCRIPT_NAME}'. Must be in kebab-case"
+          fi
+          if [[ ! -f "userscripts/${SCRIPT_NAME}/package.json" ]]; then
+            echo "::error::No userscript named '${SCRIPT_NAME}' exists in userscripts/"
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache: npm
 
-      - name: Install NPM dependencies
+      - name: Install NPM Dependencies
         run: npm ci
 
-      - name: Extract userscript info
+      - name: Extract Userscript Info
         id: userscript-info
         working-directory: userscripts/${{ inputs.script_name }}
         run: |
@@ -37,13 +60,35 @@ jobs:
       - name: Build Userscript
         run: npm run build --workspace=@userscripts/${{ inputs.script_name }}
 
+      - name: Upload Artifact Backup
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.script_name }}-dist
+          path: |
+            userscripts/${{ inputs.script_name }}/dist/*.user.js
+            userscripts/${{ inputs.script_name }}/dist/*.meta.js
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Generate Release Notes
+        env:
+          SCRIPT_NAME: ${{ inputs.script_name }}
+        run: |
+          PREV_TAG=$(git tag --list "${SCRIPT_NAME}-v*" --sort=-v:refname | head -n 1)
+          if [[ -n "$PREV_TAG" ]]; then
+            git log --oneline "$PREV_TAG..HEAD" -- "userscripts/${SCRIPT_NAME}" > RELEASE_NOTES.md
+          else
+            echo "Initial release" > RELEASE_NOTES.md
+          fi
+
       - name: Create Release
         uses: softprops/action-gh-release@v3.0.3
         with:
           tag_name: ${{ steps.userscript-info.outputs.tag }}
           name: ${{ steps.userscript-info.outputs.name }} v${{ steps.userscript-info.outputs.version }}
-          generate_release_notes: false
           fail_on_unmatched_files: true
+          body_path: RELEASE_NOTES.md
+          prerelease: ${{ inputs.is_prerelease || contains(steps.userscript-info.outputs.version, '-') }}
           files: |
             userscripts/${{ inputs.script_name }}/dist/*.user.js
             userscripts/${{ inputs.script_name }}/dist/*.meta.js
