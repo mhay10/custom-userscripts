@@ -107,7 +107,7 @@ function packageJsonTemplate({ kebab, description }) {
         JSON.stringify(
             {
                 name: `@userscripts/${kebab}`,
-                version: "0.1.0",
+                version: "0.0.0",
                 description,
                 private: true,
                 type: "module",
@@ -168,14 +168,22 @@ export default defineConfig({
         userscript({
             entry: "src/main.ts",
             header: {
+                // Userscript Details
                 name: "${title}",
                 version: pkg.version,
                 description: "${description}",
                 author: "${AUTHOR}",
-                // TODO: set the icon to a favicon for the target site
-                icon: "https://www.google.com/s2/favicons?sz=64&domain=example.com",
-                // TODO: set the match pattern(s) for the target site
-                match: "<insert url(s) here>",
+                icon: "https://www.google.com/s2/favicons?sz=64&domain=<CHANGE ME>",
+
+                // Homepage/Update Info
+                homepage: "https://github.com/mhay10/custom-userscripts",
+                downloadURL:
+                    "https://github.com/mhay10/custom-userscripts/releases/latest/download/<CHANGE ME>.user.js",
+                updateURL:
+                    "https://github.com/mhay10/custom-userscripts/releases/latest/download/<CHANGE ME>.meta.js",
+
+                // Userscript Permissions
+                match: "<CHANGE ME>",
                 "run-at": "document-end",
             },
         }),
