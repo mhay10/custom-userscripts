@@ -25,6 +25,7 @@
     },
     "scripts": {
         "build": "npm run build --workspaces --if-present",
+        "create": "node scripts/create-userscript.mjs",
         "dev": "npm run dev --workspaces --if-present",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",

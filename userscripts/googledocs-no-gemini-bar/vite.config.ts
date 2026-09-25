@@ -26,14 +26,22 @@ export default defineConfig({
         userscript({
             entry: "src/main.ts",
             header: {
-                name: "Googledocs No Gemini Bar",
+                // Userscript Details
+                name: "GoogleDocs No Gemini Bar",
                 version: pkg.version,
                 description: "Removes floating Gemini bar from bottom of the page",
                 author: "mhay10",
-                // TODO: set the icon to a favicon for the target site
-                icon: "https://www.google.com/s2/favicons?sz=64&domain=example.com",
-                // TODO: set the match pattern(s) for the target site
-                match: "<insert url(s) here>",
+                icon: "https://www.google.com/s2/favicons?sz=64&domain=docs.google.com",
+
+                // Homepage/Version Info
+                homepage: "https://github.com/mhay10/custom-userscripts",
+                downloadURL:
+                    "https://github.com/mhay10/custom-userscripts/releases/latest/download/GoogleDocs-No-Gemini-Bar.user.js",
+                updateURL:
+                    "https://github.com/mhay10/custom-userscripts/releases/latest/download/GoogleDocs-No-Gemini-Bar.meta.js",
+
+                // Userscript Permissions
+                match: "https://docs.google.com/document/*",
                 "run-at": "document-end",
             },
         }),
