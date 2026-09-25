@@ -25,7 +25,7 @@ export function createLogger(name: string): Logger {
         const message = args
             .map((arg) => {
                 if (typeof arg === "string") return arg;
-                if (arg instanceof Error) return arg.stack ?? arg.message;
+                if (arg instanceof Error) return arg.message ?? arg.stack;
                 return JSON.stringify(arg) ?? String(arg);
             })
             .join(" ");
