@@ -1,0 +1,17 @@
+{
+    "name": "@userscripts/ez-audiobook-downloader",
+    "version": "0.0.0",
+    "description": "TODO: describe Ez Audiobook Downloader",
+    "private": true,
+    "type": "module",
+    "main": "./dist/ez-audiobook-downloader.user.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@repo/common-utils": "*"
+    },
+    "devDependencies": {}
+}
