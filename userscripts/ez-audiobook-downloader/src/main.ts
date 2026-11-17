@@ -7,8 +7,8 @@ main().catch(LOGGER.error);
 
 async function main(): Promise<void> {
     /* TODO: Implement following steps:
-    [ ] Inject user interface
-    [ ] Enable download button once UI fully loaded
+    [x] Inject user interface
+    [x] Enable download button once UI fully loaded
     [ ] Event listener for when download button is clicked:
         [ ] Prevent multiple clicks
         [ ] Decrypt track urls
@@ -19,8 +19,45 @@ async function main(): Promise<void> {
 
     // Inject UI into page DOM
     const player = await waitForElement(CONFIG.pageUI.playerSelector);
-    if (!player) throw ReferenceError("Player element does not exist. Cannot continue");
     injectUI(player);
+
+    // Enable download button once player fully loaded
+    await waitForPlayerLoadFinish();
+    const downloadButton = document.querySelector(CONFIG.customUI.downloadButtonSelector);
+    downloadButton?.setAttribute("data-status", "ready");
+}
+
+async function waitForPlayerLoadFinish(): Promise<void> {
+    return new Promise((resolve) => {
+        // Create mutation observer for loading element
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                const target = mutation.target;
+                // Check for style changes
+                if (
+                    mutation.type === "attributes" &&
+                    mutation.attributeName === "style" &&
+                    target instanceof HTMLElement &&
+                    target.id === "loading-message-element"
+                ) {
+                    // Make sure loading message is hidden
+                    const style = target.getAttribute("style");
+                    if (style?.includes("display: none")) {
+                        // Resolve promise once loaded
+                        observer.disconnect();
+                        resolve();
+                    }
+                }
+            }
+        });
+
+        // Start observing document body for changes
+        observer.observe(document.body, {
+            attributes: true,
+            attributeOldValue: true,
+            subtree: true,
+        });
+    });
 }
 
 function injectUI(player: Element): void {
