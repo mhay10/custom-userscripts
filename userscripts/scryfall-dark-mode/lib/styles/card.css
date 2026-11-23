@@ -114,7 +114,43 @@ div.card-legality-item > dd.restricted {
 /* /card - .prints borders */
 .prints-table tr {
     border-bottom: 1px solid #5a546e !important;
+    border-left: 1px solid #5a546e !important;
+}
+
+.prints-table thead tr {
     border-left: none !important;
+}
+
+.prints-table svg {
+    border: 1px solid #5a546e !important;
+    background: #262034 !important;
+}
+
+/* /card - rarity stars: softer but vibrant on dark backgrounds */
+.prints-table svg.rarity-neutral path,
+.prints-table svg.rarity-common path {
+    fill: #c9c6d6 !important;
+}
+.prints-table svg.rarity-uncommon path {
+    fill: #8fbcdf !important;
+}
+.prints-table svg.rarity-rare path {
+    fill: #e6c24f !important;
+}
+.prints-table svg.rarity-special path {
+    fill: #c98ddb !important;
+}
+.prints-table svg.rarity-mythic path {
+    fill: #ff7f4d !important;
+}
+.prints-table svg.rarity-bonus path {
+    fill: #e85a70 !important;
+}
+
+/* /card - related searches rows */
+.prints-table tr.related-search a,
+.prints-table tr.related-search a > div {
+    color: #e8e8ea !important;
 }
 
 /* /card - .card-text slightly brighter than the page*/
@@ -131,7 +167,9 @@ div.card-legality-item > dd.restricted {
 
 /* /card - .card-text-artist > a brighter purple */
 .card-text-artist > a,
-.artist-text > a {
+.artist-text > a,
+.card-legality-supplement > a,
+.main > .search-info a {
     color: #c084fc !important;
 }
 
@@ -155,11 +193,9 @@ a.card-tooltip,
 
 /* /card - softer dashed section dividers */
 #rulings,
-.rulings {
-    border-top-color: #5a546e !important;
-}
+.rulings,
 .card-profile {
-    border-bottom-color: #5a546e !important;
+    border-top-color: #5a546e !important;
 }
 
 /* /card - img.card border to separate dark card edges from the page background */
