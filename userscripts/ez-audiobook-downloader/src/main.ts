@@ -2,6 +2,7 @@ import { LOGGER } from "./logger";
 import downloadUI from "../lib/download.html?raw";
 import { CONFIG } from "./config";
 import { waitForElement } from "@repo/common-utils";
+import { getTrackUrls } from "./modules/tracks";
 
 main().catch(LOGGER.error);
 
@@ -25,6 +26,31 @@ async function main(): Promise<void> {
     await waitForPlayerLoadFinish();
     const downloadButton = document.querySelector(CONFIG.customUI.downloadButtonSelector);
     downloadButton?.setAttribute("data-status", "ready");
+
+    // Start download when button is clicked
+    downloadButton?.addEventListener("click", async () => {
+        // Prevent button spam
+        if (downloadButton.getAttribute("data-status") === "ready") {
+            LOGGER.info("Starting audiobook download...");
+            downloadButton.setAttribute("data-status", "downloading");
+        } else {
+            return;
+        }
+
+        // Add event listener to audio to auto-stop playback
+        LOGGER.info("Setting audio to automatically stop if started...");
+        const audio = player.querySelector<HTMLAudioElement>(CONFIG.pageUI.audioSelector);
+        audio?.addEventListener("play", () => audio.pause());
+
+        // Get list of track urls
+        LOGGER.info("Getting list of tracks urls...");
+        const playlist = player.querySelector(CONFIG.pageUI.playlistSelector);
+        const tracks = playlist?.querySelectorAll(CONFIG.pageUI.trackSelector);
+        if (!tracks?.length) throw Error("Could not get list of tracks to download");
+
+        const trackUrls = getTrackUrls(tracks);
+        LOGGER.info(trackUrls);
+    });
 }
 
 async function waitForPlayerLoadFinish(): Promise<void> {

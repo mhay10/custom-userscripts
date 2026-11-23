@@ -1,0 +1,17 @@
+{
+    "name": "@userscripts/scryfall-dark-mode",
+    "version": "0.0.0",
+    "description": "Dark mode for Scryfall on every page",
+    "private": true,
+    "type": "module",
+    "main": "./dist/scryfall-dark-mode.user.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@repo/common-utils": "*"
+    },
+    "devDependencies": {}
+}
