@@ -2,25 +2,79 @@
 .toolbox,
 .toolbox-container,
 .card-toolbox {
-  background-color: #2a2438 !important;
-  color: #e8e8ea !important;
+    background-color: #2a2438 !important;
+    color: #e8e8ea !important;
 }
 .toolbox .toolbox-links a,
 .toolbox h6 {
-  color: #e8e8ea !important;
+    color: #e8e8ea !important;
 }
 
 /* /card - .toolbox li dark background */
 .toolbox li a {
-  background-color: #2a2438 !important;
+    background-color: #2a2438 !important;
+}
+
+/* /card - toolbox borders, icons and prices softened */
+.toolbox .button-n {
+    border-color: rgba(124, 98, 170, 0.65) !important;
+}
+.toolbox .button-n path,
+.toolbox .button-n g {
+    fill: #8a76ad !important;
+}
+.toolbox .button-n.tcgplayer {
+    border-color: rgba(98, 126, 196, 0.5) !important;
+}
+.toolbox .button-n.tcgplayer path,
+.toolbox .button-n.tcgplayer g {
+    fill: #7a93cc !important;
+}
+.toolbox .button-n.cardhoarder {
+    border-color: rgba(201, 116, 79, 0.45) !important;
+}
+.toolbox .button-n.cardhoarder path {
+    fill: none !important;
+    stroke: #c98563 !important;
+}
+.toolbox .price.currency-usd,
+.toolbox .price.currency-usd-promo {
+    color: #8199d1 !important;
+}
+.toolbox .price.currency-eur {
+    color: #a77ba6 !important;
+}
+.toolbox .price.currency-tix {
+    color: #cf8460 !important;
+}
+
+/* /card - legality badges softened */
+div.card-legality-item > dd {
+    color: #e8e8ea !important;
+}
+div.card-legality-item > dd.legal {
+    background-color: #5c7857 !important;
+}
+div.card-legality-item > dd.legal.gamechanger,
+div.card-legality-item > dd.legal.asterisk {
+    background-color: #528049 !important;
+}
+div.card-legality-item > dd.not-legal {
+    background-color: #6b6780 !important;
+}
+div.card-legality-item > dd.banned {
+    background-color: #8a4850 !important;
+}
+div.card-legality-item > dd.restricted {
+    background-color: #4a6e82 !important;
 }
 
 /* /card - #rulings */
 #rulings,
 .rulings,
 .rulings-table {
-  background-color: #211c30 !important;
-  color: #e8e8ea !important;
+    background-color: #211c30 !important;
+    color: #e8e8ea !important;
 }
 #rulings th,
 #rulings td,
@@ -28,14 +82,14 @@
 .rulings td,
 .rulings-table th,
 .rulings-table td {
-  background-color: #2a2438 !important;
-  color: #e8e8ea !important;
-  border-color: #5a546e !important;
+    background-color: #2a2438 !important;
+    color: #e8e8ea !important;
+    border-color: #5a546e !important;
 }
 
 /* /card - #rulings first h6 link match card-text-artist color */
 #rulings h6 a {
-  color: #c084fc !important;
+    color: #c084fc !important;
 }
 
 /* /card - .prints text (not prices) */
@@ -43,38 +97,40 @@
 .prints-table,
 .printings,
 .printings-table {
-  color: #e8e8ea !important;
+    color: #e8e8ea !important;
 }
 .prints td,
 .prints th,
 .prints-table td,
+.prints-table td[colspan="4"] > a,
 .prints-table th,
 .printings td,
 .printings th {
-  color: #e8e8ea !important;
-  background-color: #2a2438 !important;
-  border-color: #5a546e !important;
+    color: #e8e8ea !important;
+    background-color: #2a2438 !important;
+    border-color: #5a546e !important;
 }
 
 /* /card - .card-text-artist text */
 .card-text-artist,
 .artist-text {
-  color: #e8e8ea !important;
+    color: #e8e8ea !important;
 }
 
 /* /card - .card-text-artist > a brighter purple */
 .card-text-artist > a,
 .artist-text > a {
-  color: #c084fc !important;
+    color: #c084fc !important;
 }
 
 /* /card - a.card-tooltip lighter text */
-a.card-tooltip {
-  color: #e8e8ea !important;
+a.card-tooltip,
+.prints-table a[data-component="card-tooltip"] {
+    color: #e8e8ea !important;
 }
 
 /* /card - .card-image border to separate black edges from dark bg */
 .card-image {
-  border: 1px solid #5a546e !important;
-  box-sizing: border-box !important;
+    border: 1px solid #5a546e !important;
+    box-sizing: border-box !important;
 }

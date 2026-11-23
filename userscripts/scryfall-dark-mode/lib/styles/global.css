@@ -53,12 +53,12 @@ code[class*="language-"] {
 #scryfall-dark-mode-toggle svg {
   width: 20px !important;
   height: 20px !important;
-  fill: currentColor !important;
+  fill: none !important;
 }
 #scryfall-dark-mode-toggle svg path,
 #scryfall-dark-mode-toggle svg circle,
 #scryfall-dark-mode-toggle svg line {
-  fill: currentColor !important;
+  fill: none !important;
   stroke: currentColor !important;
 }
 

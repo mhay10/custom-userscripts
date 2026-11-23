@@ -6,6 +6,7 @@ import docsSyntaxStyles from "../lib/styles/docs-syntax.css?inline";
 import setsStyles from "../lib/styles/sets.css?inline";
 import cardStyles from "../lib/styles/card.css?inline";
 import toggleLightSvg from "../lib/toggle-light.svg?raw";
+import toggleDarkSvg from "../lib/toggle-dark.svg?raw";
 
 const darkModeStyles = [
     globalStyles,
@@ -42,6 +43,15 @@ function main(): void {
     });
 }
 
+/** Swaps the toggle icon and keeps it outlined even when Scryfall's own `.header-link path` fill applies. */
+function setToggleIcon(toggle: HTMLElement, svg: string): void {
+    toggle.innerHTML = svg;
+    // Set through CSSOM because the page CSP blocks inline style attributes
+    toggle.querySelectorAll<SVGElement>("path, circle").forEach((el) => {
+        el.style.fill = "none";
+    });
+}
+
 /** Injects a toggle link into #header that enables/disables the dark mode style sheet. */
 function addDarkModeToggle(header: HTMLElement): void {
     // Create toggle button and add to header
@@ -51,7 +61,7 @@ function addDarkModeToggle(header: HTMLElement): void {
     toggle.type = "button";
     toggle.setAttribute("aria-label", "Toggle Scryfall Dark Mode");
     toggle.title = "Toggle Scryfall Dark Mode";
-    toggle.innerHTML = toggleLightSvg;
+    setToggleIcon(toggle, toggleLightSvg);
 
     header.appendChild(toggle);
     LOGGER.info("Scryfall dark mode toggle added to header");
@@ -62,20 +72,18 @@ function addDarkModeToggle(header: HTMLElement): void {
     // Using document-level delegation because element-level listeners don't fire
     document.addEventListener("click", (event) => {
         const target = event.target as HTMLElement;
-        if (
-            target.id === "scryfall-dark-mode-toggle" ||
-            target.closest("#scryfall-dark-mode-toggle")
-        ) {
-            event.preventDefault();
-            event.stopPropagation();
-            event.stopImmediatePropagation();
-
+        // Use the live button; the original reference can go stale if the page re-renders the header
+        const button = target.closest<HTMLElement>("#scryfall-dark-mode-toggle");
+        if (button) {
             enabled = !enabled;
             const style = document.getElementById("scryfall-dark-mode-styles");
             if (style) {
                 // @ts-expect-error — HTMLStyleElement.disabled is supported in all modern browsers
                 style.disabled = !enabled;
             }
+
+            setToggleIcon(button, enabled ? toggleLightSvg : toggleDarkSvg);
+
             LOGGER.info(`Scryfall dark mode ${enabled ? "enabled" : "disabled"}`);
         }
     });
