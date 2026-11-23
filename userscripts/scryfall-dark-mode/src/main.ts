@@ -1,7 +1,19 @@
 import { waitForElement } from "@repo/common-utils";
 import { LOGGER } from "./logger";
-import darkModeStyles from "../lib/styles.css?inline";
+import globalStyles from "../lib/styles/global.css?inline";
+import advancedStyles from "../lib/styles/advanced.css?inline";
+import docsSyntaxStyles from "../lib/styles/docs-syntax.css?inline";
+import setsStyles from "../lib/styles/sets.css?inline";
+import cardStyles from "../lib/styles/card.css?inline";
 import toggleLightSvg from "../lib/toggle-light.svg?raw";
+
+const darkModeStyles = [
+    globalStyles,
+    advancedStyles,
+    docsSyntaxStyles,
+    setsStyles,
+    cardStyles,
+].join("\n");
 // import toggleDarkSvg from "../lib/toggle-dark.svg?raw";
 
 function main(): void {
@@ -33,22 +45,40 @@ function main(): void {
 /** Injects a toggle link into #header that enables/disables the dark mode style sheet. */
 function addDarkModeToggle(header: HTMLElement): void {
     // Create toggle button and add to header
-    const toggle = document.createElement("a");
+    const toggle = document.createElement("button");
     toggle.id = "scryfall-dark-mode-toggle";
     toggle.className = "header-link icon-only";
-    toggle.href = "#";
+    toggle.type = "button";
     toggle.setAttribute("aria-label", "Toggle Scryfall Dark Mode");
     toggle.title = "Toggle Scryfall Dark Mode";
     toggle.innerHTML = toggleLightSvg;
+
     header.appendChild(toggle);
+    LOGGER.info("Scryfall dark mode toggle added to header");
+
+    let enabled = true;
 
     // Add event listener to switch themes when clicked
-    toggle.addEventListener("click", () => {
-        // TODO: Figure out why this doesn't get called
-        LOGGER.info("Clicked");
-    });
+    // Using document-level delegation because element-level listeners don't fire
+    document.addEventListener("click", (event) => {
+        const target = event.target as HTMLElement;
+        if (
+            target.id === "scryfall-dark-mode-toggle" ||
+            target.closest("#scryfall-dark-mode-toggle")
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
 
-    LOGGER.info("Scryfall dark mode toggle added to #header");
+            enabled = !enabled;
+            const style = document.getElementById("scryfall-dark-mode-styles");
+            if (style) {
+                // @ts-expect-error — HTMLStyleElement.disabled is supported in all modern browsers
+                style.disabled = !enabled;
+            }
+            LOGGER.info(`Scryfall dark mode ${enabled ? "enabled" : "disabled"}`);
+        }
+    });
 }
 
 main();

@@ -1,0 +1,95 @@
+/* Scryfall Dark Mode - Global styles */
+/* html, body */
+html,
+body {
+  color-scheme: dark !important;
+}
+
+/* Force Scryfall's light content containers to dark on every page type */
+.main,
+[role="main"],
+.card-profile,
+.card-text,
+.search-controls,
+.search-info,
+.search-info.error,
+.reference-block,
+table,
+th,
+td,
+article,
+section,
+.form-row,
+.advanced-search-submit-bottom {
+  background-color: #211c30 !important;
+  color: #e8e8ea !important;
+}
+
+/* Global - code/pre/monospace tags */
+code,
+pre,
+.code,
+.monospace,
+[class*="language-"],
+pre code,
+code[class*="language-"] {
+  background-color: #1a1526 !important;
+  color: #e8e8ea !important;
+  border-color: #5a546e !important;
+}
+
+/* Dark mode toggle link in header - custom sun SVG icon (distinct from profile) */
+#scryfall-dark-mode-toggle {
+  color: #e8e8ea !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 4px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+#scryfall-dark-mode-toggle svg {
+  width: 20px !important;
+  height: 20px !important;
+  fill: currentColor !important;
+}
+#scryfall-dark-mode-toggle svg path,
+#scryfall-dark-mode-toggle svg circle,
+#scryfall-dark-mode-toggle svg line {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Remove border around #header search */
+#header input,
+#header form,
+#header .search-bar,
+#header .search-input,
+#header [role="search"] {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Keep card artwork / images untouched (they are full-color illustrations) */
+img,
+.card-image,
+.card-frame {
+  filter: none !important;
+}
+
+/* Ensure any remaining light panels are darkened */
+[style*="background-color: rgb(245"],
+[style*="background-color: rgb(243"],
+[style*="background-color: rgb(253"],
+[style*="background-color: rgb(255"],
+[style*="background: rgb(245"],
+[style*="background: rgb(243"],
+[style*="background: rgb(253"],
+[style*="background: rgb(255"] {
+  background-color: #211c30 !important;
+  color: #e8e8ea !important;
+}

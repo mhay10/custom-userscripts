@@ -1,0 +1,80 @@
+/* /card - Toolbox containers */
+.toolbox,
+.toolbox-container,
+.card-toolbox {
+  background-color: #2a2438 !important;
+  color: #e8e8ea !important;
+}
+.toolbox .toolbox-links a,
+.toolbox h6 {
+  color: #e8e8ea !important;
+}
+
+/* /card - .toolbox li dark background */
+.toolbox li a {
+  background-color: #2a2438 !important;
+}
+
+/* /card - #rulings */
+#rulings,
+.rulings,
+.rulings-table {
+  background-color: #211c30 !important;
+  color: #e8e8ea !important;
+}
+#rulings th,
+#rulings td,
+.rulings th,
+.rulings td,
+.rulings-table th,
+.rulings-table td {
+  background-color: #2a2438 !important;
+  color: #e8e8ea !important;
+  border-color: #5a546e !important;
+}
+
+/* /card - #rulings first h6 link match card-text-artist color */
+#rulings h6 a {
+  color: #c084fc !important;
+}
+
+/* /card - .prints text (not prices) */
+.prints,
+.prints-table,
+.printings,
+.printings-table {
+  color: #e8e8ea !important;
+}
+.prints td,
+.prints th,
+.prints-table td,
+.prints-table th,
+.printings td,
+.printings th {
+  color: #e8e8ea !important;
+  background-color: #2a2438 !important;
+  border-color: #5a546e !important;
+}
+
+/* /card - .card-text-artist text */
+.card-text-artist,
+.artist-text {
+  color: #e8e8ea !important;
+}
+
+/* /card - .card-text-artist > a brighter purple */
+.card-text-artist > a,
+.artist-text > a {
+  color: #c084fc !important;
+}
+
+/* /card - a.card-tooltip lighter text */
+a.card-tooltip {
+  color: #e8e8ea !important;
+}
+
+/* /card - .card-image border to separate black edges from dark bg */
+.card-image {
+  border: 1px solid #5a546e !important;
+  box-sizing: border-box !important;
+}
