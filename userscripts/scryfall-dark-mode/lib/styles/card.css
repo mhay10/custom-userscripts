@@ -147,6 +147,12 @@ div.card-legality-item > dd.restricted {
     fill: #e85a70 !important;
 }
 
+/* /card - current set header in prints, less gray than the site's #343242 */
+a.prints-current-set,
+.print-langs-item {
+    background-color: #2b253a !important;
+}
+
 /* /card - related searches rows */
 .prints-table tr.related-search a,
 .prints-table tr.related-search a > div {
@@ -193,9 +199,11 @@ a.card-tooltip,
 
 /* /card - softer dashed section dividers */
 #rulings,
-.rulings,
-.card-profile {
+.rulings {
     border-top-color: #5a546e !important;
+}
+.card-profile {
+    border-bottom-color: #5a546e !important;
 }
 
 /* /card - img.card border to separate dark card edges from the page background */
