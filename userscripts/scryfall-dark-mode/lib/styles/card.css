@@ -111,6 +111,18 @@ div.card-legality-item > dd.restricted {
     border-color: #5a546e !important;
 }
 
+/* /card - .prints borders */
+.prints-table tr {
+    border-bottom: 1px solid #5a546e !important;
+    border-left: none !important;
+}
+
+/* /card - .card-text slightly brighter than the page*/
+.card-text {
+    background-color: #262034 !important;
+    border: 1px solid #5a546e !important;
+}
+
 /* /card - .card-text-artist text */
 .card-text-artist,
 .artist-text {
@@ -129,8 +141,29 @@ a.card-tooltip,
     color: #e8e8ea !important;
 }
 
-/* /card - .card-image border to separate black edges from dark bg */
-.card-image {
+/* /card - prints prices match the toolbox price colors */
+.prints-table a.currency-usd,
+.prints-table a.currency-usd-promo {
+    color: #8199d1 !important;
+}
+.prints-table a.currency-eur {
+    color: #a77ba6 !important;
+}
+.prints-table a.currency-tix {
+    color: #cf8460 !important;
+}
+
+/* /card - softer dashed section dividers */
+#rulings,
+.rulings {
+    border-top-color: #5a546e !important;
+}
+.card-profile {
+    border-bottom-color: #5a546e !important;
+}
+
+/* /card - img.card border to separate dark card edges from the page background */
+img.card {
     border: 1px solid #5a546e !important;
     box-sizing: border-box !important;
 }
