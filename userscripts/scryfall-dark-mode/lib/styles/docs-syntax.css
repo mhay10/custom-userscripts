@@ -1,7 +1,75 @@
 /* /docs/syntax - reference-jump, reference-example */
 .reference-jump,
 .reference-example {
-  background-color: var(--sdm-surface) !important;
-  color: var(--sdm-text) !important;
-  border-color: var(--sdm-border) !important;
+    background-color: var(--sdm-surface) !important;
+    color: var(--sdm-text) !important;
+    border-color: var(--sdm-border) !important;
+}
+
+/* /docs/syntax - reference blocks */
+.reference-block {
+    border-bottom-color: var(--sdm-border) !important;
+}
+.reference-block-header {
+    color: var(--sdm-text) !important;
+}
+
+/* /docs/syntax - prose links have no color of their own, so they fall back to the browser default */
+.reference-block a:not(.reference-example):not(.button-n) {
+    color: var(--sdm-accent) !important;
+}
+
+/* /docs/syntax - icon circles: the site's dark hues are too hard on the dark background, so each is lightened and softened */
+.reference-block:nth-child(n) .reference-block-icon {
+    border-color: var(--sdm-ref-icon-purple) !important;
+}
+.reference-block:nth-child(2n) .reference-block-icon {
+    border-color: var(--sdm-ref-icon-blue) !important;
+}
+.reference-block:nth-child(3n) .reference-block-icon {
+    border-color: var(--sdm-ref-icon-red) !important;
+}
+.reference-block:nth-child(4n) .reference-block-icon {
+    border-color: var(--sdm-ref-icon-green) !important;
+}
+.reference-block:nth-child(n) .reference-block-icon path,
+.reference-block:nth-child(n) .reference-block-icon g {
+    fill: var(--sdm-ref-icon-purple) !important;
+}
+.reference-block:nth-child(2n) .reference-block-icon path,
+.reference-block:nth-child(2n) .reference-block-icon g {
+    fill: var(--sdm-ref-icon-blue) !important;
+}
+.reference-block:nth-child(3n) .reference-block-icon path,
+.reference-block:nth-child(3n) .reference-block-icon g {
+    fill: var(--sdm-ref-icon-red) !important;
+}
+.reference-block:nth-child(4n) .reference-block-icon path,
+.reference-block:nth-child(4n) .reference-block-icon g {
+    fill: var(--sdm-ref-icon-green) !important;
+}
+
+/* /docs/syntax - example descriptions under each code sample */
+.reference-example-text,
+.reference-example-text > span,
+.reference-example-text + p {
+    color: var(--sdm-text-muted) !important;
+}
+
+/* /docs/syntax - jump link buttons (site sets a light #f5f5f5 background) */
+.reference-jump-links .button-n {
+    background-color: var(--sdm-surface-card) !important;
+    border-color: var(--sdm-btn-border) !important;
+    color: var(--sdm-btn-text) !important;
+}
+.reference-jump-links .button-n path,
+.reference-jump-links .button-n g {
+    fill: var(--sdm-btn-icon) !important;
+}
+
+/* /docs/syntax - jump header and the paragraph after it: light text, no white text shadow */
+.reference-jump-header,
+.reference-jump-header + p {
+    color: var(--sdm-text) !important;
+    text-shadow: none !important;
 }
