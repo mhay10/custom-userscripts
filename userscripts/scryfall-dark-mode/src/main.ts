@@ -3,6 +3,7 @@ import { LOGGER } from "./logger";
 import variablesStyles from "../lib/styles/variables.css?inline";
 import globalStyles from "../lib/styles/global.css?inline";
 import advancedStyles from "../lib/styles/advanced.css?inline";
+import docsStyles from "../lib/styles/docs.css?inline";
 import docsSyntaxStyles from "../lib/styles/docs-syntax.css?inline";
 import setsStyles from "../lib/styles/sets.css?inline";
 import cardStyles from "../lib/styles/card.css?inline";
@@ -13,6 +14,7 @@ const darkModeStyles = [
     variablesStyles,
     globalStyles,
     advancedStyles,
+    docsStyles,
     docsSyntaxStyles,
     setsStyles,
     cardStyles,

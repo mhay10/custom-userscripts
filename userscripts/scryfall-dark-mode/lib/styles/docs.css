@@ -1,0 +1,92 @@
+/* /docs/* - shared styles for every help and reference page.
+   Only what the site overrides is restated here; page backgrounds, tables, code and base text color come from global.css. */
+
+/* Sidebar menu: the site's mauve (#4f4255) is lighter than the rest of the scheme */
+.reference-doc-menu,
+.reference-doc-menu-expander {
+    background-color: var(--sdm-surface) !important;
+}
+
+/* Prose text: the site colors .prose and its headings directly, so they never inherit the global text color */
+.prose,
+.prose h2,
+.prose-complex-h1 {
+    color: var(--sdm-text) !important;
+}
+
+/* Prose dividers: the site uses near-white lines */
+.prose h2,
+.prose hr,
+.prose-complex-h1-sublink,
+.faq-link {
+    border-color: var(--sdm-border) !important;
+}
+
+/* Blockquotes (used on /docs/tagger-tags): site gives them their own dim mauve text and a gray bar */
+.prose blockquote {
+    color: var(--sdm-text-muted) !important;
+    border-left-color: var(--sdm-border) !important;
+}
+
+/* Pills: the site's saturated fills are too bright on the dark background, so each color is softened */
+.pill {
+    background-color: var(--sdm-pill-orange) !important;
+    color: var(--sdm-pill-text) !important;
+}
+.pill.blue {
+    background-color: var(--sdm-pill-blue) !important;
+}
+.pill.red,
+.pill.danger {
+    background-color: var(--sdm-pill-red) !important;
+}
+.pill.purple {
+    background-color: var(--sdm-pill-purple) !important;
+}
+.pill.gold {
+    background-color: var(--sdm-pill-gold) !important;
+}
+
+/* Prose links: dark purple by default. The underline color is set explicitly by the site, so it follows the text instead. */
+.prose a:not(.button-n) {
+    color: var(--sdm-accent) !important;
+    text-decoration-color: currentColor !important;
+}
+
+/* FAQ index entries set their own title and subtitle colors */
+.faq-link-title {
+    color: var(--sdm-accent) !important;
+}
+.faq-link-subtitle {
+    color: var(--sdm-text-muted) !important;
+}
+
+/* Buttons: the site's .prose a rule would otherwise recolor their text, and :hover turns the background white */
+.reference-doc .button-n,
+.reference-jump-links .button-n {
+    background-color: var(--sdm-surface-card) !important;
+    border-color: var(--sdm-btn-border) !important;
+    color: var(--sdm-btn-text) !important;
+}
+.reference-doc .button-n:hover,
+.reference-doc .button-n:focus,
+.reference-jump-links .button-n:hover,
+.reference-jump-links .button-n:focus {
+    background-color: var(--sdm-surface) !important;
+}
+.reference-doc .button-n path,
+.reference-doc .button-n g,
+.reference-jump-links .button-n path,
+.reference-jump-links .button-n g {
+    fill: var(--sdm-btn-icon) !important;
+}
+
+/* Danger buttons keep their red, lightened so it reads on the dark background */
+.reference-doc .button-n.danger-n {
+    border-color: var(--sdm-danger) !important;
+    color: var(--sdm-danger) !important;
+}
+.reference-doc .button-n.danger-n path,
+.reference-doc .button-n.danger-n g {
+    fill: var(--sdm-danger) !important;
+}
