@@ -2,79 +2,79 @@
 .toolbox,
 .toolbox-container,
 .card-toolbox {
-    background-color: #2a2438 !important;
-    color: #e8e8ea !important;
+    background-color: var(--sdm-surface) !important;
+    color: var(--sdm-text) !important;
 }
 .toolbox .toolbox-links a,
 .toolbox h6 {
-    color: #e8e8ea !important;
+    color: var(--sdm-text) !important;
 }
 
 /* /card - .toolbox li dark background */
 .toolbox li a {
-    background-color: #2a2438 !important;
+    background-color: var(--sdm-surface) !important;
 }
 
 /* /card - toolbox borders, icons and prices softened */
 .toolbox .button-n {
-    border-color: rgba(124, 98, 170, 0.65) !important;
+    border-color: var(--sdm-btn-border) !important;
 }
 .toolbox .button-n path,
 .toolbox .button-n g {
-    fill: #8a76ad !important;
+    fill: var(--sdm-btn-icon) !important;
 }
 .toolbox .button-n.tcgplayer {
-    border-color: rgba(98, 126, 196, 0.5) !important;
+    border-color: var(--sdm-tcgplayer-border) !important;
 }
 .toolbox .button-n.tcgplayer path,
 .toolbox .button-n.tcgplayer g {
-    fill: #7a93cc !important;
+    fill: var(--sdm-tcgplayer-icon) !important;
 }
 .toolbox .button-n.cardhoarder {
-    border-color: rgba(201, 116, 79, 0.45) !important;
+    border-color: var(--sdm-cardhoarder-border) !important;
 }
 .toolbox .button-n.cardhoarder path {
     fill: none !important;
-    stroke: #c98563 !important;
+    stroke: var(--sdm-cardhoarder-icon) !important;
 }
 .toolbox .price.currency-usd,
 .toolbox .price.currency-usd-promo {
-    color: #8199d1 !important;
+    color: var(--sdm-price-usd) !important;
 }
 .toolbox .price.currency-eur {
-    color: #a77ba6 !important;
+    color: var(--sdm-price-eur) !important;
 }
 .toolbox .price.currency-tix {
-    color: #cf8460 !important;
+    color: var(--sdm-price-tix) !important;
 }
 
 /* /card - legality badges softened */
 div.card-legality-item > dd {
-    color: #e8e8ea !important;
+    color: var(--sdm-text) !important;
 }
 div.card-legality-item > dd.legal {
-    background-color: #5c7857 !important;
+    background-color: var(--sdm-legal) !important;
 }
 div.card-legality-item > dd.legal.gamechanger,
 div.card-legality-item > dd.legal.asterisk {
-    background-color: #528049 !important;
+    background-color: var(--sdm-legal-special) !important;
 }
 div.card-legality-item > dd.not-legal {
-    background-color: #6b6780 !important;
+    background-color: var(--sdm-not-legal) !important;
 }
 div.card-legality-item > dd.banned {
-    background-color: #8a4850 !important;
+    background-color: var(--sdm-banned) !important;
 }
 div.card-legality-item > dd.restricted {
-    background-color: #4a6e82 !important;
+    background-color: var(--sdm-restricted) !important;
 }
 
 /* /card - #rulings */
 #rulings,
 .rulings,
 .rulings-table {
-    background-color: #211c30 !important;
-    color: #e8e8ea !important;
+    background-color: var(--sdm-bg) !important;
+    color: var(--sdm-text) !important;
 }
 #rulings th,
 #rulings td,
@@ -82,14 +82,14 @@ div.card-legality-item > dd.restricted {
 .rulings td,
 .rulings-table th,
 .rulings-table td {
-    background-color: #2a2438 !important;
-    color: #e8e8ea !important;
-    border-color: #5a546e !important;
+    background-color: var(--sdm-surface) !important;
+    color: var(--sdm-text) !important;
+    border-color: var(--sdm-border) !important;
 }
 
 /* /card - #rulings first h6 link match card-text-artist color */
 #rulings h6 a {
-    color: #c084fc !important;
+    color: var(--sdm-accent) !important;
 }
 
 /* /card - .prints text (not prices) */
@@ -97,7 +97,7 @@ div.card-legality-item > dd.restricted {
 .prints-table,
 .printings,
 .printings-table {
-    color: #e8e8ea !important;
+    color: var(--sdm-text) !important;
 }
 .prints td,
 .prints th,
@@ -106,15 +106,15 @@ div.card-legality-item > dd.restricted {
 .prints-table th,
 .printings td,
 .printings th {
-    color: #e8e8ea !important;
-    background-color: #2a2438 !important;
-    border-color: #5a546e !important;
+    color: var(--sdm-text) !important;
+    background-color: var(--sdm-surface) !important;
+    border-color: var(--sdm-border) !important;
 }
 
 /* /card - .prints borders */
 .prints-table tr {
-    border-bottom: 1px solid #5a546e !important;
-    border-left: 1px solid #5a546e !important;
+    border-bottom: 1px solid var(--sdm-border) !important;
+    border-left: 1px solid var(--sdm-border) !important;
 }
 
 .prints-table thead tr {
@@ -122,53 +122,58 @@ div.card-legality-item > dd.restricted {
 }
 
 .prints-table svg {
-    border: 1px solid #5a546e !important;
-    background: #262034 !important;
+    border: 1px solid var(--sdm-border) !important;
+    background: var(--sdm-surface-card) !important;
 }
 
 /* /card - rarity stars: softer but vibrant on dark backgrounds */
 .prints-table svg.rarity-neutral path,
 .prints-table svg.rarity-common path {
-    fill: #c9c6d6 !important;
+    fill: var(--sdm-rarity-common) !important;
 }
 .prints-table svg.rarity-uncommon path {
-    fill: #8fbcdf !important;
+    fill: var(--sdm-rarity-uncommon) !important;
 }
 .prints-table svg.rarity-rare path {
-    fill: #e6c24f !important;
+    fill: var(--sdm-rarity-rare) !important;
 }
 .prints-table svg.rarity-special path {
-    fill: #c98ddb !important;
+    fill: var(--sdm-rarity-special) !important;
 }
 .prints-table svg.rarity-mythic path {
-    fill: #ff7f4d !important;
+    fill: var(--sdm-rarity-mythic) !important;
 }
 .prints-table svg.rarity-bonus path {
-    fill: #e85a70 !important;
+    fill: var(--sdm-rarity-bonus) !important;
 }
 
 /* /card - current set header in prints, less gray than the site's #343242 */
 a.prints-current-set,
 .print-langs-item {
-    background-color: #2b253a !important;
+    background-color: var(--sdm-surface-set) !important;
 }
 
 /* /card - related searches rows */
 .prints-table tr.related-search a,
 .prints-table tr.related-search a > div {
-    color: #e8e8ea !important;
+    color: var(--sdm-text) !important;
 }
 
 /* /card - .card-text slightly brighter than the page*/
 .card-text {
-    background-color: #262034 !important;
-    border: 1px solid #5a546e !important;
+    background-color: var(--sdm-surface-card) !important;
+    border: 1px solid var(--sdm-border) !important;
+}
+
+/* /card - .card-text children brighter bottom borders */
+.card-text :not(:last-child) {
+    border-bottom-color: var(--sdm-divider-soft) !important;
 }
 
 /* /card - .card-text-artist text */
 .card-text-artist,
 .artist-text {
-    color: #e8e8ea !important;
+    color: var(--sdm-text) !important;
 }
 
 /* /card - .card-text-artist > a brighter purple */
@@ -176,38 +181,38 @@ a.prints-current-set,
 .artist-text > a,
 .card-legality-supplement > a,
 .main > .search-info a {
-    color: #c084fc !important;
+    color: var(--sdm-accent) !important;
 }
 
 /* /card - a.card-tooltip lighter text */
 a.card-tooltip,
 .prints-table a[data-component="card-tooltip"] {
-    color: #e8e8ea !important;
+    color: var(--sdm-text) !important;
 }
 
 /* /card - prints prices match the toolbox price colors */
 .prints-table a.currency-usd,
 .prints-table a.currency-usd-promo {
-    color: #8199d1 !important;
+    color: var(--sdm-price-usd) !important;
 }
 .prints-table a.currency-eur {
-    color: #a77ba6 !important;
+    color: var(--sdm-price-eur) !important;
 }
 .prints-table a.currency-tix {
-    color: #cf8460 !important;
+    color: var(--sdm-price-tix) !important;
 }
 
 /* /card - softer dashed section dividers */
 #rulings,
 .rulings {
-    border-top-color: #5a546e !important;
+    border-top-color: var(--sdm-border) !important;
 }
 .card-profile {
-    border-bottom-color: #5a546e !important;
+    border-bottom-color: var(--sdm-border) !important;
 }
 
 /* /card - img.card border to separate dark card edges from the page background */
 img.card {
-    border: 1px solid #5a546e !important;
+    border: 1px solid var(--sdm-border) !important;
     box-sizing: border-box !important;
 }

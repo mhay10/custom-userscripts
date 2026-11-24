@@ -21,8 +21,8 @@ article,
 section,
 .form-row,
 .advanced-search-submit-bottom {
-  background-color: #211c30 !important;
-  color: #e8e8ea !important;
+  background-color: var(--sdm-bg) !important;
+  color: var(--sdm-text) !important;
 }
 
 /* Global - code/pre/monospace tags */
@@ -33,14 +33,14 @@ pre,
 [class*="language-"],
 pre code,
 code[class*="language-"] {
-  background-color: #1a1526 !important;
-  color: #e8e8ea !important;
-  border-color: #5a546e !important;
+  background-color: var(--sdm-surface-code) !important;
+  color: var(--sdm-text) !important;
+  border-color: var(--sdm-border) !important;
 }
 
 /* Dark mode toggle link in header - custom sun SVG icon (distinct from profile) */
 #scryfall-dark-mode-toggle {
-  color: #e8e8ea !important;
+  color: var(--sdm-text) !important;
   background: transparent !important;
   border: none !important;
   outline: none !important;
@@ -90,6 +90,6 @@ img,
 [style*="background: rgb(243"],
 [style*="background: rgb(253"],
 [style*="background: rgb(255"] {
-  background-color: #211c30 !important;
-  color: #e8e8ea !important;
+  background-color: var(--sdm-bg) !important;
+  color: var(--sdm-text) !important;
 }

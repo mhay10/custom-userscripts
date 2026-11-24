@@ -9,13 +9,13 @@ input[type="text"],
 input[type="submit"],
 input[type="button"],
 input[type="reset"] {
-  background-color: #2a2438 !important;
-  color: #e8e8ea !important;
-  border: 1px solid #5a546e !important;
+  background-color: var(--sdm-surface) !important;
+  color: var(--sdm-text) !important;
+  border: 1px solid var(--sdm-border) !important;
 }
 input::placeholder,
 textarea::placeholder {
-  color: #a8a4b2 !important;
+  color: var(--sdm-text-muted) !important;
 }
 
 /* /advanced - background outside of form */
@@ -27,5 +27,5 @@ html,
 .main-content,
 [role="main"].bg-white,
 .bg-white {
-  background-color: #211c30 !important;
+  background-color: var(--sdm-bg) !important;
 }

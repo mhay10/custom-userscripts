@@ -1,7 +1,7 @@
 /* /docs/syntax - reference-jump, reference-example */
 .reference-jump,
 .reference-example {
-  background-color: #2a2438 !important;
-  color: #e8e8ea !important;
-  border-color: #5a546e !important;
+  background-color: var(--sdm-surface) !important;
+  color: var(--sdm-text) !important;
+  border-color: var(--sdm-border) !important;
 }

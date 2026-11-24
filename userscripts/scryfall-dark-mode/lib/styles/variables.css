@@ -1,0 +1,46 @@
+/* Scryfall Dark Mode - Color palette. Loaded first so every other stylesheet can use these. */
+:root {
+    /* Surfaces, darkest to lightest */
+    --sdm-surface-code: #1a1526;
+    --sdm-bg: #211c30;
+    --sdm-surface-card: #262034;
+    --sdm-surface: #2a2438;
+    --sdm-surface-set: #2b253a;
+
+    /* Text */
+    --sdm-text: #e8e8ea;
+    --sdm-text-muted: #a8a4b2;
+    --sdm-accent: #c084fc;
+
+    /* Borders and dividers */
+    --sdm-border: #5a546e;
+    --sdm-divider-soft: rgba(255, 255, 255, 0.1);
+
+    /* Toolbox buttons */
+    --sdm-btn-border: rgba(124, 98, 170, 0.65);
+    --sdm-btn-icon: #8a76ad;
+    --sdm-tcgplayer-border: rgba(98, 126, 196, 0.5);
+    --sdm-tcgplayer-icon: #7a93cc;
+    --sdm-cardhoarder-border: rgba(201, 116, 79, 0.45);
+    --sdm-cardhoarder-icon: #c98563;
+
+    /* Prices */
+    --sdm-price-usd: #8199d1;
+    --sdm-price-eur: #a77ba6;
+    --sdm-price-tix: #cf8460;
+
+    /* Legality badges */
+    --sdm-legal: #5c7857;
+    --sdm-legal-special: #528049;
+    --sdm-not-legal: #6b6780;
+    --sdm-banned: #8a4850;
+    --sdm-restricted: #4a6e82;
+
+    /* Rarity stars */
+    --sdm-rarity-common: #c9c6d6;
+    --sdm-rarity-uncommon: #8fbcdf;
+    --sdm-rarity-rare: #e6c24f;
+    --sdm-rarity-special: #c98ddb;
+    --sdm-rarity-mythic: #ff7f4d;
+    --sdm-rarity-bonus: #e85a70;
+}

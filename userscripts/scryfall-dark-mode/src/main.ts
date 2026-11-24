@@ -1,5 +1,6 @@
 import { waitForElement } from "@repo/common-utils";
 import { LOGGER } from "./logger";
+import variablesStyles from "../lib/styles/variables.css?inline";
 import globalStyles from "../lib/styles/global.css?inline";
 import advancedStyles from "../lib/styles/advanced.css?inline";
 import docsSyntaxStyles from "../lib/styles/docs-syntax.css?inline";
@@ -9,6 +10,7 @@ import toggleLightSvg from "../lib/toggle-light.svg?raw";
 import toggleDarkSvg from "../lib/toggle-dark.svg?raw";
 
 const darkModeStyles = [
+    variablesStyles,
     globalStyles,
     advancedStyles,
     docsSyntaxStyles,

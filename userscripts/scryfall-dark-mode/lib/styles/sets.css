@@ -2,14 +2,14 @@
 .checklist,
 .checklist-item,
 .checklist * {
-  color: #e8e8ea !important;
+  color: var(--sdm-text) !important;
 }
 .checklist svg,
 .checklist svg *,
 .checklist i,
 .checklist .icon,
 .checklist [class*="icon"] {
-  fill: #e8e8ea !important;
-  color: #e8e8ea !important;
-  stroke: #e8e8ea !important;
+  fill: var(--sdm-text) !important;
+  color: var(--sdm-text) !important;
+  stroke: var(--sdm-text) !important;
 }
