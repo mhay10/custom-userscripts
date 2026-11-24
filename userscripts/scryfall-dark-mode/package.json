@@ -1,6 +1,6 @@
 {
     "name": "@userscripts/scryfall-dark-mode",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Dark mode for Scryfall on every page",
     "private": true,
     "type": "module",
