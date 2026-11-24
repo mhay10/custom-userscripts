@@ -1,15 +1,49 @@
+/* /sets - select arrows are background-image SVGs recolored to the toolbox icon color */
+select.select-n {
+    background-image: var(--sdm-select-updown) !important;
+}
+
+/* /sets - child set arrows (↳) are a dimmer muted color */
+.checklist td.indent a::before,
+.checklist td.indent-more a::before {
+    color: var(--sdm-text-muted-more) !important;
+}
+
+/* /sets - focused row marker */
+.checklist tbody tr.js-focus {
+    border-left-color: var(--sdm-btn-icon) !important;
+}
+
 /* /sets - checklist text + icons */
 .checklist,
 .checklist-item,
 .checklist * {
-  color: var(--sdm-text) !important;
+    color: var(--sdm-text) !important;
 }
 .checklist svg,
 .checklist svg *,
 .checklist i,
 .checklist .icon,
 .checklist [class*="icon"] {
-  fill: var(--sdm-text) !important;
+    fill: var(--sdm-text) !important;
+    color: var(--sdm-text) !important;
+    stroke: var(--sdm-text) !important;
+}
+
+/* /sets - muted set codes */
+.checklist small {
+    color: var(--sdm-text-muted) !important;
+}
+
+/* /sets - search controls */
+.search-controls label {
   color: var(--sdm-text) !important;
-  stroke: var(--sdm-text) !important;
+}
+
+/* /sets - released languages */
+.pillbox-item {
+  background-color: var(--sdm-surface-set) !important;
+}
+.pillbox-item.disabled {
+  background-color: transparent !important;
 }
