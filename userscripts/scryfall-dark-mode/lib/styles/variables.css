@@ -1,6 +1,7 @@
 /* Scryfall Dark Mode - Color palette. Loaded first so every other stylesheet can use these. */
 :root {
     /* Surfaces, darkest to lightest */
+    --sdm-footer: #191524;
     --sdm-surface-code: #1a1526;
     --sdm-bg: #211c30;
     --sdm-surface-card: #262034;
@@ -19,6 +20,9 @@
     /* Toolbox buttons */
     --sdm-btn-border: rgba(124, 98, 170, 0.65);
     --sdm-btn-icon: #8a76ad;
+    /* Select icons are background-image SVGs, so the color is baked in (%238a76ad). Keep it in sync with --sdm-btn-icon. */
+    --sdm-select-chevron: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%238a76ad' d='M27 9.375l-12 12.625-12-12.562 1.406-1.438 10.594 11.094 10.563-11.094z'/%3E%3C/svg%3E");
+    --sdm-select-add-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath fill='%238a76ad' d='M15 0c-8.284 0-15 6.716-15 15s6.716 15 15 15 15-6.716 15-15-6.716-15-15-15zm0 28c-7.18 0-13-5.82-13-13s5.82-13 13-13 13 5.82 13 13-5.82 13-13 13zm1-22h-2v8h-8v2h8v8h2v-8h8v-2h-8v-8z'/%3E%3C/svg%3E");
     --sdm-tcgplayer-border: rgba(98, 126, 196, 0.5);
     --sdm-tcgplayer-icon: #7a93cc;
     --sdm-cardhoarder-border: rgba(201, 116, 79, 0.45);
@@ -35,6 +39,9 @@
     --sdm-not-legal: #6b6780;
     --sdm-banned: #8a4850;
     --sdm-restricted: #4a6e82;
+
+    /* Mana symbols are background-image SVGs, so they are softened with a filter instead of recolored */
+    --sdm-card-symbol-filter: brightness(0.8) saturate(0.85);
 
     /* Rarity stars */
     --sdm-rarity-common: #c9c6d6;

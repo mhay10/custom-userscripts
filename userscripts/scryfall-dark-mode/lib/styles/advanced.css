@@ -9,13 +9,13 @@ input[type="text"],
 input[type="submit"],
 input[type="button"],
 input[type="reset"] {
-  background-color: var(--sdm-surface) !important;
-  color: var(--sdm-text) !important;
-  border: 1px solid var(--sdm-border) !important;
+    background-color: var(--sdm-surface) !important;
+    color: var(--sdm-text) !important;
+    border: 1px solid var(--sdm-border) !important;
 }
 input::placeholder,
 textarea::placeholder {
-  color: var(--sdm-text-muted) !important;
+    color: var(--sdm-text-muted) !important;
 }
 
 /* /advanced - background outside of form */
@@ -26,6 +26,44 @@ html,
 .container,
 .main-content,
 [role="main"].bg-white,
-.bg-white {
-  background-color: var(--sdm-bg) !important;
+.bg-white,
+form.advanced-search {
+    background-color: var(--sdm-bg) !important;
+}
+
+/* /advanced - select arrows are background-image SVGs recolored to the toolbox icon color */
+select.form-input,
+select.form-n-input {
+    background-image: var(--sdm-select-chevron) !important;
+}
+select.advanced-search-subjoiner {
+    background-image: var(--sdm-select-add-circle) !important;
+}
+
+/* /advanced - mana symbols a bit softer so the bright circles don't glare on the dark background */
+.card-symbol {
+    filter: var(--sdm-card-symbol-filter);
+}
+
+/* /advanced - .form-row icons use the toolbox icon color */
+.form-row svg path,
+.form-row svg g {
+    fill: var(--sdm-btn-icon) !important;
+}
+
+/* /advanced - select2 containers (multi-select fields) */
+.select2-container {
+    background-color: var(--sdm-surface) !important;
+    color: var(--sdm-text) !important;
+    border-color: var(--sdm-border) !important;
+}
+
+/* /advanced - select2 dropdown results list drops the site's #fdfdfd background */
+.select2-results__options {
+    background: transparent !important;
+}
+
+/* /advanced - select2 search input sits inside the container border, so it needs none of its own */
+input.select2-search__field {
+    border: none !important;
 }

@@ -38,7 +38,13 @@ code[class*="language-"] {
   border-color: var(--sdm-border) !important;
 }
 
-/* Dark mode toggle link in header - custom sun SVG icon (distinct from profile) */
+/* Footer: site's #19181f is neutral gray, so use a purple-tinted dark that sits just below the page background */
+#footer,
+.footer {
+  background-color: var(--sdm-footer) !important;
+}
+
+/* Dark mode toggle link in header */
 #scryfall-dark-mode-toggle {
   color: var(--sdm-text) !important;
   background: transparent !important;
