@@ -7,6 +7,7 @@ import docsStyles from "../lib/styles/docs.css?inline";
 import docsSyntaxStyles from "../lib/styles/docs-syntax.css?inline";
 import setsStyles from "../lib/styles/sets.css?inline";
 import cardStyles from "../lib/styles/card.css?inline";
+import teamStyles from "../lib/styles/team.css?inline";
 import toggleLightSvg from "../lib/toggle-light.svg?raw";
 import toggleDarkSvg from "../lib/toggle-dark.svg?raw";
 
@@ -18,6 +19,7 @@ const darkModeStyles = [
     docsSyntaxStyles,
     setsStyles,
     cardStyles,
+    teamStyles,
 ].join("\n");
 // import toggleDarkSvg from "../lib/toggle-dark.svg?raw";
 

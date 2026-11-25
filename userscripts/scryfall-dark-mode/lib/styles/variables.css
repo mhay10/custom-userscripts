@@ -67,4 +67,8 @@
     --sdm-rarity-special: #c98ddb;
     --sdm-rarity-mythic: #ff7f4d;
     --sdm-rarity-bonus: #e85a70;
+
+    /* Team page */
+    --sdm-team-header-bg: rgba(33, 28, 48, 0.9);
+    --sdm-team-members-bg: rgba(42, 36, 56, 0.95);
 }

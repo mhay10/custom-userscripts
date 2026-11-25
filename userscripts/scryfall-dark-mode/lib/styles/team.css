@@ -1,0 +1,27 @@
+/* Scryfall Dark Mode - Team page styles */
+.team-header {
+    background-color: var(--sdm-team-header-bg) !important;
+}
+
+.team-header-title {
+    color: unset !important;
+    text-shadow: none !important;
+}
+
+.team-header-block {
+    text-shadow: none !important;
+}
+.team-header-block a {
+    color: var(--sdm-accent) !important;
+}
+
+.team-members {
+    background-color: var(--sdm-team-members-bg) !important;
+}
+
+.team-member {
+    background-color: transparent !important;
+}
+.team-member-avatar {
+    border-color: var(--sdm-border) !important;
+}

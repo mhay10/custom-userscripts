@@ -1,5 +1,4 @@
-/* /docs/* - shared styles for every help and reference page.
-   Only what the site overrides is restated here; page backgrounds, tables, code and base text color come from global.css. */
+/* /docs/* - shared styles for every help and reference page */
 
 /* Sidebar menu: the site's mauve (#4f4255) is lighter than the rest of the scheme */
 .reference-doc-menu,
