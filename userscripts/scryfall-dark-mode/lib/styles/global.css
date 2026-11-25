@@ -2,7 +2,7 @@
 /* html, body */
 html,
 body {
-  color-scheme: dark !important;
+    color-scheme: dark !important;
 }
 
 /* Force Scryfall's light content containers to dark on every page type */
@@ -21,8 +21,8 @@ article,
 section,
 .form-row,
 .advanced-search-submit-bottom {
-  background-color: var(--sdm-bg) !important;
-  color: var(--sdm-text) !important;
+    background-color: var(--sdm-bg) !important;
+    color: var(--sdm-text) !important;
 }
 
 /* Global - code/pre/monospace tags */
@@ -33,39 +33,47 @@ pre,
 [class*="language-"],
 pre code,
 code[class*="language-"] {
-  background-color: var(--sdm-surface-code) !important;
-  color: var(--sdm-text) !important;
-  border-color: var(--sdm-border) !important;
+    background-color: var(--sdm-surface-code) !important;
+    color: var(--sdm-text) !important;
+    border-color: var(--sdm-border) !important;
 }
 
 /* Footer: site's #19181f is neutral gray, so use a purple-tinted dark that sits just below the page background */
 #footer,
 .footer {
-  background-color: var(--sdm-footer) !important;
+    background-color: var(--sdm-footer) !important;
+}
+
+#footer h6 {
+    color: var(--sdm-text-muted) !important;
+    border-bottom-color: var(--sdm-border) !important;
+}
+.footer-legal {
+    color: var(--sdm-text-muted-more) !important;
 }
 
 /* Dark mode toggle link in header */
 #scryfall-dark-mode-toggle {
-  color: var(--sdm-text) !important;
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  padding: 0 5px !important;
-  margin: 0 !important;
-  line-height: 1 !important;
-  cursor: pointer !important;
+    color: var(--sdm-text) !important;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 5px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
 }
 #scryfall-dark-mode-toggle svg {
-  width: 20px !important;
-  height: 20px !important;
-  fill: none !important;
+    width: 20px !important;
+    height: 20px !important;
+    fill: none !important;
 }
 #scryfall-dark-mode-toggle svg path,
 #scryfall-dark-mode-toggle svg circle,
 #scryfall-dark-mode-toggle svg line {
-  fill: none !important;
-  stroke: currentColor !important;
+    fill: none !important;
+    stroke: currentColor !important;
 }
 
 /* Remove border around #header search */
@@ -74,17 +82,17 @@ code[class*="language-"] {
 #header .search-bar,
 #header .search-input,
 #header [role="search"] {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
 }
 
 /* Keep card artwork / images untouched (they are full-color illustrations) */
 img,
 .card-image,
 .card-frame {
-  filter: none !important;
+    filter: none !important;
 }
 
 /* Ensure any remaining light panels are darkened */
@@ -96,6 +104,6 @@ img,
 [style*="background: rgb(243"],
 [style*="background: rgb(253"],
 [style*="background: rgb(255"] {
-  background-color: var(--sdm-bg) !important;
-  color: var(--sdm-text) !important;
+    background-color: var(--sdm-bg) !important;
+    color: var(--sdm-text) !important;
 }
