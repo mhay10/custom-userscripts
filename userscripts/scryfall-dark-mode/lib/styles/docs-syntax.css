@@ -60,7 +60,7 @@
 .reference-jump-links .button-n {
     background-color: var(--sdm-surface-card) !important;
     border-color: var(--sdm-border) !important;
-    color: var(--sdm-text) !important;
+    color: var(--sdm-text-muted-less) !important;
 }
 .reference-jump-links .button-n path,
 .reference-jump-links .button-n g {

@@ -10,7 +10,7 @@ input[type="submit"],
 input[type="button"],
 input[type="reset"] {
     background-color: var(--sdm-surface) !important;
-    color: var(--sdm-text) !important;
+    color: var(--sdm-text-muted-less) !important;
     border: 1px solid var(--sdm-border) !important;
 }
 input::placeholder,
@@ -54,7 +54,7 @@ select.advanced-search-subjoiner {
 /* /advanced - select2 containers (multi-select fields) */
 .select2-container {
     background-color: var(--sdm-surface) !important;
-    color: var(--sdm-text) !important;
+    color: var(--sdm-text-muted-less) !important;
     border-color: var(--sdm-border) !important;
 }
 

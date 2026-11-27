@@ -5,7 +5,9 @@
     background-color: var(--sdm-surface) !important;
     color: var(--sdm-text) !important;
 }
-.toolbox .toolbox-links a,
+.toolbox .toolbox-links a {
+    color: var(--sdm-text-muted-less) !important;
+}
 .toolbox h6 {
     color: var(--sdm-text) !important;
 }

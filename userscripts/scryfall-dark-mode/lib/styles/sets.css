@@ -41,11 +41,6 @@ select.select-n {
     color: var(--sdm-text-muted) !important;
 }
 
-/* /sets - search controls */
-.search-controls label {
-  color: var(--sdm-text) !important;
-}
-
 /* /sets - released languages */
 .pillbox-item {
   background-color: var(--sdm-surface-set) !important;

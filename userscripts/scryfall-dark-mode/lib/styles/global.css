@@ -24,6 +24,15 @@ section,
     color: var(--sdm-text) !important;
 }
 
+/* Labels and button-like controls: a step dimmer than body text */
+label,
+.button-n,
+.select-n,
+.select2-selection__rendered,
+.select2-results__option {
+    color: var(--sdm-text-muted-less) !important;
+}
+
 /* Global - code/pre/monospace tags */
 code,
 pre,
