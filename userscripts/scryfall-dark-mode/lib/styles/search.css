@@ -6,7 +6,7 @@
 /* /search - pagination buttons */
 .search-controls-pagination .button-n {
     background-color: var(--sdm-surface) !important;
-    color: var(--sdm-btn-text) !important;
+    color: var(--sdm-text) !important;
     border: 1px solid var(--sdm-border) !important;
 }
 .search-controls-pagination .button-n:not(.disabled):hover,
@@ -20,7 +20,7 @@
 .search-controls-pagination .button-n.disabled:focus {
     background-color: var(--sdm-surface) !important;
     border-color: var(--sdm-border) !important;
-    color: var(--sdm-btn-text) !important;
+    color: var(--sdm-text) !important;
 }
 .search-controls-pagination .button-n svg path {
     fill: var(--sdm-btn-icon) !important;

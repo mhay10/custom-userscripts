@@ -14,7 +14,7 @@ Rules for the Scryfall Dark Mode userscript in `userscripts/scryfall-dark-mode`.
 ## Styling rules
 
 - Do not hard-code colors in the page stylesheets. Add or reuse a variable in `variables.css`
-- Name new variables `--sdm-<group>-<name>` (for example `--sdm-btn-text`, `--sdm-text-muted-more`). The prefix is `sdm`, not `smd`
+- Name new variables `--sdm-<group>-<name>` (for example `--sdm-btn-icon`, `--sdm-text-muted-more`). The prefix is `sdm`, not `smd`
 - Do not repeat what `global.css` or `variables.css` already provide. Only target an element when the site overrides the global style
     - Example: if the global text color is light but a site rule turns `p` near-black, target `p` in the page stylesheet and set it back
 - Scryfall's own rules usually win, so the dark mode rules use `!important`. Match the specificity of the site rule when it is not enough

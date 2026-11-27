@@ -72,7 +72,7 @@
 .reference-jump-links .button-n {
     background-color: var(--sdm-surface-card) !important;
     border-color: var(--sdm-border) !important;
-    color: var(--sdm-btn-text) !important;
+    color: var(--sdm-text) !important;
 }
 .reference-doc .button-n:hover,
 .reference-doc .button-n:focus,
