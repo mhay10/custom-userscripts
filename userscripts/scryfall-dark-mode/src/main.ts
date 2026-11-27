@@ -5,6 +5,7 @@ import globalStyles from "../lib/styles/global.css?inline";
 import advancedStyles from "../lib/styles/advanced.css?inline";
 import docsStyles from "../lib/styles/docs.css?inline";
 import docsSyntaxStyles from "../lib/styles/docs-syntax.css?inline";
+import searchStyles from "../lib/styles/search.css?inline";
 import setsStyles from "../lib/styles/sets.css?inline";
 import cardStyles from "../lib/styles/card.css?inline";
 import teamStyles from "../lib/styles/team.css?inline";
@@ -17,6 +18,7 @@ const darkModeStyles = [
     advancedStyles,
     docsStyles,
     docsSyntaxStyles,
+    searchStyles,
     setsStyles,
     cardStyles,
     teamStyles,

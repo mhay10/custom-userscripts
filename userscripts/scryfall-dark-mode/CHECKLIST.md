@@ -3,6 +3,7 @@
 - [x] /card
 - [x] /sets
 - [ ] /sets/[code]
+- [x] /search
 - [x] /docs/*
 - [x] /docs/syntax
 - [x] /team

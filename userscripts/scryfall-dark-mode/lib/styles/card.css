@@ -17,17 +17,17 @@
 
 /* /card - toolbox borders, icons and prices softened */
 .toolbox .button-n {
-    border-color: var(--sdm-btn-border) !important;
+    border-color: var(--sdm-border) !important;
 }
 .toolbox .button-n path,
 .toolbox .button-n g {
     fill: var(--sdm-btn-icon) !important;
 }
-.toolbox .button-n.tcgplayer {
+.toolbox .button-n.tcgplayer-promo {
     border-color: var(--sdm-tcgplayer-border) !important;
 }
-.toolbox .button-n.tcgplayer path,
-.toolbox .button-n.tcgplayer g {
+.toolbox .button-n.tcgplayer-promo path,
+.toolbox .button-n.tcgplayer-promo g {
     fill: var(--sdm-tcgplayer-icon) !important;
 }
 .toolbox .button-n.cardhoarder {

@@ -7,19 +7,19 @@
     --sdm-surface-card: #262034;
     --sdm-surface: #2a2438;
     --sdm-surface-set: #2b253a;
+    --sdm-surface-hover: #373049;
 
     /* Text */
     --sdm-text: #e8e8ea;
     --sdm-text-muted: #a8a4b2;
     --sdm-text-muted-more: #6f6b80;
-    --sdm-accent: #b683e2;
+    --sdm-accent: #b58ed7;
 
     /* Borders and dividers */
     --sdm-border: #5a546e;
     --sdm-divider-soft: rgba(255, 255, 255, 0.1);
 
     /* Toolbox buttons */
-    --sdm-btn-border: rgba(124, 98, 170, 0.65);
     --sdm-btn-icon: #8a76ad;
     --sdm-btn-text: #b5a3d6;
     --sdm-danger: var(--sdm-ref-icon-red);

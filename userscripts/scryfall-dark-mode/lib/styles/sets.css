@@ -30,6 +30,12 @@ select.select-n {
     stroke: var(--sdm-text) !important;
 }
 
+/* /sets - keyboard focus on a set link: the site's light purple would hide the light text */
+.checklist td > a:focus:not(:hover):not(:active),
+.checklist td > span:focus:not(:hover):not(:active) {
+    background-color: var(--sdm-surface-hover) !important;
+}
+
 /* /sets - muted set codes */
 .checklist small {
     color: var(--sdm-text-muted) !important;

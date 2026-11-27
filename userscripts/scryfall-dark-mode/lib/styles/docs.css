@@ -52,6 +52,13 @@
     text-decoration-color: currentColor !important;
 }
 
+/* FAQ index entries: the site turns the background near-white on hover */
+.faq-link:hover,
+.faq-link:active,
+.faq-link:focus {
+    background-color: var(--sdm-surface-hover) !important;
+}
+
 /* FAQ index entries set their own title and subtitle colors */
 .faq-link-title {
     color: var(--sdm-accent) !important;
@@ -64,7 +71,7 @@
 .reference-doc .button-n,
 .reference-jump-links .button-n {
     background-color: var(--sdm-surface-card) !important;
-    border-color: var(--sdm-btn-border) !important;
+    border-color: var(--sdm-border) !important;
     color: var(--sdm-btn-text) !important;
 }
 .reference-doc .button-n:hover,
