@@ -2,7 +2,7 @@
 
 - [x] /card
 - [x] /sets
-- [ ] /sets/[code]
+- [x] /sets/[code]
 - [x] /search
 - [x] /docs/*
 - [x] /docs/syntax

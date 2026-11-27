@@ -3,6 +3,26 @@ select.select-n {
     background-image: var(--sdm-select-updown) !important;
 }
 
+/* /sets/[code] - set header banner */
+.set-header {
+    background-color: var(--sdm-surface-set) !important;
+}
+
+/* /sets/[code] - "Cards • N cards" divider: the site's light label background and line */
+.card-grid-header-content {
+    background-color: var(--sdm-bg) !important;
+    color: var(--sdm-text-muted) !important;
+}
+.card-grid-header-content * {
+    color: var(--sdm-text-muted) !important;
+}
+.card-grid-header-content a:hover {
+    color: var(--sdm-text-muted-less) !important;
+}
+.card-grid-header-inner::before {
+    background-color: var(--sdm-border) !important;
+}
+
 /* /sets - child set arrows (↳) are a dimmer muted color */
 .checklist td.indent a::before,
 .checklist td.indent-more a::before {
@@ -43,8 +63,8 @@ select.select-n {
 
 /* /sets - released languages */
 .pillbox-item {
-  background-color: var(--sdm-surface-set) !important;
+    background-color: var(--sdm-surface-set) !important;
 }
 .pillbox-item.disabled {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }

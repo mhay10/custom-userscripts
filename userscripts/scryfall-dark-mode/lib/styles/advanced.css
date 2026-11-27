@@ -2,7 +2,7 @@
 input,
 textarea,
 select,
-button,
+button:not(#scryfall-dark-mode-toggle),
 .button,
 .btn,
 input[type="text"],

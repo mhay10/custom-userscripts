@@ -62,7 +62,6 @@ code[class*="language-"] {
 
 /* Dark mode toggle link in header */
 #scryfall-dark-mode-toggle {
-    color: var(--sdm-text) !important;
     background: transparent !important;
     border: none !important;
     outline: none !important;

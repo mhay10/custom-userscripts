@@ -92,6 +92,11 @@ function addDarkModeToggle(header: HTMLElement): void {
 
             setToggleIcon(button, enabled ? toggleLightSvg : toggleDarkSvg);
 
+            // A mouse click leaves the button focused, which keeps the site's :focus color after the pointer leaves. Keyboard activations (detail 0) keep focus.
+            if (event.detail > 0) {
+                button.blur();
+            }
+
             LOGGER.info(`Scryfall dark mode ${enabled ? "enabled" : "disabled"}`);
         }
     });

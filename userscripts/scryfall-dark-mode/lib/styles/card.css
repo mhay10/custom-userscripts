@@ -89,6 +89,11 @@ div.card-legality-item > dd.restricted {
     border-color: var(--sdm-border) !important;
 }
 
+/* /card - ruling dates: the site's #9b9b9b gray */
+.rulings-item-date {
+    color: var(--sdm-text-muted) !important;
+}
+
 /* /card - #rulings first h6 link match card-text-artist color */
 #rulings h6 a {
     color: var(--sdm-accent) !important;
