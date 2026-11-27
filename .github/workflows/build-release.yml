@@ -57,6 +57,20 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=${NAME}-v${VERSION}" >> $GITHUB_OUTPUT
 
+      - name: Fail If Release Already Exists
+        env:
+          TAG: ${{ steps.userscript-info.outputs.tag }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" > /dev/null; then
+            echo "::error::Tag '${TAG}' already exists. Bump the version in userscripts/${{ inputs.script_name }}/package.json before releasing."
+            exit 1
+          fi
+          if gh release view "${TAG}" > /dev/null 2>&1; then
+            echo "::error::A release for '${TAG}' already exists. Bump the version in userscripts/${{ inputs.script_name }}/package.json before releasing."
+            exit 1
+          fi
+
       - name: Build Userscript
         run: npm run build --workspace=@userscripts/${{ inputs.script_name }}
 
