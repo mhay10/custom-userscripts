@@ -151,6 +151,8 @@ const __dirname = resolve(fileURLToPath(import.meta.url), "..");
 export default defineConfig({
     build: {
         outDir: "dist",
+        // vite-userscript-plugin turns JS minification off, which also leaves inlined CSS unminified
+        cssMinify: "lightningcss",
         lib: {
             entry: resolve(__dirname, "src/main.ts"),
             name: "${pascal}",
